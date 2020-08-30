@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<title>Client Profile</title>
+
+{% endblock %}
+
+{% block body %}
+
+<h1>CLient Profile</h1>
+<hr />
+
+<div class="card">
+    <h1 class="card-header">{{client.client_name}}</h1>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            
+            {% if client.profile_picture %}
+            <li class="list-group-item">
+                <img class="img-thumbnail" src="{{client.profile_picture.url}}" alt="Responsive image"></li>
+            {% endif %}
+
+            <li class="list-group-item">User Name : {{client.user_name}}</li>
+            <li class="list-group-item">Client type : {{client.client_type}}</li>
+            <li class="list-group-item">Email : {{client.user_name.email}}</li>
+            <li class="list-group-item">Contact Number : {{client.contact_number}}</li>
+            <li class="list-group-item">DOB : {{client.date_of_birth}}</li>
+            <li class="list-group-item">Address : {{client.address}}</li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

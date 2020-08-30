@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+<title>Home</title>
+
+{% endblock %}
+
+{% block body %}
+
+<div>
+    {% if user.is_authenticated %}
+    <h1 class="col-md-8 offset-md-2 text-center">
+        Welcome to Urban Communication - 2
+    </h1>
+    <hr/>
+    <br/>
+    {% endif %}
+
+</div>
+
+{% endblock %}
