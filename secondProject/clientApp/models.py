@@ -4,8 +4,6 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 import uuid
 
-# Create your models here.
-
 
 class Client(models.Model):
     CLIENT_TYPE = (
@@ -20,7 +18,6 @@ class Client(models.Model):
     client_name = models.CharField(max_length=100, null=False)
     client_type = models.CharField(max_length=30, choices=CLIENT_TYPE)
     contact_number = models.CharField(max_length=30)
-    date_of_birth = models.DateField()
     address = models.CharField(max_length=200)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
@@ -41,7 +38,7 @@ class Operator(models.Model):
     date_of_birth = models.DateField()
     address = models.CharField(max_length=200)
     total_leaves = models.IntegerField(null=False)
-    avaliable_leaves = models.IntegerField(null=False)
+    available_leaves = models.IntegerField(null=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     profile_picture = models.ImageField(
@@ -94,8 +91,7 @@ class Leave(models.Model):
     from_date = models.DateField(null=False)
     to_date = models.DateField(null=False)
     no_of_days = models.CharField(max_length=20, choices=DAYS)
-    leave_status = models.CharField(max_length=20, choices=LEAVE_STATUS, default='Pending')
+    leave_status = models.CharField(
+        max_length=20, choices=LEAVE_STATUS, default='Pending')
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True)
-
-    

@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 from secondProject import views
 
 urlpatterns = [
+    path('', views.login_redirect),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('client/', include('clientApp.urls', namespace='clientApp')),

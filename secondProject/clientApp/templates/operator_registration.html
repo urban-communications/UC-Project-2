@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+
+<title>Operator Registration</title>
+
+{% endblock %}
+
+{% block body %}
+
+<div>
+    <br />
+    <h1><em>Operator Registration Form</em></h1>
+    <br />
+    <div class="alert alert-secondary">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <li class="list-group-item">
+                {{user_form|crispy}}
+                {{operator_form|crispy}}
+            </li>
+            <br>
+            <button type="submit" class="btn btn-dark btn-lg btn-lg">
+                Register
+            </button>
+        </form>
+        <br />
+
+    </div>
+</div>
+{% endblock %}

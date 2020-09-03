@@ -68,7 +68,6 @@ class ClientRegistrationForm(forms.ModelForm):
         fields = (
             'client_type',
             'contact_number',
-            'date_of_birth',
             'address',
             'profile_picture'
         )
@@ -96,9 +95,11 @@ class OperatorRegistrationForm(forms.ModelForm):
     class Meta:
         model = Operator
         fields = (
+            'client_id',
             'contact_number',
             'date_of_birth',
             'address',
+            'total_leaves',
             'profile_picture'
         )
 

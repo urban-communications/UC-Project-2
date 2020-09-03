@@ -10,13 +10,41 @@
 {% block body %}
 
 <div>
-    {% if user.is_authenticated %}
     <h1 class="col-md-8 offset-md-2 text-center">
-        Welcome to Urban Communication - 2
+        Welcome to Urban Communication
     </h1>
-    <hr/>
-    <br/>
+    <hr />
+    <br />
+
+    {% if user.client %}
+
+    <h1>This is client</h1>
+
     {% endif %}
+
+
+    
+    {% if user.operator %}
+
+    <h1>This is operator</h1>
+
+    {% endif %}
+
+
+    {% if user.is_staff %}
+
+    <h2>Registration</h2>
+    <hr>
+    <div class="row">
+        <div class="col-5">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_signup' %}">Operator Registration</a>
+        </div>
+        <div class="col-5">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:admin_client_signup' %}">Client Registration</a>
+        </div>
+    </div>
+    {% endif %}
+
 
 </div>
 
