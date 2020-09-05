@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+
+<title>Feedback Form</title>
+
+{% endblock %}
+
+{% block body %}
+
+    <h1>Feedback Form</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <li class="list-group-item">
+            {{feedback|crispy}}
+        </li>
+        <br>
+        <button class="btn btn-dark btn-lg btn-lg" type="submit">Submit</button>
+    </form>
+    <br />
+
+{% endblock %}

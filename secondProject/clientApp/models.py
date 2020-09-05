@@ -68,7 +68,6 @@ class Feedback(models.Model):
     def __str__(self):
         return self.feedback_note
 
-
 class Leave(models.Model):
     LEAVE_STATUS = (
         ('Pending', 'Pending'),

@@ -32,7 +32,7 @@
                         <a class="nav-link" href="{% url 'login' %}"> Log In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clientApp:client_signup' %}"> CLient Registration</a>
+                        <a class="nav-link" href="{% url 'clientApp:client_signup' %}"> Client Registration</a>
                     </li>
 
                     {% elif user.is_authenticated and user.client %}
@@ -53,23 +53,20 @@
                         <a class="nav-link" href="{% url 'clientApp:home' %}">Operator Home</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Feedback</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
                     </li>
 
                     {% elif  user.is_authenticated and user.is_staff %}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clientApp:home' %}">Client Home</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clientApp:home' %}">Operator Home</a>
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Admin Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
                     </li>
-
-
                     {% endif %}
                 </ul>
             </div>

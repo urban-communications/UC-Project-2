@@ -10,6 +10,14 @@ CLIENT_TYPE = (
     ('Insurance Firm', 'Insurance Firm'),
     ('Others', 'Others')
 )
+RATING_CHOICES = (
+    ('', 'Choose...'),
+    ('One Star', 'One Star'),
+    ('Two Star', 'Two Star'),
+    ('Three Star', 'Three Star'),
+    ('Four Star', 'Four Star'),
+    ('Five Star', 'Five Star'),
+)
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -107,12 +115,18 @@ class OperatorRegistrationForm(forms.ModelForm):
 class FeedbackForm(forms.ModelForm):
     rating = forms.ChoiceField(
         required=True,
-        label="Client Type",
-        choices=CLIENT_TYPE,
+        label="Rating",
+        choices=RATING_CHOICES
     )
+
+    def __init__(self, request,  *args, **kwargs):
+        super(FeedbackForm, self).__init__(*args, **kwargs)
+        self.fields['operator_id'].queryset = Operator.objects.filter(client_id=request.user.client.client_user_id)
+
     class Meta:
         model = Feedback
         fields = (
+            'operator_id',
             'rating',
             'feedback_note'
         )

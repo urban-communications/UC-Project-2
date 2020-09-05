@@ -69,7 +69,7 @@ class OperatorRegistration(TemplateView):
             return redirect('clientApp:home')
 
     def post(self, request):
-        if(request.user.is_staff):
+        if request.user.is_staff:
             context = {}
             form_user = UserRegistrationForm(request.POST)
             form_operator = OperatorRegistrationForm(

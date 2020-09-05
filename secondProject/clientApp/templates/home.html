@@ -18,7 +18,21 @@
 
     {% if user.client %}
 
-    <h1>This is client</h1>
+    <h1>Hi, {{user.client}}</h1>
+    <hr>
+
+    <div class="row">
+        <div class="col-4">
+            <h2>Operator Feedback</h2>
+        </div>
+        <div class="col-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:client_feedback' %}">Give Feedback</a>
+        </div>
+        <div class="col-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:client_feedback_list' %}">View Feedback</a>
+        </div>
+    </div>
+    <hr>
 
     {% endif %}
 
