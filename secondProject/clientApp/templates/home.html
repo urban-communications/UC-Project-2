@@ -37,7 +37,7 @@
     {% endif %}
 
 
-    
+
     {% if user.operator %}
 
     <h1>This is operator</h1>
@@ -46,6 +46,17 @@
 
 
     {% if user.is_staff %}
+
+    {% if user.is_superuser %}
+    <h2>Admin</h2>
+    <hr>
+    <div class="row">
+        <div class="col-5">
+            <a class="btn btn-primary btn-lg" href="/admin/">Admin Panal</a>
+        </div>
+    </div>
+    <hr>
+    {% endif %}
 
     <h2>Registration</h2>
     <hr>
@@ -57,6 +68,15 @@
             <a class="btn btn-primary btn-lg" href="{% url 'clientApp:admin_client_signup' %}">Client Registration</a>
         </div>
     </div>
+    <hr>
+    <h2>Feedback</h2>
+    <hr>
+    <div class="row">
+        <div class="col-5">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:admin_feedback_list' %}">Feedback</a>
+        </div>
+    </div>
+    <hr>
     {% endif %}
 
 

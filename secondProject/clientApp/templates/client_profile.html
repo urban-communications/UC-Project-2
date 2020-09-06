@@ -17,7 +17,7 @@
     <h1 class="card-header">{{client.client_name}}</h1>
     <div class="card-body">
         <ul class="list-group list-group-flush">
-            
+
             {% if client.profile_picture %}
             <li class="list-group-item">
                 <img class="img-thumbnail" src="{{client.profile_picture.url}}" alt="Responsive image"></li>
@@ -29,6 +29,12 @@
             <li class="list-group-item">Contact Number : {{client.contact_number}}</li>
             <li class="list-group-item">Address : {{client.address}}</li>
         </ul>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-5">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:home' %}">Back</a>
+        </div>
     </div>
 </div>
 

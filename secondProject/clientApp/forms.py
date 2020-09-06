@@ -121,7 +121,8 @@ class FeedbackForm(forms.ModelForm):
 
     def __init__(self, request,  *args, **kwargs):
         super(FeedbackForm, self).__init__(*args, **kwargs)
-        self.fields['operator_id'].queryset = Operator.objects.filter(client_id=request.user.client.client_user_id)
+        self.fields['operator_id'].queryset = Operator.objects.filter(
+            client_id=request.user.client.client_user_id)
 
     class Meta:
         model = Feedback
@@ -130,6 +131,9 @@ class FeedbackForm(forms.ModelForm):
             'rating',
             'feedback_note'
         )
+        labels = {
+            "operator_id": "Operator Name"
+        }
 
 
 class LeaveForm(forms.ModelForm):
