@@ -137,11 +137,22 @@ class FeedbackForm(forms.ModelForm):
 
 
 class LeaveForm(forms.ModelForm):
+    from_date = forms.DateField(
+        widget=forms.TextInput(
+            attrs={'type': 'date'}
+        )
+    )
+    to_date = forms.DateField(
+        widget=forms.TextInput(
+            attrs={'type': 'date'}
+        )
+    )
 
     class Meta:
         model = Leave
         fields = (
             'from_date',
             'to_date',
-            'no_of_days'
+            'no_of_days',
+            'reason'
         )

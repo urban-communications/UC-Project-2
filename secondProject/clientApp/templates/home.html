@@ -40,7 +40,17 @@
 
     {% if user.operator %}
 
-    <h1>This is operator</h1>
+    <h2>Leave Details</h2>
+    <hr>
+    <div class="row">
+        <div class="col-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_leave_request' %}">Leave Request</a>
+        </div>
+        <div class="col-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_leave_list' %}">Leave List</a>
+        </div>
+    </div>
+    <hr>
 
     {% endif %}
 

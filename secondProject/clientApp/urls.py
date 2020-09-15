@@ -15,6 +15,8 @@ urlpatterns = [
     path('feedback/list/', views.ListClientFeedbackView.as_view(), name='client_feedback_list'),
     path('feedback/operator/list/', views.ListOperatorFeedbackView.as_view(), name='operator_feedback_list'),
     path('feedback/admin/list/', views.ListAdminFeedbackView.as_view(), name='admin_feedback_list'),
+    path('operator/leave-request/', views.OperatorLeaveRequest.as_view(), name='operator_leave_request'),
+    path('operator/leave-request/list', views.OperatorLeaveList.as_view(), name='operator_leave_list'),
 ]
 
 app_name = 'clientApp'

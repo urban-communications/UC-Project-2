@@ -90,7 +90,10 @@ class Leave(models.Model):
     from_date = models.DateField(null=False)
     to_date = models.DateField(null=False)
     no_of_days = models.CharField(max_length=20, choices=DAYS)
+    reason = models.TextField(null=True)
     leave_status = models.CharField(
         max_length=20, choices=LEAVE_STATUS, default='Pending')
+    client_leave_status = models.BooleanField(default=False) 
+    admin_leave_status = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True)

@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, DetailView, ListView
 from clientApp.models import Operator, Feedback
 
-from clientApp.forms import FeedbackForm
+from clientApp.forms import FeedbackForm, LeaveForm
 
-from clientApp.models import Client
+from clientApp.models import Client, Leave
 
 
 class HomeView(TemplateView):
@@ -35,7 +35,7 @@ class FeedbackView(TemplateView):
         return render(request, self.template_name, context)
 
     def post(self, request):
-        if(request.user.client):
+        if request.user.client:
             context = {}
             feedback_form = FeedbackForm(request, request.POST)
             if feedback_form.is_valid():
@@ -93,3 +93,40 @@ class ListAdminFeedbackView(ListView):
             return Feedback.objects.filter(rating__icontains=query)
 
         return Feedback.objects.all().order_by('-created_at')
+
+
+class OperatorLeaveRequest(TemplateView):
+    template_name = 'operator_leave_request.html'
+
+    def get(self, request):
+        form = LeaveForm()
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        constxt = {}
+        if request.user.operator:
+            form = LeaveForm(request.POST)
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.operator_id = self.request.user.operator
+                data.client_id = self.request.user.operator.client_id
+                data.save()
+                return redirect('clientApp:home')
+            else:
+                context['form'] = form()
+                return render(request, self.template_name, context)
+        else:
+            return redirect('clientApp:home')
+
+
+class OperatorLeaveList(ListView):
+    template_name = 'operator_leave_list.html'
+    model = Leave
+    context_object_name = 'leave_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id).order_by('-created_at')
