@@ -130,3 +130,17 @@ class OperatorLeaveList(ListView):
 
     def get_queryset(self):
         return Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id).order_by('-created_at')
+
+class OperatorLeaveDetail(DetailView):
+    model = Leave
+    template_name = 'leave_detail.html'
+    context_object_name = 'leave'
+
+class ClientLeaveList(ListView):
+    template_name = 'client_leave_list.html'
+    model = Leave
+    context_object_name = 'leave_list'
+    paginate_by = 8
+
+    def get_queryset(self):
+        return Leave.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')

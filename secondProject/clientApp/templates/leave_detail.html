@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<title>Leave Detail</title>
+
+{% endblock %}
+
+{% block body %}
+
+<h1>Leave Detail</h1>
+<hr />
+
+<div class="card">
+    <h1 class="card-header">{{leave.operator_id}}</h1>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+
+            <li class="list-group-item">Client : {{leave.client_id}}</li>
+            <li class="list-group-item">From Date : {{leave.from_date}}</li>
+            <li class="list-group-item">To Date : {{leave.to_date}}</li>
+            <li class="list-group-item">No. of Days : {{leave.no_of_days}}</li>
+            <li class="list-group-item">Leave Request Date : {{leave.created_at}}</li>
+            
+            {% if leave.reason %}
+            <li class="list-group-item">Reason : {{leave.reason}}</li>
+            {% endif %}
+
+            {% if leave.client_leave_status %}
+            <li class="list-group-item">Client Status : Approved</li>
+            {% else %}
+            <li class="list-group-item">Client Status : Not approved yet</li>
+            {% endif %}
+            
+            {% if leave.admin_leave_status %}
+            <li class="list-group-item">Admin Status : Approved</li>
+            {% else %}
+            <li class="list-group-item">Admin Status : Not approved yet</li>
+            {% endif %}
+
+            <li class="list-group-item">Leave Final Status : {{leave.leave_status}}</li>
+        </ul>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-5">
+        <a class="btn btn-primary btn-lg" href="{% url 'clientApp:home' %}">Back</a>
+    </div>
+</div>
+
+{% endblock %}
