@@ -23,24 +23,15 @@
             <li class="list-group-item">To Date : {{leave.to_date}}</li>
             <li class="list-group-item">No. of Days : {{leave.no_of_days}}</li>
             <li class="list-group-item">Leave Request Date : {{leave.created_at}}</li>
-            
+
             {% if leave.reason %}
             <li class="list-group-item">Reason : {{leave.reason}}</li>
             {% endif %}
 
-            {% if leave.client_leave_status %}
-            <li class="list-group-item">Client Status : Approved</li>
-            {% else %}
-            <li class="list-group-item">Client Status : Not approved yet</li>
-            {% endif %}
-            
-            {% if leave.admin_leave_status %}
-            <li class="list-group-item">Admin Status : Approved</li>
-            {% else %}
-            <li class="list-group-item">Admin Status : Not approved yet</li>
-            {% endif %}
-
-            <li class="list-group-item">Leave Final Status : {{leave.leave_status}}</li>
+            <li class="list-group-item">Client Status : {{leave.client_leave_status}}</li>
+            <li class="list-group-item">Admin Status : {{leave.admin_leave_status}}</li>
+            <li class="list-group-item">Leave Final Status :<h2> <em>{{leave.leave_status}}</em></h2>
+            </li>
         </ul>
     </div>
 </div>

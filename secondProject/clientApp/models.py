@@ -93,7 +93,7 @@ class Leave(models.Model):
     reason = models.TextField(null=True)
     leave_status = models.CharField(
         max_length=20, choices=LEAVE_STATUS, default='Pending')
-    client_leave_status = models.BooleanField(default=False) 
-    admin_leave_status = models.BooleanField(default=False)
+    client_leave_status = models.CharField(max_length=20,default='Pending') 
+    admin_leave_status = models.CharField(max_length=20, default='Pending')
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True)

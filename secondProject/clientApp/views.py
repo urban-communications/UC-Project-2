@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView, DetailView, ListView
 from clientApp.models import Operator, Feedback
+from django.utils import timezone
 
 from clientApp.forms import FeedbackForm, LeaveForm
 
@@ -131,10 +133,12 @@ class OperatorLeaveList(ListView):
     def get_queryset(self):
         return Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id).order_by('-created_at')
 
+
 class OperatorLeaveDetail(DetailView):
     model = Leave
     template_name = 'leave_detail.html'
     context_object_name = 'leave'
+
 
 class ClientLeaveList(ListView):
     template_name = 'client_leave_list.html'
@@ -144,3 +148,48 @@ class ClientLeaveList(ListView):
 
     def get_queryset(self):
         return Leave.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')
+
+
+def leave_approve(request, pk):
+    if request.user.is_staff:
+        leave = Leave.objects.get(leave_id=pk)
+        leave.admin_leave_status = "Approved"
+        leave.updated_at = timezone.now()
+        if leave.client_leave_status == "Approved":
+            leave.leave_status = "Approved"
+        leave.save()
+        return redirect("clientApp:home")
+    elif hasattr(request.user, 'client'):
+        leave = Leave.objects.get(leave_id=pk)
+        leave.client_leave_status = "Approved"
+        leave.updated_at = timezone.now()
+        if leave.admin_leave_status == "Approved":
+            leave.leave_status = "Approved"
+        leave.save()
+        return redirect("clientApp:home")
+    else:
+        return redirect("clientApp:home")
+
+
+def leave_reject(request, pk):
+    if request.user.is_staff or hasattr(request.user, 'client'):
+        leave = Leave.objects.get(leave_id=pk)
+        leave.updated_at = timezone.now()
+        if hasattr(request.user, 'client'):
+            leave.client_leave_status = "Declined"
+        if request.user.is_staff:
+            leave.admin_leave_status = "Declined"
+        leave.leave_status = "Declined"
+        leave.save()
+        return redirect("clientApp:home")
+    else:
+        return redirect("clientApp:home")
+
+class AdminLeaveList(ListView):
+    template_name = 'client_leave_list.html'
+    model = Leave
+    context_object_name = 'leave_list'
+    paginate_by = 8
+
+    def get_queryset(self):
+        return Leave.objects.all().order_by('-created_at')

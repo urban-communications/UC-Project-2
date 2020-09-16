@@ -18,7 +18,10 @@ urlpatterns = [
     path('operator/leave-request/', views.OperatorLeaveRequest.as_view(), name='operator_leave_request'),
     path('operator/leave-request/list', views.OperatorLeaveList.as_view(), name='operator_leave_list'),
     path('operator/leave-request/detail/<slug:pk>', views.OperatorLeaveDetail.as_view(), name='operator_leave_detail'),
-    path('leave-request/list', views.ClientLeaveList.as_view(), name='client_leave_list'),
+    path('leave-request/list', views.ClientLeaveList.as_view(), name='leave_list'),
+    path('leave-request/approve/<slug:pk>', views.leave_approve, name='leave_approve'),
+    path('leave-request/reject/<slug:pk>', views.leave_reject, name='leave_reject'),
+    path('leave-request/admin/list', views.AdminLeaveList.as_view(), name='admin_leave_list'),
 ]
 
 app_name = 'clientApp'

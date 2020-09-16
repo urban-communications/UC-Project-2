@@ -19,6 +19,9 @@
         <thead class="thead-dark">
             <tr>
                 <th class="w-10" scope="col">Operator</th>
+                {% if user.is_staff %}
+                <th class="w-10" scope="col">Client</th>
+                {% endif %}
                 <th class="w-20" scope="col">From Date</th>
                 <th class="w-20" scope="col">To Date</th>
                 <th class="w-10" scope="col">Days Off</th>
@@ -32,6 +35,9 @@
             {% for leave in leave_list %}
             <tr>
                 <th scope="row">{{leave.operator_id}}</th>
+                {% if user.is_staff %}
+                <td>{{leave.client_id}}</td>
+                {% endif %}
                 <td>{{leave.from_date}}</td>
                 <td>{{leave.to_date}}</td>
                 <td>{{leave.no_of_days}}</td>
@@ -41,11 +47,11 @@
                         aria-pressed="true"> Detail </a>
                 </td>
                 <td> 
-                    <a href="{% url 'clientApp:operator_leave_detail' leave.leave_id %}" class="btn btn-success btn-sm" role="button"
+                    <a href="{% url 'clientApp:leave_approve' leave.leave_id %}" class="btn btn-success btn-sm" role="button"
                         aria-pressed="true"> Approve </a>
                 </td>
                 <td> 
-                    <a href="{% url 'clientApp:operator_leave_detail' leave.leave_id %}" class="btn btn-danger btn-sm" role="button"
+                    <a href="{% url 'clientApp:leave_reject' leave.leave_id %}" class="btn btn-danger btn-sm" role="button"
                         aria-pressed="true"> Reject </a>
                 </td>
             </tr>
