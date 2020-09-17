@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from clientApp.models import Client, Operator, Feedback, Leave
+from clientApp.models import Client, Operator, Feedback, Leave, OperatorDocuments
 
 CLIENT_TYPE = (
     ('', 'Choose...'),
@@ -155,4 +155,16 @@ class LeaveForm(forms.ModelForm):
             'to_date',
             'no_of_days',
             'reason'
+        )
+
+
+class OperatorDocumentsForm(forms.ModelForm):
+    documents = forms.FileField(widget=forms.ClearableFileInput(attrs={
+        'multiple': True
+    }))
+
+    class Meta:
+        model = OperatorDocuments
+        fields = (
+            'documents',
         )

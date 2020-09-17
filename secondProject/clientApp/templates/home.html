@@ -20,7 +20,7 @@
 
     <h1>Hi, {{user.client}}</h1>
     <hr>
-
+    <br>
     <div class="row">
         <div class="col-4">
             <h2>Feedbacks</h2>
@@ -48,6 +48,10 @@
 
     {% if user.operator %}
 
+    <h1>Hi, {{user.operator}}</h1>
+    <hr>
+    <br>
+
     <h2>Leave Details</h2>
     <hr>
     <div class="row">
@@ -56,6 +60,16 @@
         </div>
         <div class="col-4">
             <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_leave_list' %}">Leave List</a>
+        </div>
+    </div>
+    <hr>
+    <h2>Documents</h2>
+    <div class="row">
+        <div class="col-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_document_upload' %}">Upload Documents</a>
+        </div>
+        <div class="col-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_document_list' %}">View Documents</a>
         </div>
     </div>
     <hr>

@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic.edit import FormView
 from clientApp.models import Operator, Feedback
 from django.utils import timezone
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 
-from clientApp.forms import FeedbackForm, LeaveForm
+from clientApp.forms import FeedbackForm, LeaveForm, OperatorDocumentsForm
 
-from clientApp.models import Client, Leave
+from clientApp.models import Client, Leave, OperatorDocuments
 
 
 class HomeView(TemplateView):
@@ -185,6 +188,7 @@ def leave_reject(request, pk):
     else:
         return redirect("clientApp:home")
 
+
 class AdminLeaveList(ListView):
     template_name = 'client_leave_list.html'
     model = Leave
@@ -193,3 +197,49 @@ class AdminLeaveList(ListView):
 
     def get_queryset(self):
         return Leave.objects.all().order_by('-created_at')
+
+class OperatorDocumentsUpload(FormView):
+    form_class = OperatorDocumentsForm
+    template_name = 'operator_documents_upload.html'
+    success_url = reverse_lazy("clientApp:home")
+    context_object_name = 'document'
+
+    def post(self, request):
+        form = OperatorDocumentsForm(request.POST, request.FILES)
+        files = request.FILES.getlist('documents')
+        if form.is_valid():
+            for doc in files:
+                document = OperatorDocuments(
+                    operator_id = request.user.operator,
+                    doc_title = doc.name,
+                    documents = doc
+                )
+                document.save()
+                messages.success(request, "Uploaded Successfiully")
+            return HttpResponseRedirect(request.path_info)
+        else:
+            messages.error(request, "Failed to upload: Invalid files")
+            form = OperatorDocumentsForm()
+
+class OperatorDocumentsList(ListView):
+    template_name = 'operator_documents_list.html'
+    model = OperatorDocuments
+    context_object_name = 'documents'
+    paginate_by = 8
+
+    def get_queryset(self):
+        return OperatorDocuments.objects.filter(operator_id=self.request.user.operator.operator_user_id)
+
+def operatorDocumetDelete(request, pk):
+    if request.user.operator:
+        document = OperatorDocuments.objects.get(doc_id=pk)
+        print(document)
+        if document:
+            document.documents.delete()
+            document.delete()
+            messages.success(request, "Deleted Successfully")
+            return HttpResponseRedirect(reverse('clientApp:operator_document_list'))
+        else:
+            messages.error(request, "Error while deleting the file")
+            return render(request, 'operator_documents_list.html')
+                    

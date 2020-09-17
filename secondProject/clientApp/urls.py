@@ -22,6 +22,9 @@ urlpatterns = [
     path('leave-request/approve/<slug:pk>', views.leave_approve, name='leave_approve'),
     path('leave-request/reject/<slug:pk>', views.leave_reject, name='leave_reject'),
     path('leave-request/admin/list', views.AdminLeaveList.as_view(), name='admin_leave_list'),
+    path('operator/documents/upload', views.OperatorDocumentsUpload.as_view(), name='operator_document_upload'),
+    path('operator/documents/list', views.OperatorDocumentsList.as_view(), name='operator_document_list'),
+    path('operator/documents/delete/<slug:pk>', views.operatorDocumetDelete, name='operator_document_delete')
 ]
 
 app_name = 'clientApp'

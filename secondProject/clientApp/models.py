@@ -47,6 +47,15 @@ class Operator(models.Model):
     def __str__(self):
         return self.operator_name
 
+class OperatorDocuments(models.Model):
+    doc_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    operator_id = models.ForeignKey(Operator, on_delete=models.CASCADE)
+    doc_title = models.CharField(max_length=100, null=False)
+    documents = models.FileField(upload_to="operator_documents", null=False)
+
+    def __str__(self):
+        return self.doc_title
+
 
 class Feedback(models.Model):
     RATING_CHOICES = (
@@ -67,6 +76,7 @@ class Feedback(models.Model):
 
     def __str__(self):
         return self.feedback_note
+
 
 class Leave(models.Model):
     LEAVE_STATUS = (
@@ -93,7 +103,7 @@ class Leave(models.Model):
     reason = models.TextField(null=True)
     leave_status = models.CharField(
         max_length=20, choices=LEAVE_STATUS, default='Pending')
-    client_leave_status = models.CharField(max_length=20,default='Pending') 
+    client_leave_status = models.CharField(max_length=20, default='Pending')
     admin_leave_status = models.CharField(max_length=20, default='Pending')
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True)

@@ -50,10 +50,10 @@
                     {% elif  user.is_authenticated and user.operator %}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clientApp:home' %}">Operator Home</a>
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clientApp:operator_profile' user.operator.operator_user_id %}">Operator Profile</a>
+                        <a class="nav-link" href="{% url 'clientApp:operator_profile' user.operator.operator_user_id %}">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'clientApp:operator_feedback_list' %}">Feedback</a>
