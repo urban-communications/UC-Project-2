@@ -24,7 +24,9 @@ urlpatterns = [
     path('leave-request/admin/list', views.AdminLeaveList.as_view(), name='admin_leave_list'),
     path('operator/documents/upload', views.OperatorDocumentsUpload.as_view(), name='operator_document_upload'),
     path('operator/documents/list', views.OperatorDocumentsList.as_view(), name='operator_document_list'),
-    path('operator/documents/delete/<slug:pk>', views.operatorDocumetDelete, name='operator_document_delete')
-]
+    path('operator/documents/delete/<slug:pk>', views.operatorDocumetDelete, name='operator_document_delete'),
+    path('operator/list', views.ClientOperatorList.as_view(), name='client_operator_list'),
+    path('operator/documents/<slug:pk>', views.ClientOperatorDocumentsList.as_view(), name='client_operator_documents'),
+] 
 
 app_name = 'clientApp'

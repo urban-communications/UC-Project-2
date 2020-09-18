@@ -47,8 +47,10 @@ class Operator(models.Model):
     def __str__(self):
         return self.operator_name
 
+
 class OperatorDocuments(models.Model):
-    doc_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    doc_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
     operator_id = models.ForeignKey(Operator, on_delete=models.CASCADE)
     doc_title = models.CharField(max_length=100, null=False)
     documents = models.FileField(upload_to="operator_documents", null=False)
@@ -107,3 +109,4 @@ class Leave(models.Model):
     admin_leave_status = models.CharField(max_length=20, default='Pending')
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True)
+

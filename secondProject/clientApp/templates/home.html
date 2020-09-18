@@ -11,7 +11,7 @@
 
 <div>
     <h1 class="col-md-8 offset-md-2 text-center">
-        Welcome to Urban Communication
+        Welcome to Urban Communications
     </h1>
     <hr />
     <br />
@@ -21,6 +21,16 @@
     <h1>Hi, {{user.client}}</h1>
     <hr>
     <br>
+    <div class="row">
+        <div class="col-4">
+            <h2>Operators</h2>
+        </div>
+        <div class="col-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:client_operator_list' %}">List Operators</a>
+        </div>
+    </div>
+    <hr>
+
     <div class="row">
         <div class="col-4">
             <h2>Feedbacks</h2>

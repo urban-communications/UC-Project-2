@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 
+
 from clientApp.forms import FeedbackForm, LeaveForm, OperatorDocumentsForm
 
 from clientApp.models import Client, Leave, OperatorDocuments
@@ -225,7 +226,7 @@ class OperatorDocumentsList(ListView):
     template_name = 'operator_documents_list.html'
     model = OperatorDocuments
     context_object_name = 'documents'
-    paginate_by = 8
+    paginate_by = 10
 
     def get_queryset(self):
         return OperatorDocuments.objects.filter(operator_id=self.request.user.operator.operator_user_id)
@@ -233,7 +234,6 @@ class OperatorDocumentsList(ListView):
 def operatorDocumetDelete(request, pk):
     if request.user.operator:
         document = OperatorDocuments.objects.get(doc_id=pk)
-        print(document)
         if document:
             document.documents.delete()
             document.delete()
@@ -243,3 +243,21 @@ def operatorDocumetDelete(request, pk):
             messages.error(request, "Error while deleting the file")
             return render(request, 'operator_documents_list.html')
                     
+class ClientOperatorList(ListView):
+    model = Operator
+    template_name = "client_operator_list.html"
+    context_object_name = 'operator_list'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Operator.objects.filter(client_id=self.request.user.client.client_user_id)
+
+class ClientOperatorDocumentsList(ListView):
+    template_name = 'client_operator_documents_list.html'
+    model = OperatorDocuments
+    context_object_name = 'documents'
+    paginate_by = 10
+
+    def get_queryset(self):
+        path = self.request.path_info.split('/')
+        return OperatorDocuments.objects.filter(operator_id=path[-1])
