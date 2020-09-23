@@ -27,6 +27,9 @@
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarSupportedContent">
 
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://www.urban-communications.co.uk">Home</a>
+                    </li>
                     {% if not user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}"> Log In</a>
@@ -38,7 +41,7 @@
                     {% elif user.is_authenticated and user.client %}
 
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'clientApp:home' %}">Client Home </a>
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Dashboard</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'clientApp:client_profile' user.client.client_user_id %}">Client Profile </a>
@@ -50,7 +53,7 @@
                     {% elif  user.is_authenticated and user.operator %}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clientApp:home' %}">Home</a>
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'clientApp:operator_profile' user.operator.operator_user_id %}">Profile</a>
@@ -65,7 +68,7 @@
                     {% elif  user.is_authenticated and user.is_staff %}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clientApp:home' %}">Admin Home</a>
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
