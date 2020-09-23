@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'clientApp/style.css' %}" type="text/css">
+
+    {% block head %}
+    <title>Urban Communications</title>
+    {% endblock %}
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #800000;">
+        <div class="container">
+            <span class="navbar-brand h1" href="{% url 'clientApp:home' %}"><strong><em>Urban Communications</em></strong></span>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarSupportedContent">
+
+                <ul class="navbar-nav ml-auto">
+                    {% if not user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}"> Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clientApp:client_signup' %}"> Client Registration</a>
+                    </li>
+
+                    {% elif user.is_authenticated and user.client %}
+
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Client Home </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'clientApp:client_profile' user.client.client_user_id %}">Client Profile </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
+                    </li>
+
+                    {% elif  user.is_authenticated and user.operator %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clientApp:operator_profile' user.operator.operator_user_id %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clientApp:operator_feedback_list' %}">Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
+                    </li>
+
+                    {% elif  user.is_authenticated and user.is_staff %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Admin Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block body %}
+        <dvi class="jumbotron">
+            Urban Communication - 2
+    </div>
+    {% endblock %}
+
+    {% block pagination %}
+    {% if is_paginated %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination" <span class="page-links">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link"
+                    href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            <li class="page-item page-link">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </li>
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link"
+                    href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a></li>
+            {% endif %}
+            </span>
+        </ul>
+    </nav>
+    {% endif %}
+    {% endblock %}
+
+</body>
+
+</html>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>

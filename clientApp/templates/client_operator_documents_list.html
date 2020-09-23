@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+
+<title>Operator Documents</title>
+
+{% endblock %}
+
+{% block body %}
+<div>
+    <h1>Documents</h1>
+    <br>
+</div>
+
+<div class="table-responsive-lg">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="w-20" scope="col">No#</th>
+                <th class="w-20" scope="col">Files</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doc in documents %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td><a href="{{doc.documents.url}}" target="_blank">{{doc.doc_title}}</a></td>
+
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+    <br>
+    <div class="row">
+        <div class="col-5">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:home' %}">Back</a>
+        </div>
+    </div>
+</div>
+<br>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+    {{message}}
+</div>
+{% endfor %}
+{% endif %}
+
+<br>
+{% endblock %}

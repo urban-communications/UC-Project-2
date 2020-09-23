@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<title>Leave Request</title>
+
+{% endblock %}
+
+{% block body %}
+<div>
+    <h1>Leave Request</h1>
+    <br>
+</div>
+
+<div class="table-responsive-lg">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="w-10" scope="col">Operator</th>
+                {% if user.is_staff %}
+                <th class="w-10" scope="col">Client</th>
+                {% endif %}
+                <th class="w-20" scope="col">From Date</th>
+                <th class="w-20" scope="col">To Date</th>
+                <th class="w-10" scope="col">Days Off</th>
+                <th class="w-20" scope="col">Leave Status</th>
+                <th class="w-10" scope="col">Details</th>
+                <th class="w-10" scope="col">Approve</th>
+                <th class="w-10" scope="col">Reject</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for leave in leave_list %}
+            <tr>
+                <th scope="row">{{leave.operator_id}}</th>
+                {% if user.is_staff %}
+                <td>{{leave.client_id}}</td>
+                {% endif %}
+                <td>{{leave.from_date}}</td>
+                <td>{{leave.to_date}}</td>
+                <td>{{leave.no_of_days}}</td>
+                <td>{{leave.leave_status}}</td>
+                <td> 
+                    <a href="{% url 'clientApp:operator_leave_detail' leave.leave_id %}" class="btn btn-warning btn-sm" role="button"
+                        aria-pressed="true"> Detail </a>
+                </td>
+                <td> 
+                    <a href="{% url 'clientApp:leave_approve' leave.leave_id %}" class="btn btn-success btn-sm" role="button"
+                        aria-pressed="true"> Approve </a>
+                </td>
+                <td> 
+                    <a href="{% url 'clientApp:leave_reject' leave.leave_id %}" class="btn btn-danger btn-sm" role="button"
+                        aria-pressed="true"> Reject </a>
+                </td>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+    <br>
+    <div class="row">
+        <div class="col-5">
+            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:home' %}">Back</a>
+        </div>
+    </div>
+</div>
+<br>
+{% endblock %}

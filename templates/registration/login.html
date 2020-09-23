@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+
+<title>Log In</title>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="text-center">
+    <br />
+    <h1><em>Welcome, Login to continue</em></h1>
+    <br />
+    <div class="alert border border-dark justify-content-center align-items-center w-50 p-3" style="background-color:white;margin-left:25%;">
+        <form method="post">
+            {% csrf_token %}
+            <li class="list-group-item">
+                {{form|crispy}}
+            </li>
+            <br>
+            <button type="submit" class="btn btn-dark">
+                LOG IN
+            </button>
+        </form>
+        <br />
+        <a href="/accounts/password_reset/" class="btn btn-primary">Forget password/username</a>
+
+    </div>
+</div>
+{% endblock %}
