@@ -21,11 +21,10 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'https://urbancommunications.herokuapp.com/',
-    'urbancommunications.herokuapp.com/',
-    '127.0.0.1',
-    'localhost'
-]
+    'localhost',
+    'https://urbancommunications.herokuapp.com',
+    'urbancommunications.herokuapp.com'
+    ]
 
 # Application definition
 
@@ -146,7 +145,9 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "emails")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'secondProject/media')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'secondProject/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'),]
+
 
 # heruku setting
 django_heroku.settings(locals())
