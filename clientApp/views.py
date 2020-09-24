@@ -216,7 +216,7 @@ class OperatorDocumentsUpload(FormView):
                     documents = doc
                 )
                 document.save()
-                messages.success(request, "Uploaded Successfiully")
+                messages.success(request, "Uploaded Successfully")
             return HttpResponseRedirect(request.path_info)
         else:
             messages.error(request, "Failed to upload: Invalid files")

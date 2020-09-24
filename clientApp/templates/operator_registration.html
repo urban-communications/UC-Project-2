@@ -12,8 +12,19 @@
 
 <div>
     <br />
-    <h1><em>Operator Registration Form</em></h1>
+    <h1>Operator Registration Form</h1>
     <br />
+
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <div class="alert alert-secondary">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -22,16 +33,17 @@
                 {{operator_form|crispy}}
             </li>
             <br>
-            <button type="submit" class="btn btn-dark btn-lg btn-lg">
+            <button type="submit" class="btn btn-dark">
                 Register
             </button>
         </form>
         <br>
         <div class="row">
             <div class="col-5">
-                <a class="btn btn-primary btn-lg" href="{% url 'clientApp:home' %}">Back</a>
+                <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
             </div>
         </div>
     </div>
+    <br>
 </div>
 {% endblock %}

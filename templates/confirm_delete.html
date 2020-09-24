@@ -13,13 +13,13 @@
     <hr />
     <form method="post">
         {% csrf_token %}
-        <h5>Are you sure you want to delete <em><strong> "{{ object }}" </strong></em> ?</h5>
+        <h5>Are you sure you want to delete <strong> "{{ object }}" </strong> ?</h5>
         <hr />
-        <button class="btn-danger btn-lg" type="submit">Yes, Delete</button>
+        <button class="btn-danger" type="submit">Yes, Delete</button>
     </form>
     <br>
-    <form action="{% url 'inventoryapp:my_advertisment_list' %}">
-        <button type="submit" class="btn-primary btn-lg">Back</button>
+    <form action="{% url 'clientApp:home' %}">
+        <button type="submit" class="btn-primary">Back</button>
     </form>
 
 </div>

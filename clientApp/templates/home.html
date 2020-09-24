@@ -3,7 +3,7 @@
 
 {% block head %}
 
-<title>Home</title>
+<title>Dashboard</title>
 
 {% endblock %}
 
@@ -18,39 +18,50 @@
 
     {% if user.client %}
 
-    <h1>Hi, {{user.client}}</h1>
+    <h1>{{user.client}}</h1>
     <hr>
     <br>
+    <h2>Operators</h2>
     <div class="row">
-        <div class="col-4">
-            <h2>Operators</h2>
-        </div>
-        <div class="col-4">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:client_operator_list' %}">List Operators</a>
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:client_operator_list' %}">View Operators</a>
         </div>
     </div>
     <hr>
 
+    <h2>Feedback</h2>
     <div class="row">
-        <div class="col-4">
-            <h2>Feedbacks</h2>
-        </div>
-        <div class="col-4">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:client_feedback' %}">Give Feedback</a>
-        </div>
-        <div class="col-4">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:client_feedback_list' %}">View Feedback</a>
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:client_feedback' %}">Give your Feedback</a>
+            &nbsp;
+            <a class="btn btn-primary" href="{% url 'clientApp:client_feedback_list' %}">View Feedbacks</a>
         </div>
     </div>
     <hr>
+
+    <h2>Holiday Requests</h2>
     <div class="row">
-        <div class="col-4">
-            <h2>Leave Requests</h2>
-        </div>
-        <div class="col-4">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:leave_list' %}">Leave Requests</a>
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:leave_list' %}">Holiday Request</a>
         </div>
     </div>
+    <hr>
+
+    <h2>Invoices</h2>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:leave_list' %}">View Invoices</a>
+        </div>
+    </div>
+    <hr>
+
+    <h2>Send Message</h2>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:leave_list' %}">View Invoices</a>
+        </div>
+    </div>
+    <hr>
 
     {% endif %}
 
@@ -58,28 +69,34 @@
 
     {% if user.operator %}
 
-    <h1>Hi, {{user.operator}}</h1>
+    <h1>{{user.operator}}</h1>
     <hr>
     <br>
 
-    <h2>Leave Details</h2>
-    <hr>
+    <h2>Documents</h2>
     <div class="row">
-        <div class="col-4">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_leave_request' %}">Leave Request</a>
-        </div>
-        <div class="col-4">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_leave_list' %}">Leave List</a>
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_document_upload' %}">Upload Documents</a>
+            &nbsp;
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_document_list' %}">View Documents</a>
         </div>
     </div>
     <hr>
-    <h2>Documents</h2>
+
+    <h2>Holiday Details</h2>
     <div class="row">
-        <div class="col-4">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_document_upload' %}">Upload Documents</a>
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_request' %}">Holidays Request</a>
+            &nbsp;
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_list' %}">Holidays List</a>
         </div>
-        <div class="col-4">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_document_list' %}">View Documents</a>
+    </div>
+    <hr>
+
+    <h2>Feedback</h2>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_feedback_list' %}">Feedback</a>
         </div>
     </div>
     <hr>
@@ -88,47 +105,45 @@
 
 
     {% if user.is_staff %}
+    <h2>Admin</h2>
 
     {% if user.is_superuser %}
-    <h2>Admin</h2>
     <hr>
     <div class="row">
-        <div class="col-5">
-            <a class="btn btn-primary btn-lg" href="/admin/">Admin Panal</a>
+        <div class="col">
+            <a class="btn btn-primary" href="/admin/">Admin Panel</a>
         </div>
     </div>
-    <hr>
     {% endif %}
+    <hr>
+    <br>
 
     <h2>Registration</h2>
-    <hr>
     <div class="row">
-        <div class="col-5">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:operator_signup' %}">Operator Registration</a>
-        </div>
-        <div class="col-5">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:admin_client_signup' %}">Client Registration</a>
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_signup' %}">Operator Registration</a>
+            &nbsp;
+            <a class="btn btn-primary" href="{% url 'clientApp:admin_client_signup' %}">Client Registration</a>
         </div>
     </div>
     <hr>
+
     <h2>Feedback</h2>
-    <hr>
     <div class="row">
-        <div class="col-5">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:admin_feedback_list' %}">Feedback</a>
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:admin_feedback_list' %}">Feedback</a>
         </div>
     </div>
     <hr>
-    <h2>Leave Requests</h2>
-    <hr>
+
+    <h2>Holiday Request</h2>
     <div class="row">
-        <div class="col-5">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:admin_leave_list' %}">Leave Requests</a>
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:admin_leave_list' %}">Holiday Request</a>
         </div>
     </div>
     <hr>
     {% endif %}
-
 
 </div>
 

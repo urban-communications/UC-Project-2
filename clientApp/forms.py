@@ -99,6 +99,12 @@ class OperatorRegistrationForm(forms.ModelForm):
             'placeholder': 'Enter contact number'
         }),
     )
+    date_of_birth = forms.DateField(
+        widget=forms.TextInput(
+            attrs={'type': 'date'}
+        )
+    )
+
 
     class Meta:
         model = Operator
@@ -110,6 +116,9 @@ class OperatorRegistrationForm(forms.ModelForm):
             'total_leaves',
             'profile_picture'
         )
+        labels = {
+            "total_leaves": "Total Holidays"
+        }
 
 
 class FeedbackForm(forms.ModelForm):

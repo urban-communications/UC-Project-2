@@ -3,13 +3,13 @@
 
 {% block head %}
 
-<title>Leave Request</title>
+<title>Holiday Request</title>
 
 {% endblock %}
 
 {% block body %}
 
-    <h1>Leave Request Form</h1>
+    <h1>Holiday Request Form</h1>
     <form method="POST">
         {% csrf_token %}
         <li class="list-group-item">
@@ -21,7 +21,7 @@
     <br />
     <div class="row">
         <div class="col-5">
-            <a class="btn btn-primary btn-lg" href="{% url 'clientApp:home' %}">Back</a>
+            <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
         </div>
     </div>
 

@@ -18,7 +18,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #800000;">
         <div class="container">
-            <span class="navbar-brand h1" href="{% url 'clientApp:home' %}"><strong><em>Urban Communications</em></strong></span>
+            <span class="navbar-brand h1" href="{% url 'clientApp:home' %}"><strong>Urban Communications</strong></span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -44,7 +44,7 @@
                         <a class="nav-link" href="{% url 'clientApp:home' %}">Dashboard</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'clientApp:client_profile' user.client.client_user_id %}">Client Profile </a>
+                        <a class="nav-link" href="{% url 'clientApp:client_profile' user.client.client_user_id %}">Profile </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
@@ -57,9 +57,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'clientApp:operator_profile' user.operator.operator_user_id %}">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'clientApp:operator_feedback_list' %}">Feedback</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
@@ -83,12 +80,13 @@
     <div class="container">
         {% block body %}
         <dvi class="jumbotron">
-            Urban Communication - 2
+            Urban Communications
     </div>
     {% endblock %}
 
     {% block pagination %}
     {% if is_paginated %}
+    <br>
     <nav aria-label="Page navigation example">
         <ul class="pagination" <span class="page-links">
             {% if page_obj.has_previous %}

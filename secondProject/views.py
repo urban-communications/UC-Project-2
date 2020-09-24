@@ -3,6 +3,9 @@ from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.urls import reverse
 from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+
 
 from clientApp.models import User, Client, Operator
 from clientApp.forms import UserRegistrationForm, ClientRegistrationForm, OperatorRegistrationForm
@@ -46,7 +49,8 @@ class ClientRegistration(TemplateView):
                 profile_picture=form_client.cleaned_data['profile_picture']
             )
             new_client.save()
-            return redirect('login')
+            messages.success(request, "Client created successfully")
+            return HttpResponseRedirect(request.path_info)
         else:
             context['user_form'] = form_user
             context['client_form'] = form_client
@@ -91,10 +95,11 @@ class OperatorRegistration(TemplateView):
                     profile_picture=form_operator.cleaned_data['profile_picture']
                 )
                 new_operator.save()
-                return redirect('clientApp:home')
+                messages.success(request, "Operator created successfully")
+                return HttpResponseRedirect(request.path_info)
             else:
                 context['user_form'] = form_user
-                context['client_form'] = form_operator
+                context['operator_form'] = form_operator
             return render(request, self.template_name, context)
         else:
             return redirect('clientApp:home')
