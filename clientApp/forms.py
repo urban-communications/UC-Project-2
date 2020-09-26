@@ -162,7 +162,6 @@ class LeaveForm(forms.ModelForm):
         fields = (
             'from_date',
             'to_date',
-            'no_of_days',
             'reason'
         )
 

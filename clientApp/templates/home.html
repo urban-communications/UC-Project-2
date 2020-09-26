@@ -86,9 +86,13 @@
     <h2>Holiday Details</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_request' %}">Holidays Request</a>
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_request' %}">Request Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_list' %}">Holidays List</a>
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_list' action='Pending' %}">Pending Holidays</a>
+            &nbsp;
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_list' action='Approve' %}">Approved Holidays</a>
+            &nbsp;
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_list' action='Decline' %}">Declined Holidays</a>
         </div>
     </div>
     <hr>

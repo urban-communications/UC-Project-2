@@ -116,11 +116,24 @@ class OperatorLeaveRequest(TemplateView):
         if request.user.operator:
             form = LeaveForm(request.POST)
             if form.is_valid():
-                data = form.save(commit=False)
-                data.operator_id = self.request.user.operator
-                data.client_id = self.request.user.operator.client_id
-                data.save()
-                return redirect('clientApp:home')
+                # Calculate no. of holidays
+                day = form.cleaned_data['to_date'] - form.cleaned_data['from_date']
+                total_days = day.days
+                if(total_days > 0):
+                    total_days = total_days + 1
+                if(total_days == 0):
+                    total_days = 1
+                
+                if(total_days >= 1):
+                    data = form.save(commit=False)
+                    data.no_of_days = total_days 
+                    data.operator_id = self.request.user.operator
+                    data.client_id = self.request.user.operator.client_id
+                    data.save()
+                    messages.success(request, "Your holiday request has been submitted! We will get back in touch with you soon. Thank you")
+                else:
+                    messages.error(request, "Kindly select a valid date range")
+                return HttpResponseRedirect(request.path_info)
             else:
                 context['form'] = form()
                 return render(request, self.template_name, context)
@@ -132,10 +145,11 @@ class OperatorLeaveList(ListView):
     template_name = 'operator_leave_list.html'
     model = Leave
     context_object_name = 'leave_list'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
-        return Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id).order_by('-created_at')
+        action = self.request.path.split('/')[-1]
+        return Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id, leave_status=action).order_by('-created_at')
 
 
 class OperatorLeaveDetail(DetailView):

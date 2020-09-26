@@ -86,22 +86,13 @@ class Leave(models.Model):
         ('Approve', 'Approve'),
         ('Decline', 'Decline')
     )
-    DAYS = (
-        ('', 'Choose...'),
-        ('One', 'One'),
-        ('Two', 'Two'),
-        ('Three', 'Three'),
-        ('Four', 'Four'),
-        ('Five', 'Five'),
-        ('More', 'More')
-    )
     leave_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     operator_id = models.ForeignKey(Operator, on_delete=models.CASCADE)
     client_id = models.ForeignKey(Client, on_delete=models.CASCADE)
     from_date = models.DateField(null=False)
     to_date = models.DateField(null=False)
-    no_of_days = models.CharField(max_length=20, choices=DAYS)
+    no_of_days = models.IntegerField(null=False)
     reason = models.TextField(null=True)
     leave_status = models.CharField(
         max_length=20, choices=LEAVE_STATUS, default='Pending')

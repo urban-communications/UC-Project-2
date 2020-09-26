@@ -10,6 +10,17 @@
 {% block body %}
 
     <h1>Holiday Request Form</h1>
+
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
     <form method="POST">
         {% csrf_token %}
         <li class="list-group-item">
