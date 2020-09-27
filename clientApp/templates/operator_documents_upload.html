@@ -24,18 +24,6 @@
         <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
     </div>
 </div>
-
-<br>
-<div>
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-success" role="alert">
-        {{message}}
-    </div>
-    {% endfor %}
-    {% endif %}
-
-</div>
 <br>
 
 {% endblock %}

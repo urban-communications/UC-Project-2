@@ -18,15 +18,16 @@ urlpatterns = [
     path('operator/leave-request', views.OperatorLeaveRequest.as_view(), name='operator_leave_request'),
     path('operator/leave-request/list/<str:action>', views.OperatorLeaveList.as_view(), name='operator_leave_list'),
     path('operator/leave-request/detail/<slug:pk>', views.OperatorLeaveDetail.as_view(), name='operator_leave_detail'),
-    path('leave-request/list', views.ClientLeaveList.as_view(), name='leave_list'),
+    path('leave-request/list/<str:action>', views.ClientLeaveList.as_view(), name='leave_list'),
     path('leave-request/approve/<slug:pk>', views.leave_approve, name='leave_approve'),
     path('leave-request/reject/<slug:pk>', views.leave_reject, name='leave_reject'),
-    path('leave-request/admin/list', views.AdminLeaveList.as_view(), name='admin_leave_list'),
+    path('leave-request/admin/list/<str:action>', views.AdminLeaveList.as_view(), name='admin_leave_list'),
     path('operator/documents/upload', views.OperatorDocumentsUpload.as_view(), name='operator_document_upload'),
     path('operator/documents/list', views.OperatorDocumentsList.as_view(), name='operator_document_list'),
     path('operator/documents/delete/<slug:pk>', views.operatorDocumetDelete, name='operator_document_delete'),
     path('operator/list', views.ClientOperatorList.as_view(), name='client_operator_list'),
     path('operator/documents/<slug:pk>', views.ClientOperatorDocumentsList.as_view(), name='client_operator_documents'),
+    path('invoices/list', views.ClientInvoiceList.as_view(), name='client_invoice_list')
 ] 
 
 app_name = 'clientApp'

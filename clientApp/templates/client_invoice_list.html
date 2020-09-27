@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+<title>Invoices</title>
+
+{% endblock %}
+
+{% block body %}
+
+<div>
+    <br>
+    <h1>{{data}}</h1>
+    <hr>
+</div>
+<br>
+<div class="row">
+    <div class="col-5">
+        <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
+    </div>
+</div>
+
+{% endblock %}

@@ -101,3 +101,18 @@ class Leave(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True)
 
+    def __str__(self):
+        return self.operator_id
+
+class MessageQuries(models.Model):
+    message_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    admin_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    client_id = models.ForeignKey(Client, on_delete=models.CASCADE, null=True)
+    operator_id = models.ForeignKey(Operator, on_delete=models.CASCADE, null=True)
+    messageQuery = models.TextField(null=False)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.client_id
+

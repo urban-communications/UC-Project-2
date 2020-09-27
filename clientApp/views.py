@@ -8,13 +8,44 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 
 
-from clientApp.forms import FeedbackForm, LeaveForm, OperatorDocumentsForm
+from clientApp.forms import FeedbackForm, LeaveForm, OperatorDocumentsForm, ClientSendMessageForm, AdminSendMessageForm
 
-from clientApp.models import Client, Leave, OperatorDocuments
+from clientApp.models import Client, Leave, OperatorDocuments, MessageQuries
 
 
 class HomeView(TemplateView):
     template_name = 'home.html'
+
+    def get(self, request):
+        adminChatForm = None
+        clientChatForm = None
+        if request.user.is_staff:
+            adminChatForm = AdminSendMessageForm(request)
+        elif request.user.client:
+            clientChatForm = ClientSendMessageForm(request)
+
+        context = {
+            'clientChatForm': clientChatForm,
+            'adminChatForm': adminChatForm
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        if request.user.is_staff:
+            adminChatForm = AdminSendMessageForm(request, request.POST)
+            if adminChatForm.is_valid():
+                adminChatForm.save()
+                messages.error(request, "Your message has been sent.")
+                return HttpResponseRedirect(request.path_info)
+        elif request.user.client:
+            clientChatForm = ClientSendMessageForm(request, request.POST)
+            if clientChatForm.is_valid():
+                clientChatForm.save()
+                messages.error(request, "Your message has been sent.")
+                return HttpResponseRedirect(request.path_info)
+        else:
+            messages.error(request, "Failed to send message. Try Again")
+            return HttpResponseRedirect(request.path_info)
 
 
 class ClientProfileView(DetailView):
@@ -33,7 +64,6 @@ class FeedbackView(TemplateView):
     template_name = 'client_feedback.html'
 
     def get(self, request):
-        # operators = Operator.objects.filter(client_id=request.user.client)
         feedback = FeedbackForm(request)
         context = {
             'feedback': feedback
@@ -48,7 +78,9 @@ class FeedbackView(TemplateView):
                 data = feedback_form.save(commit=False)
                 data.client_id = self.request.user.client
                 data.save()
-                return redirect('clientApp:home')
+                messages.success(
+                    request, "Your feedback has been submitted. Thank you")
+                return HttpResponseRedirect(request.path_info)
             else:
                 context['feedback_form'] = feedback_form()
             return render(request, self.template_name, context)
@@ -117,20 +149,22 @@ class OperatorLeaveRequest(TemplateView):
             form = LeaveForm(request.POST)
             if form.is_valid():
                 # Calculate no. of holidays
-                day = form.cleaned_data['to_date'] - form.cleaned_data['from_date']
+                day = form.cleaned_data['to_date'] - \
+                    form.cleaned_data['from_date']
                 total_days = day.days
                 if(total_days > 0):
                     total_days = total_days + 1
                 if(total_days == 0):
                     total_days = 1
-                
+
                 if(total_days >= 1):
                     data = form.save(commit=False)
-                    data.no_of_days = total_days 
+                    data.no_of_days = total_days
                     data.operator_id = self.request.user.operator
                     data.client_id = self.request.user.operator.client_id
                     data.save()
-                    messages.success(request, "Your holiday request has been submitted! We will get back in touch with you soon. Thank you")
+                    messages.success(
+                        request, "Your holiday request has been submitted! We will get back in touch with you soon. Thank you")
                 else:
                     messages.error(request, "Kindly select a valid date range")
                 return HttpResponseRedirect(request.path_info)
@@ -162,10 +196,11 @@ class ClientLeaveList(ListView):
     template_name = 'client_leave_list.html'
     model = Leave
     context_object_name = 'leave_list'
-    paginate_by = 8
+    paginate_by = 10
 
     def get_queryset(self):
-        return Leave.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')
+        action = self.request.path.split('/')[-1]
+        return Leave.objects.filter(client_id=self.request.user.client.client_user_id, leave_status=action).order_by('-created_at')
 
 
 def leave_approve(request, pk):
@@ -176,42 +211,54 @@ def leave_approve(request, pk):
         if leave.client_leave_status == "Approved":
             leave.leave_status = "Approved"
         leave.save()
-        return redirect("clientApp:home")
-    elif hasattr(request.user, 'client'):
+        messages.success(
+            request, "Holiday request has been approved. Thank you")
+        return redirect('clientApp:home')
+    if hasattr(request.user, 'client'):
         leave = Leave.objects.get(leave_id=pk)
         leave.client_leave_status = "Approved"
         leave.updated_at = timezone.now()
         if leave.admin_leave_status == "Approved":
-            leave.leave_status = "Approved"
+            leave.leave_status = "Approve"
         leave.save()
-        return redirect("clientApp:home")
+        messages.success(
+            request, "Holiday request has been approved. Thank you")
+        return redirect('clientApp:home')
     else:
-        return redirect("clientApp:home")
+        messages.success(
+            request, "You don't have valid permission to approve holiday request")
+        return redirect('clientApp:home')
 
 
 def leave_reject(request, pk):
     if request.user.is_staff or hasattr(request.user, 'client'):
         leave = Leave.objects.get(leave_id=pk)
         leave.updated_at = timezone.now()
-        if hasattr(request.user, 'client'):
-            leave.client_leave_status = "Declined"
         if request.user.is_staff:
             leave.admin_leave_status = "Declined"
-        leave.leave_status = "Declined"
+        if hasattr(request.user, 'client'):
+            leave.client_leave_status = "Declined"
+        leave.leave_status = "Decline"
         leave.save()
-        return redirect("clientApp:home")
+        messages.success(
+            request, "Holiday request has been declined. Thank you")
+        return redirect('clientApp:home')
     else:
-        return redirect("clientApp:home")
+        messages.success(
+            request, "You don't have valid permission to decline holiday request")
+        return redirect('clientApp:home')
 
 
 class AdminLeaveList(ListView):
     template_name = 'client_leave_list.html'
     model = Leave
     context_object_name = 'leave_list'
-    paginate_by = 8
+    paginate_by = 10
 
     def get_queryset(self):
-        return Leave.objects.all().order_by('-created_at')
+        action = self.request.path.split('/')[-1]
+        return Leave.objects.filter(leave_status=action).order_by('-created_at')
+
 
 class OperatorDocumentsUpload(FormView):
     form_class = OperatorDocumentsForm
@@ -225,9 +272,9 @@ class OperatorDocumentsUpload(FormView):
         if form.is_valid():
             for doc in files:
                 document = OperatorDocuments(
-                    operator_id = request.user.operator,
-                    doc_title = doc.name,
-                    documents = doc
+                    operator_id=request.user.operator,
+                    doc_title=doc.name,
+                    documents=doc
                 )
                 document.save()
                 messages.success(request, "Uploaded Successfully")
@@ -235,6 +282,7 @@ class OperatorDocumentsUpload(FormView):
         else:
             messages.error(request, "Failed to upload: Invalid files")
             form = OperatorDocumentsForm()
+
 
 class OperatorDocumentsList(ListView):
     template_name = 'operator_documents_list.html'
@@ -244,6 +292,7 @@ class OperatorDocumentsList(ListView):
 
     def get_queryset(self):
         return OperatorDocuments.objects.filter(operator_id=self.request.user.operator.operator_user_id)
+
 
 def operatorDocumetDelete(request, pk):
     if request.user.operator:
@@ -256,7 +305,8 @@ def operatorDocumetDelete(request, pk):
         else:
             messages.error(request, "Error while deleting the file")
             return render(request, 'operator_documents_list.html')
-                    
+
+
 class ClientOperatorList(ListView):
     model = Operator
     template_name = "client_operator_list.html"
@@ -265,6 +315,7 @@ class ClientOperatorList(ListView):
 
     def get_queryset(self):
         return Operator.objects.filter(client_id=self.request.user.client.client_user_id)
+
 
 class ClientOperatorDocumentsList(ListView):
     template_name = 'client_operator_documents_list.html'
@@ -275,3 +326,15 @@ class ClientOperatorDocumentsList(ListView):
     def get_queryset(self):
         path = self.request.path_info.split('/')
         return OperatorDocuments.objects.filter(operator_id=path[-1])
+
+
+class ClientInvoiceList(TemplateView):
+    template_name = 'client_invoice_list.html'
+
+    def get(self, request):
+        data1 = "COMMING SOON"
+        return render(request, self.template_name, {'data': data1})
+
+
+class SendMessage(TemplateView):
+    template_name = 'home.html'

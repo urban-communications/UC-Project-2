@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from clientApp.models import Client, Operator, Feedback, Leave, OperatorDocuments
+from clientApp.models import Client, Operator, Feedback, Leave, OperatorDocuments, MessageQuries
 
 CLIENT_TYPE = (
     ('', 'Choose...'),
@@ -105,7 +105,6 @@ class OperatorRegistrationForm(forms.ModelForm):
         )
     )
 
-
     class Meta:
         model = Operator
         fields = (
@@ -176,3 +175,39 @@ class OperatorDocumentsForm(forms.ModelForm):
         fields = (
             'documents',
         )
+
+
+class ClientSendMessageForm(forms.ModelForm):
+
+    def __init__(self, request,  *args, **kwargs):
+        super(ClientSendMessageForm, self).__init__(*args, **kwargs)
+        self.fields['operator_id'].queryset = Operator.objects.filter(
+            client_id=request.user.client.client_user_id)
+
+    class Meta:
+        model = MessageQuries
+        fields = (
+            'operator_id',
+            'messageQuery'
+        )
+        labels = {
+            "operator_id": "Operator Name",
+            "messageQuery": "Message"
+        }
+
+class AdminSendMessageForm(forms.ModelForm):
+
+    def __init__(self, request,  *args, **kwargs):
+        super(AdminSendMessageForm, self).__init__(*args, **kwargs)
+        self.fields['client_id'].queryset = Client.objects.all().order_by('client_name')
+
+    class Meta:
+        model = MessageQuries
+        fields = (
+            'client_id',
+            'messageQuery'
+        )
+        labels = {
+            "operator_id": "Client Name",
+            "messageQuery": "Message"
+        }

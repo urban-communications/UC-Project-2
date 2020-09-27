@@ -10,13 +10,14 @@
 {% block body %}
 
     <h1>Feedback Form</h1>
+
     <form method="POST">
         {% csrf_token %}
         <li class="list-group-item">
             {{feedback|crispy}}
         </li>
         <br>
-        <button class="btn btn-dark btn-lg btn-lg" type="submit">Submit</button>
+        <button class="btn btn-dark" type="submit">Submit</button>
     </form>
     <br />
     <div class="row">
