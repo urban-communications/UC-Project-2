@@ -208,6 +208,6 @@ class AdminSendMessageForm(forms.ModelForm):
             'messageQuery'
         )
         labels = {
-            "operator_id": "Client Name",
+            "client_id": "Client Name",
             "messageQuery": "Message"
         }
