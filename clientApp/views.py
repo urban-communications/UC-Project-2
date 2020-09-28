@@ -21,7 +21,7 @@ class HomeView(TemplateView):
         clientChatForm = None
         if request.user.is_staff:
             adminChatForm = AdminSendMessageForm(request)
-        elif request.user.client:
+        if hasattr(request.user, 'client'):
             clientChatForm = ClientSendMessageForm(request)
 
         context = {
