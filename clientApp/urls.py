@@ -27,7 +27,10 @@ urlpatterns = [
     path('operator/documents/delete/<slug:pk>', views.operatorDocumetDelete, name='operator_document_delete'),
     path('operator/list', views.ClientOperatorList.as_view(), name='client_operator_list'),
     path('operator/documents/<slug:pk>', views.ClientOperatorDocumentsList.as_view(), name='client_operator_documents'),
-    path('invoices/list', views.ClientInvoiceList.as_view(), name='client_invoice_list')
+    path('invoices/list', views.ClientInvoiceList.as_view(), name='client_invoice_list'),
+    path('operator/message/list', views.OperatorViewMessages.as_view(), name='operator_message_list'),
+    path('message/operator/<slug:pk>', views.ClientOperatorViewMessage.as_view(), name='client_message_operator_list'),
+    path('message/admin/<int:pk>', views.ClientAdminViewMessage.as_view(), name='client_admin_message_list')
 ] 
 
 app_name = 'clientApp'

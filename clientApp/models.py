@@ -112,7 +112,6 @@ class MessageQuries(models.Model):
     operator_id = models.ForeignKey(Operator, on_delete=models.CASCADE, null=True)
     messageQuery = models.TextField(null=False)
     created_at = models.DateTimeField(default=timezone.now)
+    sender = models.CharField(max_length=20, null=True)
 
-    def __str__(self):
-        return self.client_id
 

@@ -9,7 +9,7 @@ from django.contrib import messages
 
 
 from clientApp.forms import FeedbackForm, LeaveForm, OperatorDocumentsForm, ClientSendMessageForm, AdminSendMessageForm
-
+from django.contrib.auth.models import User
 from clientApp.models import Client, Leave, OperatorDocuments, MessageQuries
 
 
@@ -19,14 +19,22 @@ class HomeView(TemplateView):
     def get(self, request):
         adminChatForm = None
         clientChatForm = None
+        totalOperator = None
+        admin = None
         if request.user.is_staff:
             adminChatForm = AdminSendMessageForm(request)
         if hasattr(request.user, 'client'):
             clientChatForm = ClientSendMessageForm(request)
+            totalOperator = Operator.objects.filter(
+                client_id=request.user.client.client_user_id)
+            admin = User.objects.get(is_superuser=True, is_staff=True)
+            print(admin)
 
         context = {
             'clientChatForm': clientChatForm,
-            'adminChatForm': adminChatForm
+            'adminChatForm': adminChatForm,
+            'totalOperator': totalOperator,
+            'adminAccount': admin
         }
         return render(request, self.template_name, context)
 
@@ -34,13 +42,20 @@ class HomeView(TemplateView):
         if request.user.is_staff:
             adminChatForm = AdminSendMessageForm(request, request.POST)
             if adminChatForm.is_valid():
-                adminChatForm.save()
+
+                data = adminChatForm.save(commit=False)
+                data.admin_id = request.user
+                data.sender = 'Company'
+                data.save()
                 messages.error(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
         elif request.user.client:
             clientChatForm = ClientSendMessageForm(request, request.POST)
             if clientChatForm.is_valid():
-                clientChatForm.save()
+                data = clientChatForm.save(commit=False)
+                data.client_id = request.user.client
+                data.sender = 'Client'
+                data.save()
                 messages.error(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
         else:
@@ -336,5 +351,34 @@ class ClientInvoiceList(TemplateView):
         return render(request, self.template_name, {'data': data1})
 
 
-class SendMessage(TemplateView):
-    template_name = 'home.html'
+class OperatorViewMessages(ListView):
+    template_name = 'operator_view_messages_client.html'
+    model = MessageQuries
+    context_object_name = 'message_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id).order_by('-created_at')
+
+
+class ClientOperatorViewMessage(ListView):
+    template_name = 'client_view_message_operator.html'
+    model = MessageQuries
+    context_object_name = 'message_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        operator_id = self.request.path.split('/')[-1]
+        return MessageQuries.objects.filter(operator_id=operator_id, client_id=self.request.user.client.client_user_id).order_by('-created_at')
+
+
+class ClientAdminViewMessage(ListView):
+    template_name = 'client_admin_view_message.html'
+    model = MessageQuries
+    context_object_name = 'message_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        admin_id = self.request.path.split('/')[-1]
+        return MessageQuries.objects.filter(client_id=self.request.user.client.client_user_id, admin_id=admin_id).order_by('-created_at')
+        

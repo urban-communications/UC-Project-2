@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -149,7 +149,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'),]
 
 
-DEBUG_PROPAGATE_EXCEPTIONS = True
+# DEBUG_PROPAGATE_EXCEPTIONS = True
 
 
 # heruku setting

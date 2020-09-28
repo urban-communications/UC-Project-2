@@ -74,6 +74,18 @@
         </form>
     </div>
     <hr>
+    <div>
+        <a class="btn btn-primary" href="{% url 'clientApp:client_admin_message_list' adminAccount.id %}">Company Messages</a>
+    </div>
+    <hr>
+    <div>
+        {% for operator in totalOperator %}
+        <a class="btn btn-primary" href="{% url 'clientApp:client_message_operator_list' operator.operator_user_id %}">Messages of
+            {{operator.operator_name}}</a>
+        &nbsp;
+        {% endfor %}
+    </div>
+    <hr>
 
     {% endif %}
 
@@ -116,6 +128,14 @@
     <div class="row">
         <div class="col">
             <a class="btn btn-primary" href="{% url 'clientApp:operator_feedback_list' %}">Feedback</a>
+        </div>
+    </div>
+    <hr>
+
+    <h2>Messages from Client</h2>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_message_list' %}">View Messages</a>
         </div>
     </div>
     <hr>
@@ -184,6 +204,7 @@
         </form>
     </div>
     <hr>
+
     {% endif %}
 
 </div>
