@@ -2,7 +2,15 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from clientApp.models import Client, Operator, Feedback, Leave, OperatorDocuments, MessageQuries
+from clientApp.models import (
+    Client,
+    Operator,
+    Feedback,
+    Leave,
+    OperatorDocuments,
+    MessageQuries,
+    Invoices
+)
 
 CLIENT_TYPE = (
     ('', 'Choose...'),
@@ -195,11 +203,12 @@ class ClientSendMessageForm(forms.ModelForm):
             "messageQuery": "Message"
         }
 
-class AdminSendMessageForm(forms.ModelForm):
 
+class AdminSendMessageForm(forms.ModelForm):
     def __init__(self, request,  *args, **kwargs):
         super(AdminSendMessageForm, self).__init__(*args, **kwargs)
-        self.fields['client_id'].queryset = Client.objects.all().order_by('client_name')
+        self.fields['client_id'].queryset = Client.objects.all().order_by(
+            'client_name')
 
     class Meta:
         model = MessageQuries
@@ -210,4 +219,44 @@ class AdminSendMessageForm(forms.ModelForm):
         labels = {
             "client_id": "Client Name",
             "messageQuery": "Message"
+        }
+
+
+class AdminSendMessageToOperatorForm(forms.ModelForm):
+
+    class Meta:
+        model = MessageQuries
+        fields = (
+            'operator_id',
+            'messageQuery'
+        )
+        labels = {
+            "operator_id": "Operator Name",
+            "messageQuery": "Message"
+        }
+
+
+class ClientSendMessageToAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = MessageQuries
+        fields = (
+            'messageQuery',
+        )
+        labels = {
+            "messageQuery": "Message"
+        }
+
+
+class ClientInvoiceForm(forms.ModelForm):
+
+    class Meta:
+        model = Invoices
+        fields = (
+            'client_id',
+            'title',
+            'invoices'
+        )
+        labels = {
+            "client_id": "Client Name",
         }

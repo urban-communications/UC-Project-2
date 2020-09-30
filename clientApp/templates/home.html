@@ -25,7 +25,8 @@
     <h2>Operators</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:client_operator_list' %}">View Operators</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:client_operator_list' %}">View Operators</a>
         </div>
     </div>
     <hr>
@@ -33,9 +34,11 @@
     <h2>Feedback</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:client_feedback' %}">Give your Feedback</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:client_feedback' %}">Give
+                your Feedback</a>
             &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:client_feedback_list' %}">View Feedbacks</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:client_feedback_list' %}">View Feedbacks</a>
         </div>
     </div>
     <hr>
@@ -43,11 +46,14 @@
     <h2>Holiday Requests</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:leave_list' action='Pending' %}">Pending Holidays</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:leave_list' action='Pending' %}">Pending Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:leave_list' action='Approve' %}">Approved Holidays</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:leave_list' action='Approve' %}">Approved Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:leave_list' action='Decline' %}">Declined Holidays</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:leave_list' action='Decline' %}">Declined Holidays</a>
         </div>
     </div>
     <hr>
@@ -55,12 +61,34 @@
     <h2>Invoices</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:client_invoice_list' %}">View Invoices</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:client_invoice_list' %}">View Invoices</a>
         </div>
     </div>
     <hr>
 
-    <h2>Send Message</h2>
+    <h2>Send Message to Company</h2>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <li class="list-group-item">
+                {{clientChatAdmin|crispy}}
+            </li>
+            <br>
+            <button type="submit" class="btn btn-dark ">
+                Send
+            </button>
+        </form>
+    </div>
+    <hr>
+
+    <div>
+        <a class="btn btn-primary" style="margin-bottom: 10px;"
+            href="{% url 'clientApp:client_admin_message_list' adminAccount.id %}">Company Messages</a>
+    </div>
+    <hr>
+
+    <h2>Send Message to Operator</h2>
     <div>
         <form method="post">
             {% csrf_token %}
@@ -75,12 +103,9 @@
     </div>
     <hr>
     <div>
-        <a class="btn btn-primary" href="{% url 'clientApp:client_admin_message_list' adminAccount.id %}">Company Messages</a>
-    </div>
-    <hr>
-    <div>
         {% for operator in totalOperator %}
-        <a class="btn btn-primary" href="{% url 'clientApp:client_message_operator_list' operator.operator_user_id %}">Messages of
+        <a class="btn btn-primary" style="margin-bottom: 10px;"
+            href="{% url 'clientApp:client_message_operator_list' operator.operator_user_id %}">Messages of
             {{operator.operator_name}}</a>
         &nbsp;
         {% endfor %}
@@ -100,26 +125,11 @@
     <h2>Documents</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_document_upload' %}">Upload Documents</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_document_upload' %}">Upload Documents</a>
             &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_document_list' %}">View Documents</a>
-        </div>
-    </div>
-    <hr>
-
-    <h2>Holiday Details</h2>
-    <div class="row">
-        <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_request' %}">Request Holidays</a>
-            &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_list' action='Pending' %}">Pending
-                Holidays</a>
-            &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_list' action='Approve' %}">Approved
-                Holidays</a>
-            &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_leave_list' action='Decline' %}">Declined
-                Holidays</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_document_list' %}">View Documents</a>
         </div>
     </div>
     <hr>
@@ -132,10 +142,32 @@
     </div>
     <hr>
 
+    <h2>Holiday Details</h2>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_leave_request' %}">Request Holidays</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_leave_list' action='Pending' %}">Pending
+                Holidays</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_leave_list' action='Approve' %}">Approved
+                Holidays</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_leave_list' action='Decline' %}">Declined
+                Holidays</a>
+        </div>
+    </div>
+    <hr>
+
     <h2>Messages from Client</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_message_list' %}">View Messages</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_message_list' %}">View Messages</a>
         </div>
     </div>
     <hr>
@@ -144,6 +176,7 @@
 
 
     {% if user.is_staff %}
+
     <h2>Admin</h2>
 
     {% if user.is_superuser %}
@@ -157,20 +190,35 @@
     <hr>
     <br>
 
-    <h2>Registration</h2>
+    <h2>Feedback</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_signup' %}">Operator Registration</a>
-            &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:admin_client_signup' %}">Client Registration</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:admin_feedback_list' %}">Feedback</a>
         </div>
     </div>
     <hr>
 
-    <h2>Feedback</h2>
+    <h2>Invoices</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:admin_feedback_list' %}">Feedback</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:admin_invoice_upload' %}">Upload Invoices</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:admin_invoice_list' %}">View
+                Invoices</a>
+        </div>
+    </div>
+    <hr>
+
+    <h2>Registration</h2>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_signup' %}">Operator Registration</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:admin_client_signup' %}">Client Registration</a>
         </div>
     </div>
     <hr>
@@ -178,19 +226,22 @@
     <h2>Holiday Request</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:admin_leave_list' action='Pending' %}">Pending
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:admin_leave_list' action='Pending' %}">Pending
                 Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:admin_leave_list' action='Approve' %}">Approved
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:admin_leave_list' action='Approve' %}">Approved
                 Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" href="{% url 'clientApp:admin_leave_list' action='Decline' %}">Declined
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:admin_leave_list' action='Decline' %}">Declined
                 Holidays</a>
         </div>
     </div>
     <hr>
 
-    <h2>Send Message</h2>
+    <h2>Send Message to Client</h2>
     <div>
         <form method="post">
             {% csrf_token %}
@@ -202,6 +253,43 @@
                 Send
             </button>
         </form>
+    </div>
+    <hr>
+
+    <div>
+        <h2>Messages of Client</h2>
+        {% for clientObj in adminTotalClient %}
+        <a class="btn btn-primary" style="margin-bottom: 10px;"
+            href="{% url 'clientApp:admin_client_message_list' clientObj.client_user_id %}">Messages of
+            {{clientObj.client_name}}</a>
+        &nbsp;
+        {% endfor %}
+    </div>
+    <hr>
+
+    <h2>Send Message to Operator</h2>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <li class="list-group-item">
+                {{adminChatOperator|crispy}}
+            </li>
+            <br>
+            <button type="submit" class="btn btn-dark ">
+                Send
+            </button>
+        </form>
+    </div>
+    <hr>
+
+    <div>
+        <h2>Messages of Operator</h2>
+        {% for operatorObj in adminTotalOperator %}
+        <a class="btn btn-primary" style="margin-bottom: 10px;"
+            href="{% url 'clientApp:admin_operator_message_list' operatorObj.operator_user_id %}">Messages of
+            {{operatorObj.operator_name}}</a>
+        &nbsp;
+        {% endfor %}
     </div>
     <hr>
 

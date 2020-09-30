@@ -8,9 +8,24 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 
 
-from clientApp.forms import FeedbackForm, LeaveForm, OperatorDocumentsForm, ClientSendMessageForm, AdminSendMessageForm
+from clientApp.forms import (
+    FeedbackForm,
+    LeaveForm,
+    OperatorDocumentsForm,
+    ClientSendMessageForm,
+    AdminSendMessageForm,
+    AdminSendMessageToOperatorForm,
+    ClientSendMessageToAdminForm,
+    ClientInvoiceForm
+)
 from django.contrib.auth.models import User
-from clientApp.models import Client, Leave, OperatorDocuments, MessageQuries
+from clientApp.models import (
+    Client,
+    Leave,
+    OperatorDocuments,
+    MessageQuries,
+    Invoices
+)
 
 
 class HomeView(TemplateView):
@@ -18,43 +33,75 @@ class HomeView(TemplateView):
 
     def get(self, request):
         adminChatForm = None
+        adminChatOperatorForm = None
         clientChatForm = None
-        totalOperator = None
+        clientTotalOperator = None
+        clientChatAdmin = None
         admin = None
+        adminTotalOperator = None
+        adminTotalClient = None
+
         if request.user.is_staff:
             adminChatForm = AdminSendMessageForm(request)
+            adminChatOperatorForm = AdminSendMessageToOperatorForm()
+            adminTotalOperator = Operator.objects.all().order_by('operator_name')
+            adminTotalClient = Client.objects.all().order_by('client_name')
+
         if hasattr(request.user, 'client'):
             clientChatForm = ClientSendMessageForm(request)
-            totalOperator = Operator.objects.filter(
-                client_id=request.user.client.client_user_id)
+            clientChatAdmin = ClientSendMessageToAdminForm()
+            clientTotalOperator = Operator.objects.filter(
+                client_id=request.user.client.client_user_id).order_by('operator_name')
             admin = User.objects.get(is_superuser=True, is_staff=True)
-            print(admin)
 
         context = {
             'clientChatForm': clientChatForm,
+            'clientChatAdmin': clientChatAdmin,
             'adminChatForm': adminChatForm,
-            'totalOperator': totalOperator,
-            'adminAccount': admin
+            'adminChatOperator': adminChatOperatorForm,
+            'totalOperator': clientTotalOperator,
+            'adminAccount': admin,
+            'adminTotalOperator': adminTotalOperator,
+            'adminTotalClient': adminTotalClient
         }
         return render(request, self.template_name, context)
 
     def post(self, request):
         if request.user.is_staff:
             adminChatForm = AdminSendMessageForm(request, request.POST)
+            adminChatOperatorForm = AdminSendMessageToOperatorForm(
+                request.POST)
             if adminChatForm.is_valid():
-
                 data = adminChatForm.save(commit=False)
                 data.admin_id = request.user
                 data.sender = 'Company'
                 data.save()
-                messages.error(request, "Your message has been sent.")
+                messages.success(request, "Your message has been sent.")
+                return HttpResponseRedirect(request.path_info)
+            if adminChatOperatorForm.is_valid():
+                data = adminChatOperatorForm.save(commit=False)
+                data.admin_id = request.user
+                data.sender = 'Company'
+                data.save()
+                messages.success(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
         elif request.user.client:
             clientChatForm = ClientSendMessageForm(request, request.POST)
+            clientChatAdmin = ClientSendMessageToAdminForm(request.POST)
             if clientChatForm.is_valid():
                 data = clientChatForm.save(commit=False)
                 data.client_id = request.user.client
                 data.sender = 'Client'
+                data.save()
+                messages.error(request, "Your message has been sent.")
+                return HttpResponseRedirect(request.path_info)
+            if clientChatAdmin.is_valid():
+                companyUser = User.objects.get(
+                    is_staff=True, is_superuser=True)
+                data = clientChatAdmin.save(commit=False)
+                data.client_id = request.user.client
+                data.sender = 'Client'
+                data.admin_id = companyUser
                 data.save()
                 messages.error(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
@@ -343,14 +390,6 @@ class ClientOperatorDocumentsList(ListView):
         return OperatorDocuments.objects.filter(operator_id=path[-1])
 
 
-class ClientInvoiceList(TemplateView):
-    template_name = 'client_invoice_list.html'
-
-    def get(self, request):
-        data1 = "COMMING SOON"
-        return render(request, self.template_name, {'data': data1})
-
-
 class OperatorViewMessages(ListView):
     template_name = 'operator_view_messages_client.html'
     model = MessageQuries
@@ -381,4 +420,76 @@ class ClientAdminViewMessage(ListView):
     def get_queryset(self):
         admin_id = self.request.path.split('/')[-1]
         return MessageQuries.objects.filter(client_id=self.request.user.client.client_user_id, admin_id=admin_id).order_by('-created_at')
-        
+
+
+class AdminClientViewMessage(ListView):
+    template_name = 'client_admin_view_message.html'
+    model = MessageQuries
+    context_object_name = 'message_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        client_user_id = self.request.path.split('/')[-1]
+        return MessageQuries.objects.filter(client_id=client_user_id, admin_id=self.request.user.id).order_by('-created_at')
+
+
+class AdminOperatorViewMessage(ListView):
+    template_name = 'client_view_message_operator.html'
+    model = MessageQuries
+    context_object_name = 'message_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        operator_id = self.request.path.split('/')[-1]
+        return MessageQuries.objects.filter(operator_id=operator_id, admin_id=self.request.user.id).order_by('-created_at')
+
+
+class ClientInvoiceUpload(FormView):
+    template_name = 'admin_invoice_upload.html'
+    form_class = ClientInvoiceForm
+    context_object_name = 'document'
+
+    def post(self, request):
+        form = ClientInvoiceForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Uploaded Successfully")
+            return HttpResponseRedirect(request.path_info)
+        else:
+            messages.error(request, "Failed to upload.")
+            form = OperatorDocumentsForm()
+            return HttpResponseRedirect(request.path_info)
+
+
+class AdminInvoiceList(ListView):
+    template_name = 'admin_invoice_list.html'
+    model = Invoices
+    context_object_name = 'documents'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Invoices.objects.all().order_by('-created_at')
+
+
+def invoiceDelete(request, pk):
+    if request.user.is_staff:
+        document = Invoices.objects.get(invoice_id=pk)
+        if document:
+            document.invoices.delete()
+            document.delete()
+            messages.success(request, "Deleted Successfully")
+            return HttpResponseRedirect(reverse('clientApp:admin_invoice_list'))
+        else:
+            messages.error(request, "Error while deleting the file")
+            return HttpResponseRedirect(request.path_info)
+
+
+class ClientInvoiceList(ListView):
+    template_name = 'client_invoice_view.html'
+    model = Invoices
+    context_object_name = 'documents'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Invoices.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')
+

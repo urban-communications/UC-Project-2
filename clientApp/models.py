@@ -114,4 +114,10 @@ class MessageQuries(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     sender = models.CharField(max_length=20, null=True)
 
-
+class Invoices(models.Model):
+    invoice_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    client_id = models.ForeignKey(Client, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    title = models.CharField(max_length=50, null=True)
+    invoices = models.FileField(upload_to="client_invoices", null=False)
