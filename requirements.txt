@@ -6,3 +6,5 @@ django-crispy-forms
 requests
 gunicorn
 django-heroku
+boto3
+django-storages

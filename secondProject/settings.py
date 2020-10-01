@@ -24,7 +24,7 @@ ALLOWED_HOSTS = [
     'localhost',
     'https://urbancommunications.herokuapp.com',
     'urbancommunications.herokuapp.com'
-    ]
+]
 
 # Application definition
 
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'clientApp.apps.ClientappConfig',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -101,10 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -115,11 +112,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_URL = '/static/'
 
 # login redirects
 LOGIN_URL = '/accounts/login'
@@ -134,7 +126,7 @@ LOGIN_EXEMPT_URLS = (
     r'^accounts/password_reset/done/$',
     r'^accounts/reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$',
     r'^accounts/reset/done/$',
-    r'^accounts/password_reset/complete/$',   
+    r'^accounts/password_reset/complete/$',
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -142,15 +134,30 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "emails")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'secondProject/media')
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'),]
-
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'secondProject/media')
 
 # DEBUG_PROPAGATE_EXCEPTIONS = True
 
+# AWS Congifuration
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = 'static'
+STATICFILES_STORAGE = "secondProject.storage_backends.StaticStorage"
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+
+
+AWS_DEFAULT_ACL = 'public-read'
+DEFAULT_FILE_STORAGE = 'secondProject.storage_backends.MediaStorage'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # heruku setting
 django_heroku.settings(locals())
