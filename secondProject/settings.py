@@ -115,7 +115,7 @@ USE_TZ = True
 
 # login redirects
 LOGIN_URL = '/accounts/login'
-LOGIN_REDIRECT_URL = '/client'
+LOGIN_REDIRECT_URL = '/client/'
 LOGOUT_REDIRECT_URL = '/accounts/login'
 
 LOGIN_EXEMPT_URLS = (
