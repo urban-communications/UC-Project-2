@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -135,12 +135,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # EMAIL_FILE_PATH = os.path.join(BASE_DIR, "emails")
 
-# AWS SES E-mail Settings
-# EMAIL_BACKEND = 'django_ses.SESBackend'
-# AWS_SES_REGION = 'eu-west-2'
-# AWS_SES_REGION_ENDPOINT = 'email-smtp.eu-west-2.amazonaws.com'
-
-
 # Send Email using Gmail Account
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -149,6 +143,11 @@ EMAIL_HOST_PASSWORD = "m7FGW@vw1"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'urbancommunication12@gmail.com'  
+
+# AWS SES E-mail Settings
+# EMAIL_BACKEND = 'django_ses.SESBackend'
+# AWS_SES_REGION = 'eu-west-2'
+# AWS_SES_REGION_ENDPOINT = 'email-smtp.eu-west-2.amazonaws.com'
 
 
 
