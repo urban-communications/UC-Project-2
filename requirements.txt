@@ -8,3 +8,4 @@ gunicorn
 django-heroku
 boto3
 django-storages
+django-ses
