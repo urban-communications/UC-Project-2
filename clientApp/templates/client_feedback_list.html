@@ -10,6 +10,7 @@
 
 {% block body %}
 <div>
+    <br>
     <h1>Operator Feedback</h1>
     <hr />
     <form method="GET" action="">
@@ -32,7 +33,7 @@
             {% for feedback in feedback_list %}
             <tr>
                 <th scope="row">{{feedback.operator_id}}</th>
-                <td>{{feedback.created_at}}</td>
+                <td>{{feedback.created_at|date:'d-m-Y P'}}</td>
                 <td>{{feedback.rating}}</td>
                 <td>{{feedback.feedback_note}}</td>
             </tr>

@@ -8,6 +8,7 @@
 
 {% block body %}
 <div>
+    <br>
     <h1>Invoices</h1>
     <br>
 </div>
@@ -27,7 +28,7 @@
             <tr>
                 <th scope="row">{{doc.client_id}}</th>
                 <td>{{doc.title}}</td>
-                <td><a class="btn btn-success" href="{{doc.invoices.url}}" target="_blank">Download</a></td>
+                <td><a class="btn btn-success" href="{{doc.invoices.url}}" target="_blank">Download / View</a></td>
                 <td><a href="{% url 'clientApp:admin_invoice_delete' doc.invoice_id %}" class="btn btn-danger">Delete</a></td>
             </tr>
             {% endfor%}

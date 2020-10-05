@@ -104,11 +104,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
+DATE_FORMAT = "d-b-Y"
+SHORT_DATETIME_FORMAT = "m-d-Y P"
 
 USE_TZ = True
 

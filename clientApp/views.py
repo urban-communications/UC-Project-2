@@ -206,7 +206,7 @@ class OperatorLeaveRequest(TemplateView):
         return render(request, self.template_name, context)
 
     def post(self, request):
-        constxt = {}
+        context = {}
         if request.user.operator:
             form = LeaveForm(request.POST)
             if form.is_valid():
@@ -274,7 +274,7 @@ def leave_approve(request, pk):
             leave.leave_status = "Approved"
         leave.save()
         messages.success(
-            request, "Holiday request has been approved. Thank you")
+            request, "Holiday request has been approved. Thank you.")
         return redirect('clientApp:home')
     if hasattr(request.user, 'client'):
         leave = Leave.objects.get(leave_id=pk)
@@ -284,11 +284,11 @@ def leave_approve(request, pk):
             leave.leave_status = "Approve"
         leave.save()
         messages.success(
-            request, "Holiday request has been approved. Thank you")
+            request, "Holiday request has been approved. Thank you.")
         return redirect('clientApp:home')
     else:
         messages.success(
-            request, "You don't have valid permission to approve holiday request")
+            request, "You don't have valid permission to approve holiday request.")
         return redirect('clientApp:home')
 
 
@@ -303,11 +303,11 @@ def leave_reject(request, pk):
         leave.leave_status = "Decline"
         leave.save()
         messages.success(
-            request, "Holiday request has been declined. Thank you")
+            request, "Holiday request has been declined. Thank you.")
         return redirect('clientApp:home')
     else:
         messages.success(
-            request, "You don't have valid permission to decline holiday request")
+            request, "You don't have valid permission to decline holiday request.")
         return redirect('clientApp:home')
 
 
@@ -339,10 +339,10 @@ class OperatorDocumentsUpload(FormView):
                     documents=doc
                 )
                 document.save()
-                messages.success(request, "Uploaded Successfully")
+                messages.success(request, "Uploaded Successfully.")
             return HttpResponseRedirect(request.path_info)
         else:
-            messages.error(request, "Failed to upload: Invalid files")
+            messages.error(request, "Failed to upload: Invalid files.")
             form = OperatorDocumentsForm()
 
 
@@ -362,10 +362,10 @@ def operatorDocumetDelete(request, pk):
         if document:
             document.documents.delete()
             document.delete()
-            messages.success(request, "Deleted Successfully")
+            messages.success(request, "Deleted Successfully.")
             return HttpResponseRedirect(reverse('clientApp:operator_document_list'))
         else:
-            messages.error(request, "Error while deleting the file")
+            messages.error(request, "Error while deleting the file.")
             return render(request, 'operator_documents_list.html')
 
 
@@ -453,7 +453,7 @@ class ClientInvoiceUpload(FormView):
         form = ClientInvoiceForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, "Uploaded Successfully")
+            messages.success(request, "Uploaded Successfully.")
             return HttpResponseRedirect(request.path_info)
         else:
             messages.error(request, "Failed to upload.")
@@ -477,10 +477,10 @@ def invoiceDelete(request, pk):
         if document:
             document.invoices.delete()
             document.delete()
-            messages.success(request, "Deleted Successfully")
+            messages.success(request, "Deleted Successfully.")
             return HttpResponseRedirect(reverse('clientApp:admin_invoice_list'))
         else:
-            messages.error(request, "Error while deleting the file")
+            messages.error(request, "Error while deleting the file.")
             return HttpResponseRedirect(request.path_info)
 
 
@@ -492,4 +492,3 @@ class ClientInvoiceList(ListView):
 
     def get_queryset(self):
         return Invoices.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')
-

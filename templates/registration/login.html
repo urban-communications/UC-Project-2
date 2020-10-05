@@ -11,9 +11,9 @@
 
 <div class="text-center">
     <br />
-    <h1>Welcome, Login to continue</h1>
+    <h1>Login</h1>
     <br />
-    <div class="alert border border-dark justify-content-center align-items-center w-50 p-3" style="background-color:white;margin-left:25%;">
+    <div class="alert border border-dark justify-content-center" style="background-color:white;">
         <form method="post">
             {% csrf_token %}
             <li class="list-group-item">
@@ -25,7 +25,7 @@
             </button>
         </form>
         <br />
-        <a href="/accounts/password_reset/" class="btn btn-primary" style="white-space: normal; font-size: x-small;word-wrap:break-word;">Forget password or username</a>
+        <a href="/accounts/password_reset/" class="btn btn-primary" style="white-space: normal; font-size: x-small;word-wrap:break-word;">Forgot password or username</a>
 
     </div>
 </div>

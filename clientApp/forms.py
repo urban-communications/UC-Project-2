@@ -82,11 +82,15 @@ class ClientRegistrationForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = (
+            'client_name',
             'client_type',
             'contact_number',
             'address',
             'profile_picture'
         )
+        labels = {
+            'client_name': 'Company Name'
+            }
 
 
 class OperatorRegistrationForm(forms.ModelForm):
@@ -109,7 +113,8 @@ class OperatorRegistrationForm(forms.ModelForm):
     )
     date_of_birth = forms.DateField(
         widget=forms.TextInput(
-            attrs={'type': 'date'}
+            attrs={'type': 'date', 'format': 'd-m-Y', 'input_formats': 'd-m-Y'},
+            
         )
     )
 

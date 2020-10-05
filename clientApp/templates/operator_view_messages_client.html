@@ -10,6 +10,7 @@
 
 {% block body %}
 <div>
+    <br>
     <h1>Client Messages</h1>
     <br>
 </div>
@@ -25,7 +26,7 @@
         <tbody>
             {% for msg in message_list %}
             <tr>
-                <th scope="row">{{msg.created_at}}</th>
+                <th scope="row">{{msg.created_at|date:'d-m-Y P'}}</th>
                 <td>{{msg.messageQuery}}</td>
             </tr>
             {% endfor%}

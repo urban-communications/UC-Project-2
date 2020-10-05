@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-
+<br>
 <h1>Holiday Detail</h1>
 <hr />
 
@@ -19,10 +19,10 @@
         <ul class="list-group list-group-flush">
 
             <li class="list-group-item">Client : {{leave.client_id}}</li>
-            <li class="list-group-item">From Date : {{leave.from_date}}</li>
-            <li class="list-group-item">To Date : {{leave.to_date}}</li>
-            <li class="list-group-item">No of Days : {{leave.no_of_days}}</li>
-            <li class="list-group-item">Leave Request Date : {{leave.created_at}}</li>
+            <li class="list-group-item">From : {{leave.from_date}}</li>
+            <li class="list-group-item">To : {{leave.to_date}}</li>
+            <li class="list-group-item">Total Days : {{leave.no_of_days}}</li>
+            <li class="list-group-item">Leave Requested On : {{leave.created_at}}</li>
 
             {% if leave.reason %}
             <li class="list-group-item">Reason : {{leave.reason}}</li>

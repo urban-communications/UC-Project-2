@@ -11,8 +11,9 @@
 {% block body %}
 
 <div>
+    <br>
     <h1 class="col-md-8 offset-md-2 text-center">
-        Welcome to Urban Communications
+        Welcome
     </h1>
     <hr />
     <br />
@@ -34,8 +35,7 @@
     <h2>Feedback</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:client_feedback' %}">Give
-                your Feedback</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:client_feedback' %}">Give Feedback</a>
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:client_feedback_list' %}">View Feedbacks</a>
@@ -105,8 +105,9 @@
     <div>
         {% for operator in totalOperator %}
         <a class="btn btn-primary" style="margin-bottom: 10px;"
-            href="{% url 'clientApp:client_message_operator_list' operator.operator_user_id %}">Messages of
-            {{operator.operator_name}}</a>
+            href="{% url 'clientApp:client_message_operator_list' operator.operator_user_id %}">
+            {{operator.operator_name}}
+        </a>
         &nbsp;
         {% endfor %}
     </div>
@@ -180,7 +181,6 @@
     <h2>Admin</h2>
 
     {% if user.is_superuser %}
-    <hr>
     <div class="row">
         <div class="col">
             <a class="btn btn-primary" href="/admin/">Admin Panel</a>
@@ -188,7 +188,6 @@
     </div>
     {% endif %}
     <hr>
-    <br>
 
     <h2>Feedback</h2>
     <div class="row">
@@ -260,8 +259,9 @@
         <h2>Messages of Client</h2>
         {% for clientObj in adminTotalClient %}
         <a class="btn btn-primary" style="margin-bottom: 10px;"
-            href="{% url 'clientApp:admin_client_message_list' clientObj.client_user_id %}">Messages of
-            {{clientObj.client_name}}</a>
+            href="{% url 'clientApp:admin_client_message_list' clientObj.client_user_id %}">
+            {{clientObj.client_name}}
+        </a>
         &nbsp;
         {% endfor %}
     </div>
@@ -286,8 +286,9 @@
         <h2>Messages of Operator</h2>
         {% for operatorObj in adminTotalOperator %}
         <a class="btn btn-primary" style="margin-bottom: 10px;"
-            href="{% url 'clientApp:admin_operator_message_list' operatorObj.operator_user_id %}">Messages of
-            {{operatorObj.operator_name}}</a>
+            href="{% url 'clientApp:admin_operator_message_list' operatorObj.operator_user_id %}">
+            {{operatorObj.operator_name}}
+        </a>
         &nbsp;
         {% endfor %}
     </div>
