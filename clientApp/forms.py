@@ -161,12 +161,14 @@ class LeaveForm(forms.ModelForm):
     from_date = forms.DateField(
         widget=forms.TextInput(
             attrs={'type': 'date'}
-        )
+        ),
+        label="From"
     )
     to_date = forms.DateField(
         widget=forms.TextInput(
             attrs={'type': 'date'}
-        )
+        ),
+        label="To"
     )
 
     class Meta:
