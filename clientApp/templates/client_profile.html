@@ -24,7 +24,8 @@
             {% endif %}
 
             <li class="list-group-item">Username : {{client.user_name}}</li>
-            <li class="list-group-item">Client type : {{client.client_type}}</li>
+            <li class="list-group-item">Contact Person : {{client.user_name.first_name}} {{client.user_name.last_name}}</li>
+            <li class="list-group-item">Client Type : {{client.client_type}}</li>
             <li class="list-group-item">Email : {{client.user_name.email}}</li>
             <li class="list-group-item">Contact # : {{client.contact_number}}</li>
             <li class="list-group-item">Address : {{client.address}}</li>

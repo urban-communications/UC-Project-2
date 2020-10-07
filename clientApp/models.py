@@ -75,6 +75,8 @@ class Feedback(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     rating = models.CharField(max_length=20, choices=RATING_CHOICES)
     feedback_note = models.TextField(null=False)
+    read_by_operator = models.BooleanField(default=False)
+    read_by_admin = models.BooleanField(default=False)
 
     def __str__(self):
         return self.feedback_note
@@ -100,6 +102,9 @@ class Leave(models.Model):
     admin_leave_status = models.CharField(max_length=20, default='Pending')
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True)
+    read_by_operator = models.BooleanField(default=False)
+    read_by_client = models.BooleanField(default=False)
+    read_by_admin = models.BooleanField(default=False)
 
     def __str__(self):
         return self.operator_id
@@ -113,6 +118,9 @@ class MessageQuries(models.Model):
     messageQuery = models.TextField(null=False)
     created_at = models.DateTimeField(default=timezone.now)
     sender = models.CharField(max_length=20, null=True)
+    read_by_operator = models.BooleanField(default=False)
+    read_by_client = models.BooleanField(default=False)
+    read_by_admin = models.BooleanField(default=False)
 
 class Invoices(models.Model):
     invoice_id = models.UUIDField(
@@ -121,3 +129,7 @@ class Invoices(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=50, null=True)
     invoices = models.FileField(upload_to="client_invoices", null=False)
+    read_by_client = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title

@@ -35,7 +35,8 @@
     <h2>Feedback</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:client_feedback' %}">Give Feedback</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:client_feedback' %}">Give
+                Feedback</a>
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:client_feedback_list' %}">View Feedbacks</a>
@@ -47,7 +48,8 @@
     <div class="row">
         <div class="col">
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:leave_list' action='Pending' %}">Pending Holidays</a>
+                href="{% url 'clientApp:leave_list' action='Pending' %}">Pending Holidays <span
+                    class="badge badge-light">{{pendingLeaveCount}}</span></a>
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:leave_list' action='Approve' %}">Approved Holidays</a>
@@ -62,7 +64,8 @@
     <div class="row">
         <div class="col">
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:client_invoice_list' %}">View Invoices</a>
+                href="{% url 'clientApp:client_invoice_list' %}">View Invoices <span
+                    class="badge badge-light">{{invoiceCount}}</span></a>
         </div>
     </div>
     <hr>
@@ -84,7 +87,8 @@
 
     <div>
         <a class="btn btn-primary" style="margin-bottom: 10px;"
-            href="{% url 'clientApp:client_admin_message_list' adminAccount.id %}">Company Messages</a>
+            href="{% url 'clientApp:client_admin_message_list' adminAccount.id %}">Company Messages <span
+                class="badge badge-light">{{messageCount}}</span></a>
     </div>
     <hr>
 
@@ -138,7 +142,8 @@
     <h2>Feedback</h2>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_feedback_list' %}">Feedback</a>
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_feedback_list' %}">Feedback <span
+                class="badge badge-light">{{feedbackCount}}</span></a>
         </div>
     </div>
     <hr>
@@ -151,7 +156,7 @@
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:operator_leave_list' action='Pending' %}">Pending
-                Holidays</a>
+                Holidays <span class="badge badge-light">{{pendingLeaveCount}}</span></a>
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:operator_leave_list' action='Approve' %}">Approved
@@ -168,7 +173,8 @@
     <div class="row">
         <div class="col">
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:operator_message_list' %}">View Messages</a>
+                href="{% url 'clientApp:operator_message_list' %}">View Messages <span
+                    class="badge badge-light">{{messageCount}}</span></a>
         </div>
     </div>
     <hr>
@@ -193,7 +199,8 @@
     <div class="row">
         <div class="col">
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:admin_feedback_list' %}">Feedback</a>
+                href="{% url 'clientApp:admin_feedback_list' %}">Feedback <span
+                class="badge badge-light">{{feedbackCount}}</span></a>
         </div>
     </div>
     <hr>
@@ -227,7 +234,7 @@
         <div class="col">
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:admin_leave_list' action='Pending' %}">Pending
-                Holidays</a>
+                Holidays <span class="badge badge-light">{{pendingLeaveCount}}</span></a>
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:admin_leave_list' action='Approve' %}">Approved

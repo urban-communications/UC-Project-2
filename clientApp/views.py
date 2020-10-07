@@ -40,12 +40,19 @@ class HomeView(TemplateView):
         admin = None
         adminTotalOperator = None
         adminTotalClient = None
+        pendingHolidayCount = None
+        messageCount = None
+        invoiceCount = None
+        feedbackCount = None
 
         if request.user.is_staff:
             adminChatForm = AdminSendMessageForm(request)
             adminChatOperatorForm = AdminSendMessageToOperatorForm()
             adminTotalOperator = Operator.objects.all().order_by('operator_name')
             adminTotalClient = Client.objects.all().order_by('client_name')
+            pendingHolidayCount = Leave.objects.filter(
+                leave_status='Pending', read_by_admin=False).count()
+            feedbackCount = Feedback.objects.filter(read_by_admin=False).count()
 
         if hasattr(request.user, 'client'):
             clientChatForm = ClientSendMessageForm(request)
@@ -53,6 +60,18 @@ class HomeView(TemplateView):
             clientTotalOperator = Operator.objects.filter(
                 client_id=request.user.client.client_user_id).order_by('operator_name')
             admin = User.objects.get(is_superuser=True, is_staff=True)
+            pendingHolidayCount = Leave.objects.filter(
+                leave_status='Pending', client_id=request.user.client.client_user_id, read_by_client=False).count()
+            messageCount = MessageQuries.objects.filter(
+                client_id=request.user.client.client_user_id, admin_id=admin.id, read_by_client=False).count()
+            invoiceCount = Invoices.objects.filter(client_id=request.user.client.client_user_id, read_by_client=False).count()
+
+        if hasattr(request.user, 'operator'):
+            pendingHolidayCount = Leave.objects.filter(
+                leave_status='Pending', operator_id=request.user.operator.operator_user_id, read_by_operator=False).count()
+            messageCount = MessageQuries.objects.filter(
+                operator_id=request.user.operator.operator_user_id, read_by_operator=False).count()
+            feedbackCount = Feedback.objects.filter(operator_id=request.user.operator.operator_user_id ,read_by_operator=False).count()
 
         context = {
             'clientChatForm': clientChatForm,
@@ -62,7 +81,11 @@ class HomeView(TemplateView):
             'totalOperator': clientTotalOperator,
             'adminAccount': admin,
             'adminTotalOperator': adminTotalOperator,
-            'adminTotalClient': adminTotalClient
+            'adminTotalClient': adminTotalClient,
+            'pendingLeaveCount': pendingHolidayCount,
+            'invoiceCount': invoiceCount,
+            'messageCount': messageCount,
+            'feedbackCount': feedbackCount
         }
         return render(request, self.template_name, context)
 
@@ -75,6 +98,7 @@ class HomeView(TemplateView):
                 data = adminChatForm.save(commit=False)
                 data.admin_id = request.user
                 data.sender = 'Company'
+                data.read_by_admin = True
                 data.save()
                 messages.success(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
@@ -82,6 +106,7 @@ class HomeView(TemplateView):
                 data = adminChatOperatorForm.save(commit=False)
                 data.admin_id = request.user
                 data.sender = 'Company'
+                data.read_by_admin = True
                 data.save()
                 messages.success(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
@@ -92,6 +117,7 @@ class HomeView(TemplateView):
                 data = clientChatForm.save(commit=False)
                 data.client_id = request.user.client
                 data.sender = 'Client'
+                data.read_by_client = True
                 data.save()
                 messages.error(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
@@ -102,6 +128,7 @@ class HomeView(TemplateView):
                 data.client_id = request.user.client
                 data.sender = 'Client'
                 data.admin_id = companyUser
+                data.read_by_client = True
                 data.save()
                 messages.error(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
@@ -172,6 +199,8 @@ class ListOperatorFeedbackView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
+        Feedback.objects.filter(operator_id=self.request.user.operator.operator_user_id, read_by_operator=False).update(read_by_operator=True)
+
         # for search feedback
         query = self.request.GET.get("q")
         if query:
@@ -187,6 +216,8 @@ class ListAdminFeedbackView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
+        Feedback.objects.filter(read_by_admin=False).update(read_by_admin=True)
+
         # for search feedback
         query = self.request.GET.get("q")
         if query:
@@ -245,6 +276,8 @@ class OperatorLeaveList(ListView):
 
     def get_queryset(self):
         action = self.request.path.split('/')[-1]
+        if action == "Pending":
+            Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id, leave_status="Pending", read_by_operator=False).update(read_by_operator=True)
         return Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id, leave_status=action).order_by('-created_at')
 
 
@@ -262,6 +295,8 @@ class ClientLeaveList(ListView):
 
     def get_queryset(self):
         action = self.request.path.split('/')[-1]
+        if action == "Pending":
+            Leave.objects.filter(client_id=self.request.user.client.client_user_id, leave_status="Pending", read_by_client=False).update(read_by_client=True)
         return Leave.objects.filter(client_id=self.request.user.client.client_user_id, leave_status=action).order_by('-created_at')
 
 
@@ -319,6 +354,8 @@ class AdminLeaveList(ListView):
 
     def get_queryset(self):
         action = self.request.path.split('/')[-1]
+        if action == "Pending":
+            Leave.objects.filter(leave_status="Pending", read_by_admin=False).update(read_by_admin=True)
         return Leave.objects.filter(leave_status=action).order_by('-created_at')
 
 
@@ -397,6 +434,8 @@ class OperatorViewMessages(ListView):
     paginate_by = 20
 
     def get_queryset(self):
+        MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id,
+                                     read_by_operator=False).update(read_by_operator=True)
         return MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id).order_by('-created_at')
 
 
@@ -419,6 +458,7 @@ class ClientAdminViewMessage(ListView):
 
     def get_queryset(self):
         admin_id = self.request.path.split('/')[-1]
+        MessageQuries.objects.filter(client_id=self.request.user.client.client_user_id, admin_id=admin_id, read_by_client=False).update(read_by_client=True)
         return MessageQuries.objects.filter(client_id=self.request.user.client.client_user_id, admin_id=admin_id).order_by('-created_at')
 
 
@@ -491,4 +531,5 @@ class ClientInvoiceList(ListView):
     paginate_by = 10
 
     def get_queryset(self):
+        Invoices.objects.filter(client_id=self.request.user.client.client_user_id, read_by_client=False).update(read_by_client=True)
         return Invoices.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 from clientApp.models import (
     Client,
@@ -26,7 +27,6 @@ RATING_CHOICES = (
     ('Four Star', 'Four Star'),
     ('Five Star', 'Five Star'),
 )
-
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(
