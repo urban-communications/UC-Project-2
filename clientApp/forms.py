@@ -267,3 +267,4 @@ class ClientInvoiceForm(forms.ModelForm):
         labels = {
             "client_id": "Client Name",
         }
+

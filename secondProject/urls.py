@@ -5,10 +5,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from secondProject import views
+from secondProject.forms import UserLoginForm
 
 urlpatterns = [
     path('', views.login_redirect),
     path('admin/', admin.site.urls),
+    path('accounts/login/', LoginView.as_view(form_class=UserLoginForm), name='login'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('client/', include('clientApp.urls', namespace='clientApp')),
     path('accounts/password_change/',
