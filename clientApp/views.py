@@ -6,7 +6,8 @@ from clientApp.models import Operator, Feedback
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 
 from clientApp.forms import (
     FeedbackForm,
@@ -37,13 +38,15 @@ class HomeView(TemplateView):
         clientChatForm = None
         clientTotalOperator = None
         clientChatAdmin = None
-        admin = None
         adminTotalOperator = None
         adminTotalClient = None
         pendingHolidayCount = None
         messageCount = None
+        operatorAdminMessageCount = None
         invoiceCount = None
         feedbackCount = None
+        admin = User.objects.get(is_superuser=True, is_staff=True)
+        adminClientMessageCountList = []
 
         if request.user.is_staff:
             adminChatForm = AdminSendMessageForm(request)
@@ -52,26 +55,40 @@ class HomeView(TemplateView):
             adminTotalClient = Client.objects.all().order_by('client_name')
             pendingHolidayCount = Leave.objects.filter(
                 leave_status='Pending', read_by_admin=False).count()
-            feedbackCount = Feedback.objects.filter(read_by_admin=False).count()
+            feedbackCount = Feedback.objects.filter(
+                read_by_admin=False).count()
+
+            for client in adminTotalClient:
+                adminClientMessageCount = MessageQuries.objects.filter(
+                    client_id=client.client_user_id, admin_id=request.user.id, read_by_admin=False).count()
+                data = {
+                    'client_id': client.client_user_id,
+                    'count': adminClientMessageCount
+                }
+                adminClientMessageCountList.append(data)
 
         if hasattr(request.user, 'client'):
             clientChatForm = ClientSendMessageForm(request)
             clientChatAdmin = ClientSendMessageToAdminForm()
             clientTotalOperator = Operator.objects.filter(
                 client_id=request.user.client.client_user_id).order_by('operator_name')
-            admin = User.objects.get(is_superuser=True, is_staff=True)
             pendingHolidayCount = Leave.objects.filter(
                 leave_status='Pending', client_id=request.user.client.client_user_id, read_by_client=False).count()
             messageCount = MessageQuries.objects.filter(
                 client_id=request.user.client.client_user_id, admin_id=admin.id, read_by_client=False).count()
-            invoiceCount = Invoices.objects.filter(client_id=request.user.client.client_user_id, read_by_client=False).count()
+            invoiceCount = Invoices.objects.filter(
+                client_id=request.user.client.client_user_id, read_by_client=False).count()
 
         if hasattr(request.user, 'operator'):
             pendingHolidayCount = Leave.objects.filter(
                 leave_status='Pending', operator_id=request.user.operator.operator_user_id, read_by_operator=False).count()
             messageCount = MessageQuries.objects.filter(
+                operator_id=request.user.operator.operator_user_id, client_id=request.user.operator.client_id.client_user_id, read_by_operator=False).count()
+            operatorAdminMessageCount = MessageQuries.objects.filter(
+                operator_id=request.user.operator.operator_user_id, admin_id=admin.id, read_by_operator=False).count()
+
+            feedbackCount = Feedback.objects.filter(
                 operator_id=request.user.operator.operator_user_id, read_by_operator=False).count()
-            feedbackCount = Feedback.objects.filter(operator_id=request.user.operator.operator_user_id ,read_by_operator=False).count()
 
         context = {
             'clientChatForm': clientChatForm,
@@ -85,7 +102,9 @@ class HomeView(TemplateView):
             'pendingLeaveCount': pendingHolidayCount,
             'invoiceCount': invoiceCount,
             'messageCount': messageCount,
-            'feedbackCount': feedbackCount
+            'operatorAdminMessageCount': operatorAdminMessageCount,
+            'feedbackCount': feedbackCount,
+            'adminClientMessageCountList': adminClientMessageCountList
         }
         return render(request, self.template_name, context)
 
@@ -199,7 +218,8 @@ class ListOperatorFeedbackView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        Feedback.objects.filter(operator_id=self.request.user.operator.operator_user_id, read_by_operator=False).update(read_by_operator=True)
+        Feedback.objects.filter(operator_id=self.request.user.operator.operator_user_id,
+                                read_by_operator=False).update(read_by_operator=True)
 
         # for search feedback
         query = self.request.GET.get("q")
@@ -277,7 +297,8 @@ class OperatorLeaveList(ListView):
     def get_queryset(self):
         action = self.request.path.split('/')[-1]
         if action == "Pending":
-            Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id, leave_status="Pending", read_by_operator=False).update(read_by_operator=True)
+            Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id,
+                                 leave_status="Pending", read_by_operator=False).update(read_by_operator=True)
         return Leave.objects.filter(operator_id=self.request.user.operator.operator_user_id, leave_status=action).order_by('-created_at')
 
 
@@ -296,7 +317,8 @@ class ClientLeaveList(ListView):
     def get_queryset(self):
         action = self.request.path.split('/')[-1]
         if action == "Pending":
-            Leave.objects.filter(client_id=self.request.user.client.client_user_id, leave_status="Pending", read_by_client=False).update(read_by_client=True)
+            Leave.objects.filter(client_id=self.request.user.client.client_user_id,
+                                 leave_status="Pending", read_by_client=False).update(read_by_client=True)
         return Leave.objects.filter(client_id=self.request.user.client.client_user_id, leave_status=action).order_by('-created_at')
 
 
@@ -307,6 +329,27 @@ def leave_approve(request, pk):
         leave.updated_at = timezone.now()
         if leave.client_leave_status == "Approved":
             leave.leave_status = "Approved"
+            # send an email
+            subject, from_email, to = "Holiday request approved", settings.EMAIL_HOST_USER, leave.operator_id.user_name.email
+            text_content = "Operator Holiday request has been approved."
+            html_content = f"""<p>Hi {leave.operator_id.operator_name}, <br> 
+                Your holiday request has been Approved. <br> 
+                Your holiday summary is as follow. <br> 
+                From: {leave.from_date} <br> 
+                To: {leave.to_date} <br>
+                Total Holidays: {leave.no_of_days} <br>
+                Reason: {leave.reason} <br>
+                Leave final status: {leave.leave_status} <br> 
+                Client Action: {leave.client_leave_status} <br> 
+                Company Action: {leave.admin_leave_status} <br> <br>
+                You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>
+                """
+            msg = EmailMultiAlternatives(
+                subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+            messages.success(
+                request, "Email send to operator successfully.")
         leave.save()
         messages.success(
             request, "Holiday request has been approved. Thank you.")
@@ -317,6 +360,27 @@ def leave_approve(request, pk):
         leave.updated_at = timezone.now()
         if leave.admin_leave_status == "Approved":
             leave.leave_status = "Approve"
+            # send an email
+            subject, from_email, to = "Holiday request approved", settings.EMAIL_HOST_USER, leave.operator_id.user_name.email
+            text_content = "Operator Holiday request has been approved."
+            html_content = f"""<p>Hi {leave.operator_id.operator_name}, <br> 
+                Your holiday request has been Approved. <br> 
+                Your holiday summary is as follow. <br> 
+                From: {leave.from_date} <br> 
+                To: {leave.to_date} <br>
+                Total Holidays: {leave.no_of_days} <br>
+                Reason: {leave.reason} <br>
+                Leave final status: {leave.leave_status} <br> 
+                Client Action: {leave.client_leave_status} <br> 
+                Company Action: {leave.admin_leave_status} <br> <br>
+                You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>
+                """
+            msg = EmailMultiAlternatives(
+                subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+            messages.success(
+                request, "Email send to operator successfully.")
         leave.save()
         messages.success(
             request, "Holiday request has been approved. Thank you.")
@@ -339,6 +403,28 @@ def leave_reject(request, pk):
         leave.save()
         messages.success(
             request, "Holiday request has been declined. Thank you.")
+
+        # send an email
+        subject, from_email, to = "Holiday request declined", settings.EMAIL_HOST_USER, leave.operator_id.user_name.email
+        text_content = "Operator Holiday request has been declined."
+        html_content = f"""<p>Hi {leave.operator_id.operator_name}, <br> 
+            Your holiday request has been declined. <br> 
+            Your holiday summary is as follow. <br> 
+            From: {leave.from_date} <br> 
+            To: {leave.to_date} <br>
+            Total Holidays: {leave.no_of_days} <br>
+            Reason: {leave.reason} <br>
+            Leave final status: {leave.leave_status} <br> 
+            Client Action: {leave.client_leave_status} <br> 
+            Company Action: {leave.admin_leave_status} <br> <br>
+            You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>"""
+        msg = EmailMultiAlternatives(
+            subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        messages.success(
+            request, "Email send to operator successfully.")
+
         return redirect('clientApp:home')
     else:
         messages.success(
@@ -355,7 +441,8 @@ class AdminLeaveList(ListView):
     def get_queryset(self):
         action = self.request.path.split('/')[-1]
         if action == "Pending":
-            Leave.objects.filter(leave_status="Pending", read_by_admin=False).update(read_by_admin=True)
+            Leave.objects.filter(leave_status="Pending",
+                                 read_by_admin=False).update(read_by_admin=True)
         return Leave.objects.filter(leave_status=action).order_by('-created_at')
 
 
@@ -427,16 +514,29 @@ class ClientOperatorDocumentsList(ListView):
         return OperatorDocuments.objects.filter(operator_id=path[-1])
 
 
-class OperatorViewMessages(ListView):
+class OperatorViewClientMessages(ListView):
     template_name = 'operator_view_messages_client.html'
     model = MessageQuries
     context_object_name = 'message_list'
     paginate_by = 20
 
     def get_queryset(self):
-        MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id,
+        MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id, client_id=self.request.user.operator.client_id.client_user_id,
                                      read_by_operator=False).update(read_by_operator=True)
-        return MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id).order_by('-created_at')
+        return MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id, client_id=self.request.user.operator.client_id.client_user_id).order_by('-created_at')
+
+
+class OperatorViewAdminMessages(ListView):
+    template_name = 'operator_view_message_admin.html'
+    model = MessageQuries
+    context_object_name = 'message_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        admin = User.objects.get(is_staff=True, is_superuser=True)
+        MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id, admin_id=admin.id,
+                                     read_by_operator=False).update(read_by_operator=True)
+        return MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id, admin_id=admin.id).order_by('-created_at')
 
 
 class ClientOperatorViewMessage(ListView):
@@ -458,7 +558,8 @@ class ClientAdminViewMessage(ListView):
 
     def get_queryset(self):
         admin_id = self.request.path.split('/')[-1]
-        MessageQuries.objects.filter(client_id=self.request.user.client.client_user_id, admin_id=admin_id, read_by_client=False).update(read_by_client=True)
+        MessageQuries.objects.filter(client_id=self.request.user.client.client_user_id,
+                                     admin_id=admin_id, read_by_client=False).update(read_by_client=True)
         return MessageQuries.objects.filter(client_id=self.request.user.client.client_user_id, admin_id=admin_id).order_by('-created_at')
 
 
@@ -470,6 +571,8 @@ class AdminClientViewMessage(ListView):
 
     def get_queryset(self):
         client_user_id = self.request.path.split('/')[-1]
+        MessageQuries.objects.filter(
+            client_id=client_user_id, admin_id=self.request.user.id, read_by_admin=False).update(read_by_admin=True)
         return MessageQuries.objects.filter(client_id=client_user_id, admin_id=self.request.user.id).order_by('-created_at')
 
 
@@ -531,5 +634,6 @@ class ClientInvoiceList(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        Invoices.objects.filter(client_id=self.request.user.client.client_user_id, read_by_client=False).update(read_by_client=True)
+        Invoices.objects.filter(client_id=self.request.user.client.client_user_id,
+                                read_by_client=False).update(read_by_client=True)
         return Invoices.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')

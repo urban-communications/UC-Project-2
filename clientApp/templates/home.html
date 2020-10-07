@@ -169,12 +169,16 @@
     </div>
     <hr>
 
-    <h2>Messages from Client</h2>
+    <h2>Messages</h2>
     <div class="row">
         <div class="col">
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:operator_message_list' %}">View Messages <span
+                href="{% url 'clientApp:operator_message_client_list' %}">Client Messages <span
                     class="badge badge-light">{{messageCount}}</span></a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_message_admin_list' %}">Company Messages <span
+                    class="badge badge-light">{{operatorAdminMessageCount}}</span></a>
         </div>
     </div>
     <hr>
@@ -265,11 +269,18 @@
     <div>
         <h2>Messages of Client</h2>
         {% for clientObj in adminTotalClient %}
+
+        {% for clientCountObj in adminClientMessageCountList %}
+
+        {% if clientObj.client_user_id == clientCountObj.client_id %}
         <a class="btn btn-primary" style="margin-bottom: 10px;"
             href="{% url 'clientApp:admin_client_message_list' clientObj.client_user_id %}">
             {{clientObj.client_name}}
+            <span class="badge badge-light">{{clientCountObj.count}}</span>
         </a>
         &nbsp;
+        {% endif %}
+        {% endfor%}
         {% endfor %}
     </div>
     <hr>
