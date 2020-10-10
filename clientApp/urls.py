@@ -2,7 +2,11 @@ from django.urls import path
 from django.contrib.auth.models import User
 
 from . import views
-from secondProject.views import ClientRegistration, OperatorRegistration
+from secondProject.views import (
+    ClientRegistration,
+    OperatorRegistration,
+    EmployeeRegistration
+)
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
@@ -55,7 +59,7 @@ urlpatterns = [
          name='client_invoice_list'),
     path('operator/message/client/list', views.OperatorViewClientMessages.as_view(),
          name='operator_message_client_list'),
-     path('operator/message/admin/list', views.OperatorViewAdminMessages.as_view(),
+    path('operator/message/admin/list', views.OperatorViewAdminMessages.as_view(),
          name='operator_message_admin_list'),
     path('message/client/operator/<slug:pk>',
          views.ClientOperatorViewMessage.as_view(), name='client_message_operator_list'),
@@ -65,6 +69,8 @@ urlpatterns = [
          name='admin_client_message_list'),
     path('message/admin/operator/<slug:pk>',
          views.AdminOperatorViewMessage.as_view(), name='admin_operator_message_list'),
+    path('employee/registration', EmployeeRegistration.as_view(),
+         name='employee_signup')
 ]
 
 app_name = 'clientApp'

@@ -64,6 +64,19 @@
                         <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
                     </li>
 
+                    {% elif  user.is_authenticated and user.employee %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clientApp:home' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="{% url 'clientApp:operator_profile' user.employee.employee_user_id %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"> Log Out</a>
+                    </li>
+
                     {% elif  user.is_authenticated and user.is_staff %}
 
                     <li class="nav-item">

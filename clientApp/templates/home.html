@@ -229,6 +229,9 @@
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:admin_client_signup' %}">Client Registration</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            href="{% url 'clientApp:employee_signup' %}">Employee Registration</a>
         </div>
     </div>
     <hr>
@@ -309,6 +312,56 @@
         </a>
         &nbsp;
         {% endfor %}
+    </div>
+    <hr>
+
+    {% endif %}
+
+    {% if user.employee %}
+
+    <h1>{{user.employee}}</h1>
+    <hr>
+    <br>
+
+    <h2>Documents</h2>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_document_upload' %}">Upload Documents</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_document_list' %}">View Documents</a>
+        </div>
+    </div>
+    <hr>
+
+    <h2>Feedback</h2>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" href="{% url 'clientApp:operator_feedback_list' %}">Feedback <span
+                class="badge badge-light">{{feedbackCount}}</span></a>
+        </div>
+    </div>
+    <hr>
+
+    <h2>Holiday Details</h2>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_leave_request' %}">Request Holidays</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_leave_list' action='Pending' %}">Pending
+                Holidays <span class="badge badge-light">{{pendingLeaveCount}}</span></a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_leave_list' action='Approve' %}">Approved
+                Holidays</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:operator_leave_list' action='Decline' %}">Declined
+                Holidays</a>
+        </div>
     </div>
     <hr>
 

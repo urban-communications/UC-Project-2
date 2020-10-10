@@ -48,6 +48,26 @@ class Operator(models.Model):
         return self.operator_name
 
 
+class Employee(models.Model):
+    employee_user_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    user_name = models.OneToOneField(User, on_delete=models.CASCADE)
+    job_designation = models.CharField(max_length=100, null=False)
+    employee_name = models.CharField(max_length=100, null=False)
+    contact_number = models.CharField(max_length=30)
+    date_of_birth = models.DateField()
+    address = models.CharField(max_length=200)
+    total_leaves = models.IntegerField(null=False)
+    available_leaves = models.IntegerField(null=False)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
+    profile_picture = models.ImageField(
+        upload_to='employee_profile_picture', blank=True, null=True)
+
+    def __str__(self):
+        return self.employee_name
+
+
 class OperatorDocuments(models.Model):
     doc_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)

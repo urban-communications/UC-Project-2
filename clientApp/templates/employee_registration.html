@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+
+<title>Employee Registration</title>
+
+{% endblock %}
+
+{% block body %}
+
+<div>
+    <br />
+    <h1>Employee Registration Form</h1>
+    <br />
+
+    <div class="alert alert-secondary">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <li class="list-group-item">
+                {{user_form|crispy}}
+                {{employee_form|crispy}}
+            </li>
+            <br>
+            <button type="submit" class="btn btn-dark">
+                Register
+            </button>
+        </form>
+        <br>
+        <div class="row">
+            <div class="col-5">
+                <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+{% endblock %}

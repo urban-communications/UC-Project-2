@@ -9,8 +9,18 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
 
-from clientApp.models import User, Client, Operator
-from clientApp.forms import UserRegistrationForm, ClientRegistrationForm, OperatorRegistrationForm
+from clientApp.models import (
+    User, 
+    Client, 
+    Operator, 
+    Employee
+)
+from clientApp.forms import (
+    UserRegistrationForm, 
+    ClientRegistrationForm, 
+    OperatorRegistrationForm, 
+    EmployeeRegistrationForm
+)
 
 
 def password_change_form(request):
@@ -127,3 +137,72 @@ class OperatorRegistration(TemplateView):
             return render(request, self.template_name, context)
         else:
             return redirect('clientApp:home')
+
+
+class EmployeeRegistration(TemplateView):
+    template_name = 'employee_registration.html'
+
+    def get(self, request):
+        if(request.user.is_staff):
+            user_form = UserRegistrationForm()
+            employee_form = EmployeeRegistrationForm()
+            context = {
+                'user_form': user_form,
+                'employee_form': employee_form
+            }
+            return render(request, self.template_name, context)
+        else:
+            return redirect('clientApp:home')
+
+    def post(self, request):
+        if request.user.is_staff:
+            context = {}
+            form_user = UserRegistrationForm(request.POST)
+            form_employee = EmployeeRegistrationForm(
+                request.POST, request.FILES)
+
+            if form_employee.is_valid() and form_user.is_valid():
+                data = form_user.save()
+                name = form_user.cleaned_data['first_name'] + \
+                    ' ' + form_user.cleaned_data['last_name']
+                new_employee = Employee(
+                    user_name=data,
+                    job_designation=form_employee.cleaned_data['job_designation'],
+                    employee_name=name,
+                    contact_number=form_employee.cleaned_data['contact_number'],
+                    date_of_birth=form_employee.cleaned_data['date_of_birth'],
+                    address=form_employee.cleaned_data['address'],
+                    total_leaves=form_employee.cleaned_data['total_leaves'],
+                    available_leaves=form_employee.cleaned_data['total_leaves'],
+                    profile_picture=form_employee.cleaned_data['profile_picture']
+                )
+                new_employee.save()
+                messages.success(request, "Employee created successfully.")
+
+                # send an email
+                subject, from_email, to = f"{name} signed up Successfully", settings.EMAIL_HOST_USER, form_user.cleaned_data[
+                    'email']
+                text_content = "Your account has been registered successfully"
+                html_content = f"""<p>Hi, <br> 
+                Your account has been registered successfully. <br> 
+                Your account credientials are as follow. <br> 
+                Username: {form_user.cleaned_data['username']} <br> 
+                Password: {form_user.cleaned_data['password1']} <br> <br> 
+                you can now login by visiting our website at: <a> https://urbancommunications.herokuapp.com/ </a> 
+                </p>"""
+                msg = EmailMultiAlternatives(
+                    subject, text_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+                messages.success(
+                    request, "Email with login credientials has been sent successfully.")
+                return HttpResponseRedirect(request.path_info)
+            else:
+                context['user_form'] = form_user
+                context['employee_form'] = form_employee
+            return render(request, self.template_name, context)
+        else:
+            return redirect('clientApp:home')
+
+
+

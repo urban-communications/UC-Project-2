@@ -6,6 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from clientApp.models import (
     Client,
     Operator,
+    Employee,
     Feedback,
     Leave,
     OperatorDocuments,
@@ -122,6 +123,46 @@ class OperatorRegistrationForm(forms.ModelForm):
         model = Operator
         fields = (
             'client_id',
+            'contact_number',
+            'date_of_birth',
+            'address',
+            'total_leaves',
+            'profile_picture'
+        )
+        labels = {
+            "total_leaves": "Total Holidays"
+        }
+
+
+class EmployeeRegistrationForm(forms.ModelForm):
+    address = forms.CharField(
+        max_length=150,
+        required=True,
+        label="Address",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter complete address'
+        }),
+    )
+    contact_number = forms.CharField(
+        required=True,
+        label="Contact Number",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter contact number'
+        }),
+    )
+    date_of_birth = forms.DateField(
+        widget=forms.TextInput(
+            attrs={'type': 'date', 'format': 'd-m-Y', 'input_formats': 'd-m-Y'},
+            
+        )
+    )
+
+    class Meta:
+        model = Employee
+        fields = (
+            'job_designation',
             'contact_number',
             'date_of_birth',
             'address',
