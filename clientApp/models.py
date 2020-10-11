@@ -129,18 +129,21 @@ class Leave(models.Model):
     def __str__(self):
         return self.operator_id
 
+
 class MessageQuries(models.Model):
     message_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     admin_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     client_id = models.ForeignKey(Client, on_delete=models.CASCADE, null=True)
-    operator_id = models.ForeignKey(Operator, on_delete=models.CASCADE, null=True)
+    operator_id = models.ForeignKey(
+        Operator, on_delete=models.CASCADE, null=True)
     messageQuery = models.TextField(null=False)
     created_at = models.DateTimeField(default=timezone.now)
     sender = models.CharField(max_length=20, null=True)
     read_by_operator = models.BooleanField(default=False)
     read_by_client = models.BooleanField(default=False)
     read_by_admin = models.BooleanField(default=False)
+
 
 class Invoices(models.Model):
     invoice_id = models.UUIDField(
@@ -153,3 +156,60 @@ class Invoices(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class EmployeeDocuments(models.Model):
+    doc_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    doc_title = models.CharField(max_length=100, null=False)
+    documents = models.FileField(upload_to="employee_documents", null=False)
+
+    def __str__(self):
+        return self.doc_title
+
+
+class EmployeeHoliday(models.Model):
+    LEAVE_STATUS = (
+        ('Pending', 'Pending'),
+        ('Approve', 'Approve'),
+        ('Decline', 'Decline')
+    )
+    leave_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    admin_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    from_date = models.DateField(null=False)
+    to_date = models.DateField(null=False)
+    no_of_days = models.IntegerField(null=False)
+    reason = models.TextField(null=True)
+    leave_status = models.CharField(
+        max_length=11, choices=LEAVE_STATUS, default='Pending')
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(null=True)
+    read_by_employee = models.BooleanField(default=False)
+    read_by_admin = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.employee_id
+
+class EmployeeFeedback(models.Model):
+    RATING_CHOICES = (
+        ('', 'Choose...'),
+        ('One Star', 'One Star'),
+        ('Two Star', 'Two Star'),
+        ('Three Star', 'Three Star'),
+        ('Four Star', 'Four Star'),
+        ('Five Star', 'Five Star'),
+    )
+    feedback_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    admin_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(default=timezone.now)
+    rating = models.CharField(max_length=20, choices=RATING_CHOICES)
+    feedback_note = models.TextField(null=False)
+    read_by_employee = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.feedback_note

@@ -14,11 +14,10 @@
 <hr />
 
 <div class="card">
-    <h1 class="card-header">{{leave.operator_id}}</h1>
+    <h1 class="card-header">{{leave.employee_id}}</h1>
     <div class="card-body">
         <ul class="list-group list-group-flush">
 
-            <li class="list-group-item">Client : {{leave.client_id}}</li>
             <li class="list-group-item">From : {{leave.from_date}}</li>
             <li class="list-group-item">To : {{leave.to_date}}</li>
             <li class="list-group-item">Total Days : {{leave.no_of_days}}</li>
@@ -28,9 +27,7 @@
             <li class="list-group-item">Reason : {{leave.reason}}</li>
             {% endif %}
 
-            <li class="list-group-item">Client Status : {{leave.client_leave_status}}</li>
-            <li class="list-group-item">Company Status : {{leave.admin_leave_status}}</li>
-            <li class="list-group-item">Leave Final Status :<h2>{{leave.leave_status}}</h2>
+            <li class="list-group-item">Leave Status :<h2>{{leave.leave_status}}</h2>
             </li>
         </ul>
     </div>

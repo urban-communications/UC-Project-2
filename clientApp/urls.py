@@ -70,7 +70,24 @@ urlpatterns = [
     path('message/admin/operator/<slug:pk>',
          views.AdminOperatorViewMessage.as_view(), name='admin_operator_message_list'),
     path('employee/registration', EmployeeRegistration.as_view(),
-         name='employee_signup')
+         name='employee_signup'),
+    path('employee/documents/upload', views.EmployeeDocumentsUpload.as_view(),
+         name='employee_document_upload'),
+    path('employee/documents/list', views.EmployeeDocumentsList.as_view(),
+         name='employee_document_list'),
+    path('employee/leave-request', views.EmployeeHolidayRequest.as_view(),
+         name='employee_holiday_request'),
+    path('employee/leave-request/list/<str:action>',
+         views.EmployeeHolidayList.as_view(), name='employee_holiday_list'),
+    path('employee/leave-request/detail/<slug:pk>',
+         views.EmployeeLeaveDetail.as_view(), name='employee_leave_detail'),
+    path('admin/feedback/', views.AdminEmployeeFeedback.as_view(),
+         name='admin_employee_feedback'),
+    path('feedback/employee/list/', views.EmployeeFeedbackList.as_view(),
+         name='employee_feedback_list'),
+    path('feedback/admin/list', views.AdminFeedbackList.as_view(),
+         name='admin_employee_feedback_list'),
+
 ]
 
 app_name = 'clientApp'

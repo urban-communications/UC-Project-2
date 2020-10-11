@@ -36,8 +36,21 @@
                 <td>{{leave.no_of_days}}</td>
                 <td>{{leave.leave_status}}</td>
                 <td> 
+                    {% if user.operator %}
                     <a href="{% url 'clientApp:operator_leave_detail' leave.leave_id %}" class="btn btn-warning btn-sm" role="button"
                         aria-pressed="true"> Detail </a>
+
+                    {% elif user.employee %}
+                    <a href="{% url 'clientApp:employee_leave_detail' leave.leave_id %}" class="btn btn-warning btn-sm" role="button"
+                        aria-pressed="true"> Detail </a>
+
+                    {% else %}
+
+                    <a href="{% url 'clientApp:operator_leave_detail' leave.leave_id %}" class="btn btn-warning btn-sm" role="button"
+                        aria-pressed="true"> Detail </a>
+                    
+                    {% endif %}
+
                 </td>
             </tr>
             {% endfor%}

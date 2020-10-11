@@ -17,7 +17,10 @@ from clientApp.forms import (
     AdminSendMessageForm,
     AdminSendMessageToOperatorForm,
     ClientSendMessageToAdminForm,
-    ClientInvoiceForm
+    ClientInvoiceForm,
+    EmployeeDocumentsForm,
+    EmployeeHolidayForm,
+    EmployeeFeedbackForm
 )
 from django.contrib.auth.models import User
 from clientApp.models import (
@@ -25,7 +28,10 @@ from clientApp.models import (
     Leave,
     OperatorDocuments,
     MessageQuries,
-    Invoices
+    Invoices,
+    EmployeeDocuments,
+    EmployeeHoliday,
+    EmployeeFeedback
 )
 
 
@@ -89,6 +95,12 @@ class HomeView(TemplateView):
 
             feedbackCount = Feedback.objects.filter(
                 operator_id=request.user.operator.operator_user_id, read_by_operator=False).count()
+
+        if hasattr(request.user, 'employee'):
+            pendingHolidayCount = EmployeeHoliday.objects.filter(
+                leave_status='Pending', employee_id=request.user.employee.employee_user_id, read_by_employee=False).count()
+            feedbackCount = EmployeeFeedback.objects.filter(
+                employee_id=request.user.employee.employee_user_id, read_by_employee=False).count()
 
         context = {
             'clientChatForm': clientChatForm,
@@ -215,7 +227,7 @@ class ListOperatorFeedbackView(ListView):
     template_name = 'operator_feedback_list.html'
     model = Feedback
     context_object_name = 'feedback_list'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         Feedback.objects.filter(operator_id=self.request.user.operator.operator_user_id,
@@ -481,13 +493,24 @@ class OperatorDocumentsList(ListView):
 
 
 def operatorDocumetDelete(request, pk):
-    if request.user.operator:
+    if hasattr(request.user, 'operator'):
         document = OperatorDocuments.objects.get(doc_id=pk)
         if document:
             document.documents.delete()
             document.delete()
             messages.success(request, "Deleted Successfully.")
             return HttpResponseRedirect(reverse('clientApp:operator_document_list'))
+        else:
+            messages.error(request, "Error while deleting the file.")
+            return render(request, 'operator_documents_list.html')
+
+    if hasattr(request.user, 'employee'):
+        document = EmployeeDocuments.objects.get(doc_id=pk)
+        if document:
+            document.documents.delete()
+            document.delete()
+            messages.success(request, "Deleted Successfully.")
+            return HttpResponseRedirect(reverse('clientApp:employee_document_list'))
         else:
             messages.error(request, "Error while deleting the file.")
             return render(request, 'operator_documents_list.html')
@@ -637,3 +660,158 @@ class ClientInvoiceList(ListView):
         Invoices.objects.filter(client_id=self.request.user.client.client_user_id,
                                 read_by_client=False).update(read_by_client=True)
         return Invoices.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')
+
+
+class EmployeeDocumentsUpload(FormView):
+    form_class = EmployeeDocumentsForm
+    template_name = 'operator_documents_upload.html'
+    success_url = reverse_lazy("clientApp:home")
+    context_object_name = 'document'
+
+    def post(self, request):
+        form = EmployeeDocumentsForm(request.POST, request.FILES)
+        files = request.FILES.getlist('documents')
+        if form.is_valid():
+            for doc in files:
+                document = EmployeeDocuments(
+                    employee_id=request.user.employee,
+                    doc_title=doc.name,
+                    documents=doc
+                )
+                document.save()
+            messages.success(request, "Uploaded Successfully.")
+            return HttpResponseRedirect(request.path_info)
+        else:
+            messages.error(request, "Failed to upload: Invalid files.")
+            form = OperatorDocumentsForm()
+
+
+class EmployeeDocumentsList(ListView):
+    template_name = 'operator_documents_list.html'
+    model = EmployeeDocuments
+    context_object_name = 'documents'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return EmployeeDocuments.objects.filter(employee_id=self.request.user.employee.employee_user_id)
+
+
+class EmployeeHolidayRequest(TemplateView):
+    template_name = 'operator_leave_request.html'
+
+    def get(self, request):
+        form = EmployeeHolidayForm()
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        context = {}
+        if request.user.employee:
+            form = EmployeeHolidayForm(request.POST)
+            if form.is_valid():
+                # Calculate no. of holidays
+                day = form.cleaned_data['to_date'] - \
+                    form.cleaned_data['from_date']
+                total_days = day.days
+                if(total_days > 0):
+                    total_days = total_days + 1
+                if(total_days == 0):
+                    total_days = 1
+
+                if(total_days >= 1):
+                    admin = User.objects.get(is_staff=True, is_superuser=True)
+                    data = form.save(commit=False)
+                    data.no_of_days = total_days
+                    data.employee_id = self.request.user.employee
+                    data.admin_id = admin
+                    data.save()
+                    messages.success(
+                        request, "Your holiday request has been submitted! We will get back in touch with you soon. Thank you")
+                else:
+                    messages.error(request, "Kindly select a valid date range")
+                return HttpResponseRedirect(request.path_info)
+            else:
+                context['form'] = form()
+                return render(request, self.template_name, context)
+        else:
+            return redirect('clientApp:home')
+
+
+class EmployeeHolidayList(ListView):
+    template_name = 'operator_leave_list.html'
+    model = EmployeeHoliday
+    context_object_name = 'leave_list'
+    paginate_by = 10
+
+    def get_queryset(self):
+        action = self.request.path.split('/')[-1]
+        if action == "Pending":
+            EmployeeHoliday.objects.filter(employee_id=self.request.user.employee.employee_user_id,
+                                           leave_status="Pending", read_by_employee=False).update(read_by_employee=True)
+        return EmployeeHoliday.objects.filter(employee_id=self.request.user.employee.employee_user_id, leave_status=action).order_by('-created_at')
+
+
+class EmployeeLeaveDetail(DetailView):
+    model = EmployeeHoliday
+    template_name = 'employee_holiday_detail.html'
+    context_object_name = 'leave'
+
+
+class AdminEmployeeFeedback(TemplateView):
+    template_name = 'client_feedback.html'
+
+    def get(self, request):
+        feedback = EmployeeFeedbackForm()
+        context = {
+            'feedback': feedback
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        context = {}
+        feedback_form = EmployeeFeedbackForm(request.POST)
+        if feedback_form.is_valid():
+            data = feedback_form.save(commit=False)
+            data.admin_id = self.request.user
+            data.save()
+            messages.success(
+                request, "Your feedback has been submitted. Thank you")
+            return HttpResponseRedirect(request.path_info)
+        else:
+            context['feedback_form'] = feedback_form()
+        return render(request, self.template_name, context)
+
+
+class EmployeeFeedbackList(ListView):
+    template_name = 'employee_feedback_list.html'
+    model = EmployeeFeedback
+    context_object_name = 'feedback_list'
+    paginate_by = 10
+
+    def get_queryset(self):
+        EmployeeFeedback.objects.filter(employee_id=self.request.user.employee.employee_user_id,
+                                read_by_employee=False).update(read_by_employee=True)
+
+        # for search feedback
+        query = self.request.GET.get("q")
+        if query:
+            return EmployeeFeedback.objects.filter(employee_id=self.request.user.employee.employee_user_id, rating__icontains=query)
+
+        return EmployeeFeedback.objects.filter(employee_id=self.request.user.employee.employee_user_id).order_by('-created_at')
+
+
+class AdminFeedbackList(ListView):
+    template_name = 'admin_employee_feedback_list.html'
+    model = EmployeeFeedback
+    context_object_name = 'feedback_list'
+    paginate_by = 10
+
+    def get_queryset(self):
+        # for search feedback
+        query = self.request.GET.get("q")
+        if query:
+            return EmployeeFeedback.objects.filter(rating__icontains=query)
+
+        return EmployeeFeedback.objects.all().order_by('-created_at')

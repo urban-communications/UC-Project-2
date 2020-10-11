@@ -11,7 +11,10 @@ from clientApp.models import (
     Leave,
     OperatorDocuments,
     MessageQuries,
-    Invoices
+    Invoices,
+    EmployeeDocuments,
+    EmployeeHoliday,
+    EmployeeFeedback
 )
 
 CLIENT_TYPE = (
@@ -309,3 +312,56 @@ class ClientInvoiceForm(forms.ModelForm):
             "client_id": "Client Name",
         }
 
+
+class EmployeeDocumentsForm(forms.ModelForm):
+    documents = forms.FileField(widget=forms.ClearableFileInput(attrs={
+        'multiple': True
+    }))
+
+    class Meta:
+        model = EmployeeDocuments
+        fields = (
+            'documents',
+        )
+
+
+class EmployeeHolidayForm(forms.ModelForm):
+    from_date = forms.DateField(
+        widget=forms.TextInput(
+            attrs={'type': 'date'}
+        ),
+        label="From"
+    )
+    to_date = forms.DateField(
+        widget=forms.TextInput(
+            attrs={'type': 'date'}
+        ),
+        label="To"
+    )
+
+    class Meta:
+        model = EmployeeHoliday
+        fields = (
+            'from_date',
+            'to_date',
+            'reason'
+        )
+
+
+class EmployeeFeedbackForm(forms.ModelForm):
+    rating = forms.ChoiceField(
+        required=True,
+        label="Rating",
+        choices=RATING_CHOICES
+    )
+
+    class Meta:
+        model = EmployeeFeedback
+        fields = (
+            'employee_id',
+            'rating',
+            'feedback_note'
+        )
+        labels = {
+            "employee_id": "Employee Name"
+        }

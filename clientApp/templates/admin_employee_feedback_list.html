@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<title>Feedback</title>
+
+{% endblock %}
+
+{% block body %}
+<div>
+    <br>
+    <h1>Overall Feedback of Employees</h1>
+    <hr />
+    <form method="GET" action="">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search by rating" />
+        <button type="submit" class="btn btn-primary btn-sm" value="Search">Search</button>
+    </form>
+</div>
+<hr />
+<div class="table-responsive-lg">
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th class="w-10" scope="col">Employee</th>
+            <th class="w-20" scope="col">Time</th>
+            <th class="w-10" scope="col">Rating</th>
+            <th class="w-50 justify" scope="col">Feedback</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for feedback in feedback_list %}
+        <tr>
+            <th scope="row">{{feedback.employee_id}}</th>
+            <td>{{feedback.created_at}}</td>
+            <td>{{feedback.rating}}</td>
+            <td>{{feedback.feedback_note}}</td>
+        </tr>
+        {% endfor%}
+    </tbody>
+</table>
+<br>
+<div class="row">
+    <div class="col-5">
+        <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
+    </div>
+</div>
+</div>
+{% endblock %}
