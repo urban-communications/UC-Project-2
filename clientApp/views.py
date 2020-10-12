@@ -53,6 +53,7 @@ class HomeView(TemplateView):
         feedbackCount = None
         admin = User.objects.get(is_superuser=True, is_staff=True)
         adminClientMessageCountList = []
+        pendingHolidayEmployeeCount = None
 
         if request.user.is_staff:
             adminChatForm = AdminSendMessageForm(request)
@@ -63,6 +64,8 @@ class HomeView(TemplateView):
                 leave_status='Pending', read_by_admin=False).count()
             feedbackCount = Feedback.objects.filter(
                 read_by_admin=False).count()
+            pendingHolidayEmployeeCount = EmployeeHoliday.objects.filter(
+                leave_status='Pending', read_by_admin=False).count()
 
             for client in adminTotalClient:
                 adminClientMessageCount = MessageQuries.objects.filter(
@@ -116,7 +119,8 @@ class HomeView(TemplateView):
             'messageCount': messageCount,
             'operatorAdminMessageCount': operatorAdminMessageCount,
             'feedbackCount': feedbackCount,
-            'adminClientMessageCountList': adminClientMessageCountList
+            'adminClientMessageCountList': adminClientMessageCountList,
+            'pendingHolidayEmployeeCount': pendingHolidayEmployeeCount
         }
         return render(request, self.template_name, context)
 
@@ -340,7 +344,7 @@ def leave_approve(request, pk):
         leave.admin_leave_status = "Approved"
         leave.updated_at = timezone.now()
         if leave.client_leave_status == "Approved":
-            leave.leave_status = "Approved"
+            leave.leave_status = "Approve"
             # send an email
             subject, from_email, to = "Holiday request approved", settings.EMAIL_HOST_USER, leave.operator_id.user_name.email
             text_content = "Operator Holiday request has been approved."
@@ -455,6 +459,10 @@ class AdminLeaveList(ListView):
         if action == "Pending":
             Leave.objects.filter(leave_status="Pending",
                                  read_by_admin=False).update(read_by_admin=True)
+
+        query = self.request.GET.get("q")
+        if query:
+            return Leave.objects.filter(leave_status=action,  operator_id__operator_name__icontains=query)
         return Leave.objects.filter(leave_status=action).order_by('-created_at')
 
 
@@ -792,7 +800,7 @@ class EmployeeFeedbackList(ListView):
 
     def get_queryset(self):
         EmployeeFeedback.objects.filter(employee_id=self.request.user.employee.employee_user_id,
-                                read_by_employee=False).update(read_by_employee=True)
+                                        read_by_employee=False).update(read_by_employee=True)
 
         # for search feedback
         query = self.request.GET.get("q")
@@ -815,3 +823,89 @@ class AdminFeedbackList(ListView):
             return EmployeeFeedback.objects.filter(rating__icontains=query)
 
         return EmployeeFeedback.objects.all().order_by('-created_at')
+
+
+class AdminEmployeeHolidayList(ListView):
+    template_name = 'admin_employee_leave_list.html'
+    model = EmployeeHoliday
+    context_object_name = 'leave_list'
+    paginate_by = 10
+
+    def get_queryset(self):
+        action = self.request.path.split('/')[-1]
+        if action == "Pending":
+            EmployeeHoliday.objects.filter(leave_status="Pending",
+                                           read_by_admin=False).update(read_by_admin=True)
+        
+        query = self.request.GET.get("q")
+        if query:
+            return EmployeeHoliday.objects.filter(leave_status=action,  employee_id__employee_name__icontains=query)
+
+        return EmployeeHoliday.objects.filter(leave_status=action).order_by('-created_at')
+
+
+def employee_holiday_reject(request, pk):
+    if request.user.is_staff:
+        leave = EmployeeHoliday.objects.get(leave_id=pk)
+        leave.updated_at = timezone.now()
+        leave.leave_status = "Decline"
+        leave.save()
+        messages.success(
+            request, "Holiday request has been declined. Thank you.")
+
+        # send an email
+        subject, from_email, to = "Holiday request declined", settings.EMAIL_HOST_USER, leave.employee_id.user_name.email
+        text_content = "Employee Holiday request has been declined."
+        html_content = f"""<p>Hi {leave.employee_id.employee_name}, <br> 
+            Your holiday request has been declined. <br> 
+            Your holiday summary is as follow. <br> 
+            From: {leave.from_date} <br> 
+            To: {leave.to_date} <br>
+            Total Holidays: {leave.no_of_days} <br>
+            Reason: {leave.reason} <br>
+            Leave final status: {leave.leave_status} <br> <br>
+            You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>"""
+        msg = EmailMultiAlternatives(
+            subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        messages.success(
+            request, "Email send to employee successfully.")
+
+        return redirect('clientApp:home')
+    else:
+        messages.success(
+            request, "You don't have valid permission to decline holiday request.")
+        return redirect('clientApp:home')
+
+
+def employee_holiday_approve(request, pk):
+    if request.user.is_staff:
+        leave = EmployeeHoliday.objects.get(leave_id=pk)
+        leave.updated_at = timezone.now()
+        leave.leave_status = "Approve"
+        # send an email
+        subject, from_email, to = "Holiday request approved", settings.EMAIL_HOST_USER, leave.employee_id.user_name.email
+        text_content = "Employee Holiday request has been approved."
+        html_content = f"""<p>Hi {leave.employee_id.employee_name}, <br> 
+                Your holiday request has been Approved. <br> 
+                Your holiday summary is as follow. <br> 
+                From: {leave.from_date} <br> 
+                To: {leave.to_date} <br>
+                Total Holidays: {leave.no_of_days} <br>
+                Reason: {leave.reason} <br>
+                Leave status: {leave.leave_status} <br> <br>
+                You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>
+                """
+        msg = EmailMultiAlternatives(
+            subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        messages.success(
+            request, "Email send to employee successfully.")
+        leave.save()
+        messages.success(
+            request, "Holiday request has been approved. Thank you.")
+        return redirect('clientApp:home')
+    
+

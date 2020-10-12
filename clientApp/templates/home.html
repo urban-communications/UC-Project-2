@@ -245,7 +245,8 @@
     <hr>
 
     <h2>Holiday Request</h2>
-    <div class="row">
+    <h6><strong>Operator</strong></h6>
+    <div class="row">  
         <div class="col">
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:admin_leave_list' action='Pending' %}">Pending
@@ -257,6 +258,22 @@
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:admin_leave_list' action='Decline' %}">Declined
+                Holidays</a>
+        </div>
+    </div>
+    <h6><strong>Employee</strong></h6>
+    <div class="row">  
+        <div class="col">
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:admin_employee_holiday_list' action='Pending' %}">Pending
+                Holidays <span class="badge badge-light">{{pendingHolidayEmployeeCount}}</span></a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:admin_employee_holiday_list' action='Approve' %}">Approved
+                Holidays</a>
+            &nbsp;
+            <a class="btn btn-primary" style="margin-bottom: 10px;"
+                href="{% url 'clientApp:admin_employee_holiday_list' action='Decline' %}">Declined
                 Holidays</a>
         </div>
     </div>

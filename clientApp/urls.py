@@ -87,6 +87,12 @@ urlpatterns = [
          name='employee_feedback_list'),
     path('feedback/admin/list', views.AdminFeedbackList.as_view(),
          name='admin_employee_feedback_list'),
+    path('leave-request/admin/employee/list/<str:action>',
+         views.AdminEmployeeHolidayList.as_view(), name='admin_employee_holiday_list'),
+    path('leave-request/employee/approve/<slug:pk>',
+         views.employee_holiday_approve, name='employee_leave_approve'),
+    path('leave-request/employee/reject/<slug:pk>',
+         views.employee_holiday_reject, name='employee_leave_reject'),
 
 ]
 
