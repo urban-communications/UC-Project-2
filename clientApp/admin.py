@@ -5,7 +5,11 @@ from clientApp.models import (
     Leave, 
     Feedback, 
     MessageQuries,
-    Invoices
+    Invoices,
+    Employee,
+    EmployeeDocuments,
+    EmployeeFeedback,
+    EmployeeHoliday
 )
 
 admin.site.register(Client)
@@ -14,3 +18,6 @@ admin.site.register(Leave)
 admin.site.register(Feedback)
 admin.site.register(MessageQuries)
 admin.site.register(Invoices)
+admin.site.register(EmployeeDocuments)
+admin.site.register(EmployeeFeedback)
+admin.site.register(EmployeeHoliday)
