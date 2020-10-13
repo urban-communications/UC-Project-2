@@ -134,6 +134,26 @@ class HomeView(TemplateView):
                 data.admin_id = request.user
                 data.sender = 'Company'
                 data.read_by_admin = True
+
+                # send an email
+                clientObj = Client.objects.get(client_user_id=request.POST.get('client_id'))
+                subject, from_email, to = f"Message received from Urban Communications", settings.EMAIL_HOST_USER, clientObj.user_name.email
+                text_content = ""
+                html_content = f"""<div>
+                <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                <h2> PRIVATE & CONFIDENTIAL </h2>
+                <p> Dear {adminChatForm.cleaned_data['client_id']}, <br> 
+                The company has send you a message: <br><br> <strong> {adminChatForm.cleaned_data['messageQuery']} </strong> <br>
+                Kindly check and reply from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                </p>
+                </div>"""
+                msg = EmailMultiAlternatives(
+                    subject, text_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+                messages.success(
+                    request, "Email send to client with message notification.")
+
                 data.save()
                 messages.success(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
@@ -142,6 +162,26 @@ class HomeView(TemplateView):
                 data.admin_id = request.user
                 data.sender = 'Company'
                 data.read_by_admin = True
+
+                # send an email
+                operatorObj = Operator.objects.get(operator_user_id=request.POST.get('operator_id'))
+                subject, from_email, to = f"Message received from Urban Communications", settings.EMAIL_HOST_USER, operatorObj.user_name.email
+                text_content = ""
+                html_content = f"""<div>
+                <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                <h2> PRIVATE & CONFIDENTIAL </h2>
+                <p> Dear {adminChatOperatorForm.cleaned_data['operator_id']}, <br> 
+                The company has send you a message: <br><br> <strong> {adminChatOperatorForm.cleaned_data['messageQuery']} </strong> <br>
+                Kindly check and reply from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                </p>
+                </div>"""
+                msg = EmailMultiAlternatives(
+                    subject, text_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+                messages.success(
+                    request, "Email send to operator with message notification.")
+
                 data.save()
                 messages.success(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
@@ -153,6 +193,26 @@ class HomeView(TemplateView):
                 data.client_id = request.user.client
                 data.sender = 'Client'
                 data.read_by_client = True
+
+                # send an email
+                operatorObj = Operator.objects.get(operator_user_id=request.POST.get('operator_id'))
+                subject, from_email, to = f"Message received from {request.user.client}", settings.EMAIL_HOST_USER, operatorObj.user_name.email
+                text_content = ""
+                html_content = f"""<div>
+                <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                <h2> PRIVATE & CONFIDENTIAL </h2>
+                <p> Dear {clientChatForm.cleaned_data['operator_id']}, <br> 
+                The company has send you a message: <br><br> <strong> {clientChatForm.cleaned_data['messageQuery']} </strong> <br>
+                Kindly check and reply from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                </p>
+                </div>"""
+                msg = EmailMultiAlternatives(
+                    subject, text_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+                messages.success(
+                    request, "Email send to operator with message notification.")
+
                 data.save()
                 messages.error(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
@@ -164,6 +224,25 @@ class HomeView(TemplateView):
                 data.sender = 'Client'
                 data.admin_id = companyUser
                 data.read_by_client = True
+
+                # send an email
+                subject, from_email, to = f"Message received from {request.user.client}", settings.EMAIL_HOST_USER, companyUser.email
+                text_content = ""
+                html_content = f"""<div>
+                <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                <h2> PRIVATE & CONFIDENTIAL </h2>
+                <p> Dear Admin, <br> 
+                The client: ({request.user.client}) has send you a message: <br><br> <strong> {clientChatAdmin.cleaned_data['messageQuery']} </strong> <br>
+                Kindly check and reply from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                </p>
+                </div>"""
+                msg = EmailMultiAlternatives(
+                    subject, text_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+                messages.success(
+                    request, "Email send to company with message notification.")
+
                 data.save()
                 messages.error(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
@@ -626,8 +705,30 @@ class ClientInvoiceUpload(FormView):
     def post(self, request):
         form = ClientInvoiceForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            data = form.save(commit=False)
             messages.success(request, "Uploaded Successfully.")
+
+            clientObj = Client.objects.get(
+                client_user_id=request.POST.get('client_id'))
+
+            # send an email
+            subject, from_email, to = f"Invoice received from Urban Communications", settings.EMAIL_HOST_USER, clientObj.user_name.email
+            text_content = ""
+            html_content = f"""<div>
+                <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                <h2> PRIVATE & CONFIDENTIAL </h2>
+                <p> Dear {form.cleaned_data['client_id']}, <br> 
+                The company has uploaded an invoice in you account with title: {form.cleaned_data['title']} <br>
+                Kindly check your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                </p>
+                </div>"""
+            msg = EmailMultiAlternatives(
+                subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+            messages.success(
+                request, "Email send to client with invoice notification.")
+            data.save()
             return HttpResponseRedirect(request.path_info)
         else:
             messages.error(request, "Failed to upload.")
@@ -836,7 +937,7 @@ class AdminEmployeeHolidayList(ListView):
         if action == "Pending":
             EmployeeHoliday.objects.filter(leave_status="Pending",
                                            read_by_admin=False).update(read_by_admin=True)
-        
+
         query = self.request.GET.get("q")
         if query:
             return EmployeeHoliday.objects.filter(leave_status=action,  employee_id__employee_name__icontains=query)
@@ -907,5 +1008,3 @@ def employee_holiday_approve(request, pk):
         messages.success(
             request, "Holiday request has been approved. Thank you.")
         return redirect('clientApp:home')
-    
-

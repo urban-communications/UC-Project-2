@@ -10,15 +10,15 @@ from django.conf import settings
 
 
 from clientApp.models import (
-    User, 
-    Client, 
-    Operator, 
+    User,
+    Client,
+    Operator,
     Employee
 )
 from clientApp.forms import (
-    UserRegistrationForm, 
-    ClientRegistrationForm, 
-    OperatorRegistrationForm, 
+    UserRegistrationForm,
+    ClientRegistrationForm,
+    OperatorRegistrationForm,
     EmployeeRegistrationForm
 )
 
@@ -65,7 +65,28 @@ class ClientRegistration(TemplateView):
             subject, from_email, to = f"{form_client.cleaned_data['client_name']} signed up Successfully", settings.EMAIL_HOST_USER, form_user.cleaned_data[
                 'email']
             text_content = "Your account has been registered successfully"
-            html_content = f"<p>Hi, <br> Your account has been registered successfully. <br> Your account credientials are as follow. <br> Username: {form_user.cleaned_data['username']} <br> Password: {form_user.cleaned_data['password1']} <br> <br> you can now login by visiting our website at: <a> https://urbancommunications.herokuapp.com/ </a> </p>"
+            html_content = f"""<div>
+                <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                <h2> PRIVATE & CONFIDENTIAL </h2>
+                <p> Dear {form_client.cleaned_data['client_name']}, <br> 
+                Welcome and congrats on becoming a member of the Urban Communications Family. <br>
+                We are glad to inform you that your account has been registered successfully.  <br> <br>
+
+                <b> Your account credentials are as follow: </b> <br>
+                
+                <b>Username:</b> {form_user.cleaned_data['username']} <br> 
+                <b>Password:</b> {form_user.cleaned_data['password1']} <br> <br> 
+                You can now login by visiting our website at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> </p> <br>
+                <b> Things you can do by login: <br>
+                <ul>
+                    <li>You can view the list of operators associated with you</li>
+                    <li>You can approce or decline any holiday request from your operator</li>
+                    <li>You can give feedback to your operator and view it</li>
+                    <li>You can send a message to your operator and company</li>
+                    <li>You can view your invoices from company</li>
+                    <li>You can also view your profile information</li>
+                </ul>
+                </div>"""
             msg = EmailMultiAlternatives(
                 subject, text_content, from_email, [to])
             msg.attach_alternative(html_content, "text/html")
@@ -123,7 +144,26 @@ class OperatorRegistration(TemplateView):
                 subject, from_email, to = f"{name} signed up Successfully", settings.EMAIL_HOST_USER, form_user.cleaned_data[
                     'email']
                 text_content = "Your account has been registered successfully"
-                html_content = f"<p>Hi, <br> Your account has been registered successfully. <br> Your account credientials are as follow. <br> Username: {form_user.cleaned_data['username']} <br> Password: {form_user.cleaned_data['password1']} <br> <br> you can now login by visiting our website at: <a> https://urbancommunications.herokuapp.com/ </a> </p>"
+                html_content = f"""<div>
+                <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                <h2> PRIVATE & CONFIDENTIAL </h2>
+                <p> Dear {name}, <br> 
+                Welcome and congrats on becoming a member of the Urban Communications Family. <br>
+                We are glad to inform you that your account has been registered successfully.  <br> <br>
+
+                <b> Your account credentials are as follow: </b> <br>
+                
+                <b>Username:</b> {form_user.cleaned_data['username']} <br> 
+                <b>Password:</b> {form_user.cleaned_data['password1']} <br> <br> 
+                You can now login by visiting our website at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> </p> <br>
+                <b> Things you can do by login: <br>
+                <ul>
+                    <li>You can request your holidays and track its status</li>
+                    <li>You can check your feedbacks</li>
+                    <li>You can view and upload your documents</li>
+                    <li>You can view a message from company and you associated client</li>
+                </ul>
+                </div>"""
                 msg = EmailMultiAlternatives(
                     subject, text_content, from_email, [to])
                 msg.attach_alternative(html_content, "text/html")
@@ -183,13 +223,26 @@ class EmployeeRegistration(TemplateView):
                 subject, from_email, to = f"{name} signed up Successfully", settings.EMAIL_HOST_USER, form_user.cleaned_data[
                     'email']
                 text_content = "Your account has been registered successfully"
-                html_content = f"""<p>Hi, <br> 
-                Your account has been registered successfully. <br> 
-                Your account credientials are as follow. <br> 
-                Username: {form_user.cleaned_data['username']} <br> 
-                Password: {form_user.cleaned_data['password1']} <br> <br> 
-                you can now login by visiting our website at: <a> https://urbancommunications.herokuapp.com/ </a> 
-                </p>"""
+                html_content = f"""<div>
+                <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                <h2> PRIVATE & CONFIDENTIAL </h2>
+                <p> Dear {name}, <br> 
+                Welcome and congrats on becoming a member of the Urban Communications Family. <br>
+                We are glad to inform you that your account has been registered successfully.  <br> <br>
+
+                <b> Your account credentials are as follow: </b> <br>
+                
+                <b>Username:</b> {form_user.cleaned_data['username']} <br> 
+                <b>Password:</b> {form_user.cleaned_data['password1']} <br> <br> 
+                You can now login by visiting our website at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> </p> <br>
+                <b> Things you can do by login: <br>
+                <ul>
+                    <li>You can request your holidays and track its status</li>
+                    <li>You can check your feedbacks</li>
+                    <li>You can view and upload your documents</li>
+                    <li>You can view a message from company</li>
+                </ul>
+                </div>"""
                 msg = EmailMultiAlternatives(
                     subject, text_content, from_email, [to])
                 msg.attach_alternative(html_content, "text/html")
@@ -203,6 +256,3 @@ class EmployeeRegistration(TemplateView):
             return render(request, self.template_name, context)
         else:
             return redirect('clientApp:home')
-
-
-
