@@ -24,17 +24,22 @@
     <hr>
     <br>
     <h2>Operators</h2>
+    <img src="{% static 'clientApp/client-operator-banner.jpg' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:client_operator_list' %}">View Operators</a>
         </div>
     </div>
     <hr>
-
+    
     <h2>Feedback</h2>
+    <img src="{% static 'clientApp/feedback_banner.png' %}" style="width: 100%; height:min-content;">
+    
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:client_feedback' %}">Give
                 Feedback</a>
             &nbsp;
@@ -45,8 +50,10 @@
     <hr>
 
     <h2>Holiday Requests</h2>
+    <img src="{% static 'clientApp/holidays-request.png' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:leave_list' action='Pending' %}">Pending Holidays <span
                     class="badge badge-light">{{pendingLeaveCount}}</span></a>
@@ -61,8 +68,10 @@
     <hr>
 
     <h2>Invoices</h2>
+    <img src="{% static 'clientApp/invoices.jpg' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:client_invoice_list' %}">View Invoices <span
                     class="badge badge-light">{{invoiceCount}}</span></a>
@@ -128,8 +137,10 @@
     <br>
 
     <h2>Documents</h2>
+    <img src="{% static 'clientApp/documents.jpg' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:operator_document_upload' %}">Upload Documents</a>
             &nbsp;
@@ -140,8 +151,10 @@
     <hr>
 
     <h2>Feedback</h2>
+    <img src="{% static 'clientApp/feedback_banner.png' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" href="{% url 'clientApp:operator_feedback_list' %}">Feedback <span
                     class="badge badge-light">{{feedbackCount}}</span></a>
         </div>
@@ -149,8 +162,10 @@
     <hr>
 
     <h2>Holiday Details</h2>
+    <img src="{% static 'clientApp/holidays-request.png' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:operator_leave_request' %}">Request Holidays</a>
             &nbsp;
@@ -170,8 +185,10 @@
     <hr>
 
     <h2>Messages</h2>
+    <img src="{% static 'clientApp/message.jpg' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:operator_message_client_list' %}">Client Messages <span
                     class="badge badge-light">{{messageCount}}</span></a>
@@ -191,8 +208,10 @@
     <h2>Admin</h2>
 
     {% if user.is_superuser %}
+    <img src="{% static 'clientApp/admin.jpg' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" href="/admin/">Admin Panel</a>
         </div>
     </div>
@@ -200,8 +219,10 @@
     <hr>
 
     <h2>Feedback</h2>
+    <img src="{% static 'clientApp/feedback_banner.png' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:admin_feedback_list' %}">Feedback (Operator) <span
                     class="badge badge-light">{{feedbackCount}}</span></a>
@@ -218,8 +239,10 @@
     <hr>
 
     <h2>Invoices</h2>
+    <img src="{% static 'clientApp/invoices.jpg' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:admin_invoice_upload' %}">Upload Invoices</a>
             &nbsp;
@@ -230,8 +253,10 @@
     <hr>
 
     <h2>Registration</h2>
+    <img src="{% static 'clientApp/registration.png' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:operator_signup' %}">Operator Registration</a>
             &nbsp;
@@ -245,6 +270,8 @@
     <hr>
 
     <h2>Holiday Request</h2>
+    <img src="{% static 'clientApp/holidays-request.png' %}" style="width: 100%; height:min-content;">
+    <br>
     <h6><strong>Operator</strong></h6>
     <div class="row">  
         <div class="col">

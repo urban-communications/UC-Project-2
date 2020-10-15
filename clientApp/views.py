@@ -31,7 +31,8 @@ from clientApp.models import (
     Invoices,
     EmployeeDocuments,
     EmployeeHoliday,
-    EmployeeFeedback
+    EmployeeFeedback,
+    Employee
 )
 
 
@@ -134,9 +135,16 @@ class HomeView(TemplateView):
                 data.admin_id = request.user
                 data.sender = 'Company'
                 data.read_by_admin = True
+                try:
+                    data.save()
+                    messages.success(request, "Your message has been sent.")
+                except:
+                    messages.success(request, "Unable to send message.")
+                    return HttpResponseRedirect(request.path_info)
 
                 # send an email
-                clientObj = Client.objects.get(client_user_id=request.POST.get('client_id'))
+                clientObj = Client.objects.get(
+                    client_user_id=request.POST.get('client_id'))
                 subject, from_email, to = f"Message received from Urban Communications", settings.EMAIL_HOST_USER, clientObj.user_name.email
                 text_content = ""
                 html_content = f"""<div>
@@ -150,21 +158,30 @@ class HomeView(TemplateView):
                 msg = EmailMultiAlternatives(
                     subject, text_content, from_email, [to])
                 msg.attach_alternative(html_content, "text/html")
-                msg.send()
-                messages.success(
-                    request, "Email send to client with message notification.")
+                try:
+                    msg.send()
+                    messages.success(
+                        request, "Email send to client with message notification.")
+                except:
+                    messages.error(
+                        request, "Unable to send email to client with message notification.")
 
-                data.save()
-                messages.success(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
             if adminChatOperatorForm.is_valid():
                 data = adminChatOperatorForm.save(commit=False)
                 data.admin_id = request.user
                 data.sender = 'Company'
                 data.read_by_admin = True
+                try:
+                    data.save()
+                    messages.success(request, "Your message has been sent.")
+                except:
+                    messages.error(
+                        request, "Unable to send email to client with message notification.")
 
                 # send an email
-                operatorObj = Operator.objects.get(operator_user_id=request.POST.get('operator_id'))
+                operatorObj = Operator.objects.get(
+                    operator_user_id=request.POST.get('operator_id'))
                 subject, from_email, to = f"Message received from Urban Communications", settings.EMAIL_HOST_USER, operatorObj.user_name.email
                 text_content = ""
                 html_content = f"""<div>
@@ -178,12 +195,14 @@ class HomeView(TemplateView):
                 msg = EmailMultiAlternatives(
                     subject, text_content, from_email, [to])
                 msg.attach_alternative(html_content, "text/html")
-                msg.send()
-                messages.success(
-                    request, "Email send to operator with message notification.")
+                try:
+                    msg.send()
+                    messages.success(
+                        request, "Email send to operator with message notification.")
+                except:
+                    messages.success(
+                        request, "Unable to send email to operator.")
 
-                data.save()
-                messages.success(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
         elif request.user.client:
             clientChatForm = ClientSendMessageForm(request, request.POST)
@@ -193,9 +212,16 @@ class HomeView(TemplateView):
                 data.client_id = request.user.client
                 data.sender = 'Client'
                 data.read_by_client = True
+                try:
+                    data.save()
+                    messages.success(request, "Your message has been sent.")
+                except:
+                    messages.error(request, "Unable to send message.")
+                    return HttpResponseRedirect(request.path_info)
 
                 # send an email
-                operatorObj = Operator.objects.get(operator_user_id=request.POST.get('operator_id'))
+                operatorObj = Operator.objects.get(
+                    operator_user_id=request.POST.get('operator_id'))
                 subject, from_email, to = f"Message received from {request.user.client}", settings.EMAIL_HOST_USER, operatorObj.user_name.email
                 text_content = ""
                 html_content = f"""<div>
@@ -209,12 +235,14 @@ class HomeView(TemplateView):
                 msg = EmailMultiAlternatives(
                     subject, text_content, from_email, [to])
                 msg.attach_alternative(html_content, "text/html")
-                msg.send()
-                messages.success(
-                    request, "Email send to operator with message notification.")
+                try:
+                    msg.send()
+                    messages.success(
+                        request, "Email send to operator with message notification.")
+                except:
+                    messages.success(
+                        request, "Unable to send email to operator.")
 
-                data.save()
-                messages.error(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
             if clientChatAdmin.is_valid():
                 companyUser = User.objects.get(
@@ -224,6 +252,12 @@ class HomeView(TemplateView):
                 data.sender = 'Client'
                 data.admin_id = companyUser
                 data.read_by_client = True
+                try:
+                    data.save()
+                    messages.error(request, "Your message has been sent.")
+                except:
+                    messages.error(request, "Unable to send your message.")
+                    return HttpResponseRedirect(request.path_info)
 
                 # send an email
                 subject, from_email, to = f"Message received from {request.user.client}", settings.EMAIL_HOST_USER, companyUser.email
@@ -239,12 +273,14 @@ class HomeView(TemplateView):
                 msg = EmailMultiAlternatives(
                     subject, text_content, from_email, [to])
                 msg.attach_alternative(html_content, "text/html")
-                msg.send()
-                messages.success(
-                    request, "Email send to company with message notification.")
+                try:
+                    msg.send()
+                    messages.success(
+                        request, "Email send to company with message notification.")
+                except:
+                    messages.error(
+                        request, "Unable to send email to company.")
 
-                data.save()
-                messages.error(request, "Your message has been sent.")
                 return HttpResponseRedirect(request.path_info)
         else:
             messages.error(request, "Failed to send message. Try Again")
@@ -280,12 +316,46 @@ class FeedbackView(TemplateView):
             if feedback_form.is_valid():
                 data = feedback_form.save(commit=False)
                 data.client_id = self.request.user.client
-                data.save()
-                messages.success(
-                    request, "Your feedback has been submitted. Thank you")
+                try:
+                    data.save()
+                    messages.success(
+                        request, "Your feedback has been submitted. Thank you")
+                except:
+                    messages.error(
+                        request, "Unable to submit your feedback.")
+                    return HttpResponseRedirect(request.path_info)
+
+                # send an email
+                try:
+                    admin = User.objects.get(is_staff=True, is_superuser=True)
+                    operator = Operator.objects.get(
+                        operator_user_id=request.POST.get('operator_id'))
+                    subject, from_email = f"Feedback from {request.user.client}", settings.EMAIL_HOST_USER
+                    text_content = ""
+                    html_content = f"""<div>
+                    <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                    <h2> PRIVATE & CONFIDENTIAL </h2>
+                    <p> Dear {operator}, <br> 
+                    There is a feedback from your client ({request.user.client}). Details are as follow: <br><br>
+                    <b>Rating:</b> {feedback_form.cleaned_data['rating']} <br>
+                    <b>Feedback:</b> {feedback_form.cleaned_data['feedback_note']} <br><br>
+                    You can check the feedback by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                    </p>
+                    </div>"""
+
+                    msg = EmailMultiAlternatives(
+                        subject, text_content, from_email, [operator.user_name.email], cc=[admin.email])
+                    msg.attach_alternative(html_content, "text/html")
+                    msg.send(fail_silently=True)
+                    messages.success(
+                        request, "Email send to operator and company with feedback details.")
+                except:
+                    messages.success(
+                        request, "Unable to send email due to some error.")
+
                 return HttpResponseRedirect(request.path_info)
             else:
-                context['feedback_form'] = feedback_form()
+                context['feedback_form'] = feedback_form
             return render(request, self.template_name, context)
         else:
             return redirect('clientApp:home')
@@ -370,14 +440,51 @@ class OperatorLeaveRequest(TemplateView):
                     data.no_of_days = total_days
                     data.operator_id = self.request.user.operator
                     data.client_id = self.request.user.operator.client_id
-                    data.save()
-                    messages.success(
-                        request, "Your holiday request has been submitted! We will get back in touch with you soon. Thank you")
+                    try:
+                        data.save()
+                        messages.success(
+                            request, "Holiday request successfully created.")
+                    except:
+                        messages.success(
+                            request, "Unable to create holiday request.")
+                        return HttpResponseRedirect(request.path_info)
+
+                    # send an email
+                    subject, from_email, to = f"Holiday request from {request.user.operator}", settings.EMAIL_HOST_USER, request.user.operator.client_id.user_name.email
+                    text_content = ""
+                    html_content = f"""<div>
+                    <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                    <h2> PRIVATE & CONFIDENTIAL </h2>
+                    <p> Dear {request.user.operator.client_id}, <br> 
+                    There is an holiday request received from {request.user.operator}. Details are as follow: <br><br>
+                    <b>Name:</b> {request.user.operator} <br>
+                    <b>From:</b> {form.cleaned_data['from_date']} <br>
+                    <b>To:</b> {form.cleaned_data['to_date']} <br>
+                    <b>Total Days:</b> {total_days} <br>
+                    <b>Reason:</b> {form.cleaned_data['reason']} <br> <br>
+
+                    Kindly check and approve or decline from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                    </p>
+                    </div>"""
+
+                    try:
+                        admin = User.objects.get(
+                            is_staff=True, is_superuser=True)
+                        msg = EmailMultiAlternatives(
+                            subject, text_content, from_email, [to], cc=[admin.email])
+                        msg.attach_alternative(html_content, "text/html")
+                        msg.send(fail_silently=True)
+                        messages.success(
+                            request, "Email send to company and client with holiday details.")
+                    except:
+                        messages.success(
+                            request, "Unable to send email due to some error.")
+
                 else:
                     messages.error(request, "Kindly select a valid date range")
                 return HttpResponseRedirect(request.path_info)
             else:
-                context['form'] = form()
+                context['form'] = form
                 return render(request, self.template_name, context)
         else:
             return redirect('clientApp:home')
@@ -428,23 +535,31 @@ def leave_approve(request, pk):
             subject, from_email, to = "Holiday request approved", settings.EMAIL_HOST_USER, leave.operator_id.user_name.email
             text_content = "Operator Holiday request has been approved."
             html_content = f"""<p>Hi {leave.operator_id.operator_name}, <br> 
-                Your holiday request has been Approved. <br> 
+                <b>Your holiday request has been Approved.</b> <br> <br>
                 Your holiday summary is as follow. <br> 
-                From: {leave.from_date} <br> 
-                To: {leave.to_date} <br>
-                Total Holidays: {leave.no_of_days} <br>
-                Reason: {leave.reason} <br>
-                Leave final status: {leave.leave_status} <br> 
-                Client Action: {leave.client_leave_status} <br> 
-                Company Action: {leave.admin_leave_status} <br> <br>
-                You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>
+                <b>From:</b> {leave.from_date} <br> 
+                <b>To:</b> {leave.to_date} <br>
+                <b>Total Holidays:</b> {leave.no_of_days} <br>
+                <b>Reason:</b> {leave.reason} <br>
+                <b>Leave final status:</b> {leave.leave_status} <br> 
+                <b>Client Action:</b> {leave.client_leave_status} <br> 
+                <b>Company Action:</b> {leave.admin_leave_status} <br> <br>
+                You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>
                 """
             msg = EmailMultiAlternatives(
                 subject, text_content, from_email, [to])
             msg.attach_alternative(html_content, "text/html")
-            msg.send()
-            messages.success(
-                request, "Email send to operator successfully.")
+            try:
+                leave.save()
+                messages.success(
+                    request, "Holiday request has been approved. Thank you.")
+                msg.send()
+                messages.success(
+                    request, "Email send to operator successfully.")
+                return redirect('clientApp:home')
+            except:
+                messages.error(
+                    request, "Unable to send email to operator.")
         leave.save()
         messages.success(
             request, "Holiday request has been approved. Thank you.")
@@ -459,23 +574,31 @@ def leave_approve(request, pk):
             subject, from_email, to = "Holiday request approved", settings.EMAIL_HOST_USER, leave.operator_id.user_name.email
             text_content = "Operator Holiday request has been approved."
             html_content = f"""<p>Hi {leave.operator_id.operator_name}, <br> 
-                Your holiday request has been Approved. <br> 
+                <b>Your holiday request has been Approved.</b> <br> <br>
                 Your holiday summary is as follow. <br> 
-                From: {leave.from_date} <br> 
-                To: {leave.to_date} <br>
-                Total Holidays: {leave.no_of_days} <br>
-                Reason: {leave.reason} <br>
-                Leave final status: {leave.leave_status} <br> 
-                Client Action: {leave.client_leave_status} <br> 
-                Company Action: {leave.admin_leave_status} <br> <br>
-                You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>
+                <b>From:</b> {leave.from_date} <br> 
+                <b>To:</b> {leave.to_date} <br>
+                <b>Total Holidays:</b> {leave.no_of_days} <br>
+                <b>Reason:</b> {leave.reason} <br>
+                <b>Leave final status:</b> {leave.leave_status} <br> 
+                <b>Client Action:</b> {leave.client_leave_status} <br> 
+                <b>Company Action:</b> {leave.admin_leave_status} <br> <br>
+                You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>
                 """
             msg = EmailMultiAlternatives(
                 subject, text_content, from_email, [to])
             msg.attach_alternative(html_content, "text/html")
-            msg.send()
-            messages.success(
-                request, "Email send to operator successfully.")
+            try:
+                leave.save()
+                messages.success(
+                    request, "Holiday request has been approved. Thank you.")
+                msg.send()
+                messages.success(
+                    request, "Email send to operator successfully.")
+                return redirect('clientApp:home')
+            except:
+                messages.error(
+                    request, "Unable to send email to operator.")
         leave.save()
         messages.success(
             request, "Holiday request has been approved. Thank you.")
@@ -495,30 +618,38 @@ def leave_reject(request, pk):
         if hasattr(request.user, 'client'):
             leave.client_leave_status = "Declined"
         leave.leave_status = "Decline"
-        leave.save()
-        messages.success(
-            request, "Holiday request has been declined. Thank you.")
+        try:
+            leave.save()
+            messages.success(
+                request, "Holiday request has been declined. Thank you.")
+        except:
+            messages.success(
+                request, "Unable to update status of holiday request.")
 
         # send an email
         subject, from_email, to = "Holiday request declined", settings.EMAIL_HOST_USER, leave.operator_id.user_name.email
         text_content = "Operator Holiday request has been declined."
         html_content = f"""<p>Hi {leave.operator_id.operator_name}, <br> 
-            Your holiday request has been declined. <br> 
+            <b>Your holiday request has been declined.</b> <br> <br> 
             Your holiday summary is as follow. <br> 
-            From: {leave.from_date} <br> 
-            To: {leave.to_date} <br>
-            Total Holidays: {leave.no_of_days} <br>
-            Reason: {leave.reason} <br>
-            Leave final status: {leave.leave_status} <br> 
-            Client Action: {leave.client_leave_status} <br> 
-            Company Action: {leave.admin_leave_status} <br> <br>
-            You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>"""
+            <b>From:</b> {leave.from_date} <br> 
+            <b>To:</b> {leave.to_date} <br>
+            <b>Total Holidays:</b> {leave.no_of_days} <br>
+            <b>Reason:</b> {leave.reason} <br>
+            <b>Client Action:</b> {leave.client_leave_status} <br> 
+            <b>Company Action:</b> {leave.admin_leave_status} <br> 
+            <b>Leave final status:</b> {leave.leave_status} <br> <br>
+            You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>"""
         msg = EmailMultiAlternatives(
             subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
-        msg.send()
-        messages.success(
-            request, "Email send to operator successfully.")
+        try:
+            msg.send()
+            messages.success(
+                request, "Email send to operator successfully.")
+        except:
+            messages.success(
+                request, "Unable to send email to operator.")
 
         return redirect('clientApp:home')
     else:
@@ -555,14 +686,36 @@ class OperatorDocumentsUpload(FormView):
         form = OperatorDocumentsForm(request.POST, request.FILES)
         files = request.FILES.getlist('documents')
         if form.is_valid():
-            for doc in files:
-                document = OperatorDocuments(
-                    operator_id=request.user.operator,
-                    doc_title=doc.name,
-                    documents=doc
-                )
-                document.save()
+            try:
+                for doc in files:
+                    document = OperatorDocuments(
+                        operator_id=request.user.operator,
+                        doc_title=doc.name,
+                        documents=doc
+                    )
+                    document.save()
                 messages.success(request, "Uploaded Successfully.")
+            except:
+                messages.success(request, "Upload Failed.")
+                return HttpResponseRedirect(request.path_info)
+
+            # send an email
+            subject, from_email, to = "Operator uploaded a document", settings.EMAIL_HOST_USER, request.user.operator.client_id.user_name.email
+            text_content = "Operator uploaded a document."
+            html_content = f"""<p>Hi {request.user.operator.client_id}, <br> 
+                <b>Your operator ({request.user.operator}) uploaded a document(s).</b> <br> <br> 
+                You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>"""
+            msg = EmailMultiAlternatives(
+                subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            try:
+                msg.send()
+                messages.success(
+                    request, "Notification email send to client successfully.")
+            except:
+                messages.success(
+                    request, "Unable to send email to client.")
+
             return HttpResponseRedirect(request.path_info)
         else:
             messages.error(request, "Failed to upload: Invalid files.")
@@ -706,10 +859,10 @@ class ClientInvoiceUpload(FormView):
         form = ClientInvoiceForm(request.POST, request.FILES)
         if form.is_valid():
             data = form.save(commit=False)
-            messages.success(request, "Uploaded Successfully.")
-
             clientObj = Client.objects.get(
                 client_user_id=request.POST.get('client_id'))
+            data.save()
+            messages.success(request, "Uploaded Successfully.")
 
             # send an email
             subject, from_email, to = f"Invoice received from Urban Communications", settings.EMAIL_HOST_USER, clientObj.user_name.email
@@ -725,10 +878,14 @@ class ClientInvoiceUpload(FormView):
             msg = EmailMultiAlternatives(
                 subject, text_content, from_email, [to])
             msg.attach_alternative(html_content, "text/html")
-            msg.send()
-            messages.success(
-                request, "Email send to client with invoice notification.")
-            data.save()
+            try:
+                msg.send()
+                messages.success(
+                    request, "Email send to client with invoice notification.")
+            except:
+                messages.success(
+                    request, "Unable to send email to client.")
+
             return HttpResponseRedirect(request.path_info)
         else:
             messages.error(request, "Failed to upload.")
@@ -835,14 +992,50 @@ class EmployeeHolidayRequest(TemplateView):
                     data.no_of_days = total_days
                     data.employee_id = self.request.user.employee
                     data.admin_id = admin
-                    data.save()
-                    messages.success(
-                        request, "Your holiday request has been submitted! We will get back in touch with you soon. Thank you")
+                    try:
+                        data.save()
+                        messages.success(
+                            request, "Your holiday request has been submitted! We will get back in touch with you soon. Thank you")
+                    except:
+                        messages.success(
+                            request, "Unable to create holiday request")
+                        return HttpResponseRedirect(request.path_info)
+
+                    # send an email
+                    subject, from_email, to = f"Holiday request from {request.user.employee}", settings.EMAIL_HOST_USER, admin.email
+                    text_content = ""
+                    html_content = f"""<div>
+                    <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                    <h2> PRIVATE & CONFIDENTIAL </h2>
+                    <p> Dear Admin, <br> 
+                    There is an holiday request received from {request.user.employee}. Details are as follow: <br><br>
+                    <b>Name:</b> {request.user.employee} <br>
+                    <b>From:</b> {form.cleaned_data['from_date']} <br>
+                    <b>To:</b> {form.cleaned_data['to_date']} <br>
+                    <b>Total Days:</b> {total_days} <br>
+                    <b>Reason:</b> {form.cleaned_data['reason']} <br> <br>
+
+                    Kindly check and approve or decline from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                    </p>
+                    </div>"""
+
+                    try:
+                        msg = EmailMultiAlternatives(
+                            subject, text_content, from_email, [to])
+                        msg.attach_alternative(html_content, "text/html")
+                        msg.send(fail_silently=True)
+                        messages.success(
+                            request, "Email send to company with holiday details.")
+                    except:
+                        messages.error(
+                            request, "Unable to send email due to some error.")
+
                 else:
-                    messages.error(request, "Kindly select a valid date range")
+                    messages.error(
+                        request, "Kindly select a valid date range.")
                 return HttpResponseRedirect(request.path_info)
             else:
-                context['form'] = form()
+                context['form'] = form
                 return render(request, self.template_name, context)
         else:
             return redirect('clientApp:home')
@@ -884,12 +1077,46 @@ class AdminEmployeeFeedback(TemplateView):
         if feedback_form.is_valid():
             data = feedback_form.save(commit=False)
             data.admin_id = self.request.user
-            data.save()
-            messages.success(
-                request, "Your feedback has been submitted. Thank you")
+            try:
+                data.save()
+                messages.success(
+                    request, "Your feedback has been submitted. Thank you")
+            except:
+                messages.error(
+                    request, "Unable to submit your feedback")
+                return HttpResponseRedirect(request.path_info)
+
+            # send an email
+            try:
+                employee = Employee.objects.get(
+                    employee_user_id=request.POST.get('employee_id'))
+                subject, from_email = f"Feedback from Company", settings.EMAIL_HOST_USER
+                text_content = ""
+                html_content = f"""<div>
+                <em> This is an automated e-mail - please do not reply to this address </em> <br>
+                <h2> PRIVATE & CONFIDENTIAL </h2>
+                <p> Dear {employee}, <br> 
+                There is a feedback from admin. Details are as follow: <br><br>
+                <b>Rating:</b> {feedback_form.cleaned_data['rating']} <br>
+                <b>Feedback:</b> {feedback_form.cleaned_data['feedback_note']} <br><br>
+                You can check the feedback by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                </p>
+                </div>"""
+
+                msg = EmailMultiAlternatives(
+                    subject, text_content, from_email, [employee.user_name.email])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send(fail_silently=True)
+                messages.success(
+                    request, "Email send to employee with feedback details.")
+            except:
+                messages.success(
+                    request, "Unable to send email due to some error.")
+
             return HttpResponseRedirect(request.path_info)
+
         else:
-            context['feedback_form'] = feedback_form()
+            context['feedback_form'] = feedback_form
         return render(request, self.template_name, context)
 
 
@@ -950,28 +1177,37 @@ def employee_holiday_reject(request, pk):
         leave = EmployeeHoliday.objects.get(leave_id=pk)
         leave.updated_at = timezone.now()
         leave.leave_status = "Decline"
-        leave.save()
-        messages.success(
-            request, "Holiday request has been declined. Thank you.")
+        try:
+            leave.save()
+            messages.success(
+                request, "Holiday request has been declined. Thank you.")
+        except:
+            messages.error(
+                request, "Unable to save your response on this holiday request.")
+            return redirect('clientApp:home')
 
         # send an email
         subject, from_email, to = "Holiday request declined", settings.EMAIL_HOST_USER, leave.employee_id.user_name.email
-        text_content = "Employee Holiday request has been declined."
+        text_content = "Operator Holiday request has been declined."
         html_content = f"""<p>Hi {leave.employee_id.employee_name}, <br> 
-            Your holiday request has been declined. <br> 
+            <b>Your holiday request has been declined.</b> <br> <br> 
             Your holiday summary is as follow. <br> 
-            From: {leave.from_date} <br> 
-            To: {leave.to_date} <br>
-            Total Holidays: {leave.no_of_days} <br>
-            Reason: {leave.reason} <br>
-            Leave final status: {leave.leave_status} <br> <br>
-            You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>"""
+            <b>From:</b> {leave.from_date} <br> 
+            <b>To:</b> {leave.to_date} <br>
+            <b>Total Holidays:</b> {leave.no_of_days} <br>
+            <b>Reason:</b> {leave.reason} <br>
+            <b>Leave final status:</b> {leave.leave_status} <br> <br>
+            You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>"""
         msg = EmailMultiAlternatives(
             subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
-        msg.send()
-        messages.success(
-            request, "Email send to employee successfully.")
+        try:
+            msg.send()
+            messages.success(
+                request, "Email send to employee successfully.")
+        except:
+            messages.success(
+                request, "Unable to send email to employee.")
 
         return redirect('clientApp:home')
     else:
@@ -985,26 +1221,36 @@ def employee_holiday_approve(request, pk):
         leave = EmployeeHoliday.objects.get(leave_id=pk)
         leave.updated_at = timezone.now()
         leave.leave_status = "Approve"
+        try:
+            leave.save()
+            messages.success(
+                request, "Holiday request has been approved. Thank you.")
+        except:
+            messages.error(
+                request, "Unable to save your response on this holiday request.")
+            return redirect('clientApp:home')
+
         # send an email
-        subject, from_email, to = "Holiday request approved", settings.EMAIL_HOST_USER, leave.employee_id.user_name.email
-        text_content = "Employee Holiday request has been approved."
+        subject, from_email, to = "Holiday request Approved", settings.EMAIL_HOST_USER, leave.employee_id.user_name.email
+        text_content = "Operator Holiday request has been approved."
         html_content = f"""<p>Hi {leave.employee_id.employee_name}, <br> 
-                Your holiday request has been Approved. <br> 
-                Your holiday summary is as follow. <br> 
-                From: {leave.from_date} <br> 
-                To: {leave.to_date} <br>
-                Total Holidays: {leave.no_of_days} <br>
-                Reason: {leave.reason} <br>
-                Leave status: {leave.leave_status} <br> <br>
-                You can login by visiting our website for more details: <a> https://urbancommunications.herokuapp.com/ </a> </p>
-                """
+            <b>Your holiday request has been approved.</b> <br> <br> 
+            Your holiday summary is as follow. <br> 
+            <b>From:</b> {leave.from_date} <br> 
+            <b>To:</b> {leave.to_date} <br>
+            <b>Total Holidays:</b> {leave.no_of_days} <br>
+            <b>Reason:</b> {leave.reason} <br>
+            <b>Leave final status:</b> {leave.leave_status} <br> <br>
+            You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>"""
         msg = EmailMultiAlternatives(
             subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
-        msg.send()
-        messages.success(
-            request, "Email send to employee successfully.")
-        leave.save()
-        messages.success(
-            request, "Holiday request has been approved. Thank you.")
+        try:
+            msg.send()
+            messages.success(
+                request, "Email send to employee successfully.")
+        except:
+            messages.success(
+                request, "Unable to send email to employee.")
+
         return redirect('clientApp:home')

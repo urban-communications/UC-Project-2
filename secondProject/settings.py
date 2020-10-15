@@ -137,14 +137,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # EMAIL_FILE_PATH = os.path.join(BASE_DIR, "emails")
 
-# Send Email using Gmail Account
+# Send Email using Godaddy Account
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'urbancommunication12@gmail.com'
-EMAIL_HOST_PASSWORD = "m7FGW@vw1"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'urbancommunication12@gmail.com'  
+EMAIL_HOST = 'mail.urban-communications.co.uk'
+EMAIL_HOST_USER = 'noreply@urban-communications.co.uk'
+EMAIL_HOST_PASSWORD = "_L^JKw7^8,l*"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'noreply@urban-communications.co.uk'
 
 # AWS SES E-mail Settings
 # EMAIL_BACKEND = 'django_ses.SESBackend'
