@@ -376,8 +376,10 @@
     <br>
 
     <h2>Feedback</h2>
+    <img src="{% static 'clientApp/feedback_banner.png' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" href="{% url 'clientApp:employee_feedback_list' %}">Feedback <span
                     class="badge badge-light">{{feedbackCount}}</span></a>
         </div>
@@ -385,8 +387,10 @@
     <hr>
 
     <h2>Documents</h2>
+    <img src="{% static 'clientApp/documents.jpg' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:employee_document_upload' %}">Upload Documents</a>
             &nbsp;
@@ -397,8 +401,10 @@
     <hr>
 
     <h2>Holiday Details</h2>
+    <img src="{% static 'clientApp/holidays-request.png' %}" style="width: 100%; height:min-content;">
     <div class="row">
         <div class="col">
+            <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
                 href="{% url 'clientApp:employee_holiday_request' %}">Request Holidays</a>
             &nbsp;
