@@ -193,6 +193,7 @@ class EmployeeHoliday(models.Model):
     def __str__(self):
         return self.employee_id
 
+
 class EmployeeFeedback(models.Model):
     RATING_CHOICES = (
         ('', 'Choose...'),

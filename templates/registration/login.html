@@ -9,24 +9,39 @@
 
 {% block body %}
 
-<div class="text-center">
+<div>
     <br />
-    <h1>Login</h1>
+    <h1 class="text-center">Login</h1>
     <br />
-    <div class="alert border border-dark justify-content-center" style="background-color:white;">
-        <form method="post">
-            {% csrf_token %}
-            <li class="list-group-item">
-                {{form|crispy}}
-            </li>
-            <br>
-            <button type="submit" class="btn btn-dark">
-                LOG IN
-            </button>
-        </form>
-        <br />
-        <a href="/accounts/password_reset/" class="btn btn-primary" style="white-space: normal; font-size: x-small;word-wrap:break-word;">Forgot password or username</a>
+    <div class="text-center">
+        <div class="row">
+            <div class="col-12 col-md-3"></div>
+            <div class="col-12 col-md-6">
+                <div class="card p-4 border border-dark" style="background-color:white;">
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div>
+                            {{form|crispy}}
+                        </div>
+                        <br>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-dark center">
+                                LOG IN
+                            </button>
+                        </div>
+                    </form>
+                    <div class="text-center">
+                        <a href="/accounts/password_reset/" class="btn btn-primary"
+                            style="white-space: normal; font-size: small;word-wrap:break-word;margin-top: 10px;">Forgot
+                            password or
+                            username</a>
+                    </div>
 
+                </div>
+            </div>
+            <div class="col-12 col-md-3"></div>
+        </div>
     </div>
 </div>
 {% endblock %}
