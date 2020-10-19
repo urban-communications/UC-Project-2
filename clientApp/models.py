@@ -127,7 +127,7 @@ class Leave(models.Model):
     read_by_admin = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.operator_id
+        return self.operator_id.operator_name
 
 
 class MessageQuery(models.Model):
@@ -197,7 +197,7 @@ class EmployeeHoliday(models.Model):
     read_by_admin = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.employee_id
+        return self.employee_id.employee_name
 
 
 class EmployeeFeedback(models.Model):

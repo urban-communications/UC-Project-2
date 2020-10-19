@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -116,9 +116,9 @@ USE_TZ = True
 
 
 # login redirects
-LOGIN_URL = '/accounts/login'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/client/'
-LOGOUT_REDIRECT_URL = '/accounts/login'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 LOGIN_EXEMPT_URLS = (
     r'^accounts/login/$',
