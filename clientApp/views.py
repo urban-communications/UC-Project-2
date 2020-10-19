@@ -139,7 +139,7 @@ class HomeView(TemplateView):
                     data.save()
                     messages.success(request, "Your message has been sent.")
                 except:
-                    messages.success(request, "Unable to send message.")
+                    messages.success(request, "Unable to sent message.")
                     return HttpResponseRedirect(request.path_info)
 
                 # send an email
@@ -161,10 +161,10 @@ class HomeView(TemplateView):
                 try:
                     msg.send()
                     messages.success(
-                        request, "Email send to client with message notification.")
+                        request, "Email sent to client with message notification.")
                 except:
                     messages.error(
-                        request, "Unable to send email to client with message notification.")
+                        request, "Unable to sent email to client with message notification.")
 
                 return HttpResponseRedirect(request.path_info)
             if adminChatOperatorForm.is_valid():
@@ -177,7 +177,7 @@ class HomeView(TemplateView):
                     messages.success(request, "Your message has been sent.")
                 except:
                     messages.error(
-                        request, "Unable to send email to client with message notification.")
+                        request, "Unable to sent email to client with message notification.")
 
                 # send an email
                 operatorObj = Operator.objects.get(
@@ -198,10 +198,10 @@ class HomeView(TemplateView):
                 try:
                     msg.send()
                     messages.success(
-                        request, "Email send to operator with message notification.")
+                        request, "Email sent to operator with message notification.")
                 except:
                     messages.success(
-                        request, "Unable to send email to operator.")
+                        request, "Unable to sent email to operator.")
 
                 return HttpResponseRedirect(request.path_info)
         elif request.user.client:
@@ -216,7 +216,7 @@ class HomeView(TemplateView):
                     data.save()
                     messages.success(request, "Your message has been sent.")
                 except:
-                    messages.error(request, "Unable to send message.")
+                    messages.error(request, "Unable to sent message.")
                     return HttpResponseRedirect(request.path_info)
 
                 # send an email
@@ -238,10 +238,10 @@ class HomeView(TemplateView):
                 try:
                     msg.send()
                     messages.success(
-                        request, "Email send to operator with message notification.")
+                        request, "Email sent to operator with message notification.")
                 except:
                     messages.success(
-                        request, "Unable to send email to operator.")
+                        request, "Unable to sent email to operator.")
 
                 return HttpResponseRedirect(request.path_info)
             if clientChatAdmin.is_valid():
@@ -256,7 +256,7 @@ class HomeView(TemplateView):
                     data.save()
                     messages.error(request, "Your message has been sent.")
                 except:
-                    messages.error(request, "Unable to send your message.")
+                    messages.error(request, "Unable to sent your message.")
                     return HttpResponseRedirect(request.path_info)
 
                 # send an email
@@ -276,14 +276,14 @@ class HomeView(TemplateView):
                 try:
                     msg.send()
                     messages.success(
-                        request, "Email send to company with message notification.")
+                        request, "Email sent to company with message notification.")
                 except:
                     messages.error(
-                        request, "Unable to send email to company.")
+                        request, "Unable to sent email to company.")
 
                 return HttpResponseRedirect(request.path_info)
         else:
-            messages.error(request, "Failed to send message. Try Again")
+            messages.error(request, "Failed to sent message. Try Again")
             return HttpResponseRedirect(request.path_info)
 
 
@@ -348,10 +348,10 @@ class FeedbackView(TemplateView):
                     msg.attach_alternative(html_content, "text/html")
                     msg.send(fail_silently=True)
                     messages.success(
-                        request, "Email send to operator and company with feedback details.")
+                        request, "Email sent to operator and company with feedback details.")
                 except:
                     messages.success(
-                        request, "Unable to send email due to some error.")
+                        request, "Unable to sent email due to some error.")
 
                 return HttpResponseRedirect(request.path_info)
             else:
@@ -475,10 +475,10 @@ class OperatorLeaveRequest(TemplateView):
                         msg.attach_alternative(html_content, "text/html")
                         msg.send(fail_silently=True)
                         messages.success(
-                            request, "Email send to company and client with holiday details.")
+                            request, "Email sent to company and client with holiday details.")
                     except:
                         messages.success(
-                            request, "Unable to send email due to some error.")
+                            request, "Unable to sent email due to some error.")
 
                 else:
                     messages.error(request, "Kindly select a valid date range")
@@ -542,8 +542,8 @@ def leave_approve(request, pk):
                 <b>Total Holidays:</b> {leave.no_of_days} <br>
                 <b>Reason:</b> {leave.reason} <br>
                 <b>Leave final status:</b> {leave.leave_status} <br> 
-                <b>Client Action:</b> {leave.client_leave_status} <br> 
-                <b>Company Action:</b> {leave.admin_leave_status} <br> <br>
+                <b>Client Response:</b> {leave.client_leave_status} <br> 
+                <b>Urban Communication's Response:</b> {leave.admin_leave_status} <br> <br>
                 You can login by visiting our website for more details: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a>  </p>
                 """
             msg = EmailMultiAlternatives(
@@ -555,11 +555,11 @@ def leave_approve(request, pk):
                     request, "Holiday request has been approved. Thank you.")
                 msg.send()
                 messages.success(
-                    request, "Email send to operator successfully.")
+                    request, "Email sent to operator successfully.")
                 return redirect('clientApp:home')
             except:
                 messages.error(
-                    request, "Unable to send email to operator.")
+                    request, "Unable to sent email to operator.")
         leave.save()
         messages.success(
             request, "Holiday request has been approved. Thank you.")
@@ -581,8 +581,8 @@ def leave_approve(request, pk):
                 <b>Total Holidays:</b> {leave.no_of_days} <br>
                 <b>Reason:</b> {leave.reason} <br>
                 <b>Leave final status:</b> {leave.leave_status} <br> 
-                <b>Client Action:</b> {leave.client_leave_status} <br> 
-                <b>Company Action:</b> {leave.admin_leave_status} <br> <br>
+                <b>Client Response:</b> {leave.client_leave_status} <br> 
+                <b>Urban Communication's Response:</b> {leave.admin_leave_status} <br> <br>
                 You can login by visiting our website for more details: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a>  </p>
                 """
             msg = EmailMultiAlternatives(
@@ -594,11 +594,11 @@ def leave_approve(request, pk):
                     request, "Holiday request has been approved. Thank you.")
                 msg.send()
                 messages.success(
-                    request, "Email send to operator successfully.")
+                    request, "Email sent to operator successfully.")
                 return redirect('clientApp:home')
             except:
                 messages.error(
-                    request, "Unable to send email to operator.")
+                    request, "Unable to sent email to operator.")
         leave.save()
         messages.success(
             request, "Holiday request has been approved. Thank you.")
@@ -636,8 +636,8 @@ def leave_reject(request, pk):
             <b>To:</b> {leave.to_date} <br>
             <b>Total Holidays:</b> {leave.no_of_days} <br>
             <b>Reason:</b> {leave.reason} <br>
-            <b>Client Action:</b> {leave.client_leave_status} <br> 
-            <b>Company Action:</b> {leave.admin_leave_status} <br> 
+            <b>Client Response:</b> {leave.client_leave_status} <br> 
+            <b>Urban Communication's Response:</b> {leave.admin_leave_status} <br> 
             <b>Leave final status:</b> {leave.leave_status} <br> <br>
             You can login by visiting our website for more details: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a>  </p>"""
         msg = EmailMultiAlternatives(
@@ -646,10 +646,10 @@ def leave_reject(request, pk):
         try:
             msg.send()
             messages.success(
-                request, "Email send to operator successfully.")
+                request, "Email sent to operator successfully.")
         except:
             messages.success(
-                request, "Unable to send email to operator.")
+                request, "Unable to sent email to operator.")
 
         return redirect('clientApp:home')
     else:
@@ -711,10 +711,10 @@ class OperatorDocumentsUpload(FormView):
             try:
                 msg.send()
                 messages.success(
-                    request, "Notification email send to client successfully.")
+                    request, "Notification email sent to client successfully.")
             except:
                 messages.success(
-                    request, "Unable to send email to client.")
+                    request, "Unable to sent email to client.")
 
             return HttpResponseRedirect(request.path_info)
         else:
@@ -881,10 +881,10 @@ class ClientInvoiceUpload(FormView):
             try:
                 msg.send()
                 messages.success(
-                    request, "Email send to client with invoice notification.")
+                    request, "Email sent to client with invoice notification.")
             except:
                 messages.success(
-                    request, "Unable to send email to client.")
+                    request, "Unable to sent email to client.")
 
             return HttpResponseRedirect(request.path_info)
         else:
@@ -1025,10 +1025,10 @@ class EmployeeHolidayRequest(TemplateView):
                         msg.attach_alternative(html_content, "text/html")
                         msg.send(fail_silently=True)
                         messages.success(
-                            request, "Email send to company with holiday details.")
+                            request, "Email sent to company with holiday details.")
                     except:
                         messages.error(
-                            request, "Unable to send email due to some error.")
+                            request, "Unable to sent email due to some error.")
 
                 else:
                     messages.error(
@@ -1108,10 +1108,10 @@ class AdminEmployeeFeedback(TemplateView):
                 msg.attach_alternative(html_content, "text/html")
                 msg.send(fail_silently=True)
                 messages.success(
-                    request, "Email send to employee with feedback details.")
+                    request, "Email sent to employee with feedback details.")
             except:
                 messages.success(
-                    request, "Unable to send email due to some error.")
+                    request, "Unable to sent email due to some error.")
 
             return HttpResponseRedirect(request.path_info)
 
@@ -1204,10 +1204,10 @@ def employee_holiday_reject(request, pk):
         try:
             msg.send()
             messages.success(
-                request, "Email send to employee successfully.")
+                request, "Email sent to employee successfully.")
         except:
             messages.success(
-                request, "Unable to send email to employee.")
+                request, "Unable to sent email to employee.")
 
         return redirect('clientApp:home')
     else:
@@ -1248,9 +1248,9 @@ def employee_holiday_approve(request, pk):
         try:
             msg.send()
             messages.success(
-                request, "Email send to employee successfully.")
+                request, "Email sent to employee successfully.")
         except:
             messages.success(
-                request, "Unable to send email to employee.")
+                request, "Unable to sent email to employee.")
 
         return redirect('clientApp:home')

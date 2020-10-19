@@ -144,6 +144,12 @@ class MessageQuery(models.Model):
     read_by_client = models.BooleanField(default=False)
     read_by_admin = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.sender
+
+    class Meta:
+        verbose_name_plural = 'Message Queries'
+
 
 class Invoice(models.Model):
     invoice_id = models.UUIDField(
