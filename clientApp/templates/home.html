@@ -23,13 +23,13 @@
     <h1>{{user.client}}</h1>
     <hr>
     <br>
-    <h2>Operators</h2>
+    <h2>Yours Operators</h2>
     <img src="{% static 'clientApp/client-operator-banner.jpg' %}" style="width: 100%; height:200px;">
     <div class="row">
         <div class="col">
             <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:client_operator_list' %}">View Operators</a>
+                href="{% url 'clientApp:client_operator_list' %}">View your operators</a>
         </div>
     </div>
     <hr>
@@ -40,16 +40,15 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:client_feedback' %}">Give
-                Feedback</a>
+            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:client_feedback' %}">Giving a feedback</a>
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:client_feedback_list' %}">View Feedbacks</a>
+                href="{% url 'clientApp:client_feedback_list' %}">Viewing a feedback</a>
         </div>
     </div>
     <hr>
 
-    <h2>Holiday Requests</h2>
+    <h2>Holiday requests</h2>
     <img src="{% static 'clientApp/holidays-request.png' %}" style="width: 100%; height:200px;">
     <div class="row">
         <div class="col">
@@ -79,7 +78,6 @@
     </div>
     <hr>
 
-    <h2>Send Message to Urban Communications</h2>
     <div>
         <form method="post">
             {% csrf_token %}
@@ -87,9 +85,11 @@
                 {{clientChatAdmin|crispy}}
             </li>
             <br>
-            <button type="submit" class="btn btn-dark ">
+            <h2>Send a message to Urban Communications &nbsp;
+            <button type="submit" class="btn btn-dark text-center ">
                 Send
             </button>
+        </h2>
         </form>
     </div>
     <hr>
@@ -101,7 +101,7 @@
     </div>
     <hr>
 
-    <h2>Send Message to Operator</h2>
+    <h2>Send message to your operator</h2>
     <div>
         <form method="post">
             {% csrf_token %}
@@ -224,14 +224,14 @@
         <div class="col">
             <br>
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:admin_feedback_list' %}">Client Feedback<span
+                href="{% url 'clientApp:admin_feedback_list' %}">Client feedback <span
                     class="badge badge-light">{{feedbackCount}}</span></a>
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:admin_employee_feedback' %}">Give Feedback</a>
+                href="{% url 'clientApp:admin_employee_feedback' %}">Giving feedback to your employee</a>
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:admin_employee_feedback_list' %}">Feedback History</a>
+                href="{% url 'clientApp:admin_employee_feedback_list' %}">Viewing the feedback of your employee</a>
 
         </div>
     </div>
