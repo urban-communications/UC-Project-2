@@ -79,7 +79,7 @@
     </div>
     <hr>
 
-    <h2>Send Message to Company</h2>
+    <h2>Send Message to Urban Communications</h2>
     <div>
         <form method="post">
             {% csrf_token %}
@@ -96,7 +96,7 @@
 
     <div>
         <a class="btn btn-primary" style="margin-bottom: 10px;"
-            href="{% url 'clientApp:client_admin_message_list' adminAccount.id %}">Company Messages <span
+            href="{% url 'clientApp:client_admin_message_list' adminAccount.id %}">Urban Communications Messages <span
                 class="badge badge-light">{{messageCount}}</span></a>
     </div>
     <hr>
@@ -194,7 +194,7 @@
                     class="badge badge-light">{{messageCount}}</span></a>
             &nbsp;
             <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:operator_message_admin_list' %}">Company Messages <span
+                href="{% url 'clientApp:operator_message_admin_list' %}">Urban Communications Messages <span
                     class="badge badge-light">{{operatorAdminMessageCount}}</span></a>
         </div>
     </div>

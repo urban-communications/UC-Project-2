@@ -82,8 +82,8 @@ class ClientRegistration(TemplateView):
                     <li>You can view the list of operators associated with you</li>
                     <li>You can approce or decline any holiday request from your operator</li>
                     <li>You can give feedback to your operator and view it</li>
-                    <li>You can send a message to your operator and company</li>
-                    <li>You can view your invoices from company</li>
+                    <li>You can send a message to your operator and Urban Communications</li>
+                    <li>You can view your invoices from Urban Communications</li>
                     <li>You can also view your profile information</li>
                 </ul>
                 </div>"""
@@ -161,7 +161,7 @@ class OperatorRegistration(TemplateView):
                     <li>You can request your holidays and track its status</li>
                     <li>You can check your feedbacks</li>
                     <li>You can view and upload your documents</li>
-                    <li>You can view a message from company and you associated client</li>
+                    <li>You can view a message from Urban Communications and you associated client</li>
                 </ul>
                 </div>"""
                 msg = EmailMultiAlternatives(
@@ -240,7 +240,7 @@ class EmployeeRegistration(TemplateView):
                     <li>You can request your holidays and track its status</li>
                     <li>You can check your feedbacks</li>
                     <li>You can view and upload your documents</li>
-                    <li>You can view a message from company</li>
+                    <li>You can view a message from Urban Communications</li>
                 </ul> <br> <br>
                 <p></p>
                 </div>"""

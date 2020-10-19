@@ -188,7 +188,7 @@ class HomeView(TemplateView):
                 <em> This is an automated e-mail - please do not reply to this address </em> <br>
                 <h2> PRIVATE & CONFIDENTIAL </h2>
                 <p> Dear {adminChatOperatorForm.cleaned_data['operator_id']}, <br> 
-                The company has send you a message: <br><br> <strong> {adminChatOperatorForm.cleaned_data['messageQuery']} </strong> <br>
+                The Urban Communications has send you a message: <br><br> <strong> {adminChatOperatorForm.cleaned_data['messageQuery']} </strong> <br>
                 Kindly check and reply from your account by login at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> 
                 </p>
                 </div>"""
@@ -228,7 +228,7 @@ class HomeView(TemplateView):
                 <em> This is an automated e-mail - please do not reply to this address </em> <br>
                 <h2> PRIVATE & CONFIDENTIAL </h2>
                 <p> Dear {clientChatForm.cleaned_data['operator_id']}, <br> 
-                The company has send you a message: <br><br> <strong> {clientChatForm.cleaned_data['messageQuery']} </strong> <br>
+                The Urban Communications has send you a message: <br><br> <strong> {clientChatForm.cleaned_data['messageQuery']} </strong> <br>
                 Kindly check and reply from your account by login at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> 
                 </p>
                 </div>"""
@@ -276,10 +276,10 @@ class HomeView(TemplateView):
                 try:
                     msg.send()
                     messages.success(
-                        request, "Email sent to company with message notification.")
+                        request, "Email sent to Urban Communications with message notification.")
                 except:
                     messages.error(
-                        request, "Unable to sent email to company.")
+                        request, "Unable to sent email to Urban Communications.")
 
                 return HttpResponseRedirect(request.path_info)
         else:
@@ -348,7 +348,7 @@ class FeedbackView(TemplateView):
                     msg.attach_alternative(html_content, "text/html")
                     msg.send(fail_silently=True)
                     messages.success(
-                        request, "Email sent to operator and company with feedback details.")
+                        request, "Email sent to operator and Urban Communications with feedback details.")
                 except:
                     messages.success(
                         request, "Unable to sent email due to some error.")
@@ -475,7 +475,7 @@ class OperatorLeaveRequest(TemplateView):
                         msg.attach_alternative(html_content, "text/html")
                         msg.send(fail_silently=True)
                         messages.success(
-                            request, "Email sent to company and client with holiday details.")
+                            request, "Email sent to Urban Communications and client with holiday details.")
                     except:
                         messages.success(
                             request, "Unable to sent email due to some error.")
@@ -871,7 +871,7 @@ class ClientInvoiceUpload(FormView):
                 <em> This is an automated e-mail - please do not reply to this address </em> <br>
                 <h2> PRIVATE & CONFIDENTIAL </h2>
                 <p> Dear {form.cleaned_data['client_id']}, <br> 
-                The company has uploaded an invoice in you account with title: {form.cleaned_data['title']} <br>
+                The Urban Communications has uploaded an invoice in you account with title: {form.cleaned_data['title']} <br>
                 Kindly check your account by login at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> 
                 </p>
                 </div>"""
@@ -1025,7 +1025,7 @@ class EmployeeHolidayRequest(TemplateView):
                         msg.attach_alternative(html_content, "text/html")
                         msg.send(fail_silently=True)
                         messages.success(
-                            request, "Email sent to company with holiday details.")
+                            request, "Email sent to Urban Communications with holiday details.")
                     except:
                         messages.error(
                             request, "Unable to sent email due to some error.")
@@ -1090,7 +1090,7 @@ class AdminEmployeeFeedback(TemplateView):
             try:
                 employee = Employee.objects.get(
                     employee_user_id=request.POST.get('employee_id'))
-                subject, from_email = f"Feedback from Company", settings.EMAIL_HOST_USER
+                subject, from_email = f"Feedback from Urban Communications", settings.EMAIL_HOST_USER
                 text_content = ""
                 html_content = f"""<div>
                 <em> This is an automated e-mail - please do not reply to this address </em> <br>
