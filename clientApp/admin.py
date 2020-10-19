@@ -4,10 +4,11 @@ from clientApp.models import (
     Operator, 
     Leave, 
     Feedback, 
-    MessageQuries,
-    Invoices,
+    MessageQuery,
+    Invoice,
     Employee,
-    EmployeeDocuments,
+    OperatorDocument,
+    EmployeeDocument,
     EmployeeFeedback,
     EmployeeHoliday
 )
@@ -16,9 +17,10 @@ admin.site.register(Client)
 admin.site.register(Operator)
 admin.site.register(Leave)
 admin.site.register(Feedback)
-admin.site.register(MessageQuries)
-admin.site.register(Invoices)
+admin.site.register(MessageQuery)
+admin.site.register(Invoice)
 admin.site.register(Employee)
-admin.site.register(EmployeeDocuments)
+admin.site.register(EmployeeDocument)
 admin.site.register(EmployeeFeedback)
 admin.site.register(EmployeeHoliday)
+admin.site.register(OperatorDocument)

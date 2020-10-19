@@ -68,7 +68,7 @@ class Employee(models.Model):
         return self.employee_name
 
 
-class OperatorDocuments(models.Model):
+class OperatorDocument(models.Model):
     doc_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     operator_id = models.ForeignKey(Operator, on_delete=models.CASCADE)
@@ -130,7 +130,7 @@ class Leave(models.Model):
         return self.operator_id
 
 
-class MessageQuries(models.Model):
+class MessageQuery(models.Model):
     message_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     admin_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -145,7 +145,7 @@ class MessageQuries(models.Model):
     read_by_admin = models.BooleanField(default=False)
 
 
-class Invoices(models.Model):
+class Invoice(models.Model):
     invoice_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     client_id = models.ForeignKey(Client, on_delete=models.CASCADE)
@@ -158,7 +158,7 @@ class Invoices(models.Model):
         return self.title
 
 
-class EmployeeDocuments(models.Model):
+class EmployeeDocument(models.Model):
     doc_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE)

@@ -26,10 +26,10 @@ from django.contrib.auth.models import User
 from clientApp.models import (
     Client,
     Leave,
-    OperatorDocuments,
-    MessageQuries,
-    Invoices,
-    EmployeeDocuments,
+    OperatorDocument,
+    MessageQuery,
+    Invoice,
+    EmployeeDocument,
     EmployeeHoliday,
     EmployeeFeedback,
     Employee
@@ -69,7 +69,7 @@ class HomeView(TemplateView):
                 leave_status='Pending', read_by_admin=False).count()
 
             for client in adminTotalClient:
-                adminClientMessageCount = MessageQuries.objects.filter(
+                adminClientMessageCount = MessageQuery.objects.filter(
                     client_id=client.client_user_id, admin_id=request.user.id, read_by_admin=False).count()
                 data = {
                     'client_id': client.client_user_id,
@@ -84,17 +84,17 @@ class HomeView(TemplateView):
                 client_id=request.user.client.client_user_id).order_by('operator_name')
             pendingHolidayCount = Leave.objects.filter(
                 leave_status='Pending', client_id=request.user.client.client_user_id, read_by_client=False).count()
-            messageCount = MessageQuries.objects.filter(
+            messageCount = MessageQuery.objects.filter(
                 client_id=request.user.client.client_user_id, admin_id=admin.id, read_by_client=False).count()
-            invoiceCount = Invoices.objects.filter(
+            invoiceCount = Invoice.objects.filter(
                 client_id=request.user.client.client_user_id, read_by_client=False).count()
 
         if hasattr(request.user, 'operator'):
             pendingHolidayCount = Leave.objects.filter(
                 leave_status='Pending', operator_id=request.user.operator.operator_user_id, read_by_operator=False).count()
-            messageCount = MessageQuries.objects.filter(
+            messageCount = MessageQuery.objects.filter(
                 operator_id=request.user.operator.operator_user_id, client_id=request.user.operator.client_id.client_user_id, read_by_operator=False).count()
-            operatorAdminMessageCount = MessageQuries.objects.filter(
+            operatorAdminMessageCount = MessageQuery.objects.filter(
                 operator_id=request.user.operator.operator_user_id, admin_id=admin.id, read_by_operator=False).count()
 
             feedbackCount = Feedback.objects.filter(
@@ -688,7 +688,7 @@ class OperatorDocumentsUpload(FormView):
         if form.is_valid():
             try:
                 for doc in files:
-                    document = OperatorDocuments(
+                    document = OperatorDocument(
                         operator_id=request.user.operator,
                         doc_title=doc.name,
                         documents=doc
@@ -724,17 +724,17 @@ class OperatorDocumentsUpload(FormView):
 
 class OperatorDocumentsList(ListView):
     template_name = 'operator_documents_list.html'
-    model = OperatorDocuments
+    model = OperatorDocument
     context_object_name = 'documents'
     paginate_by = 10
 
     def get_queryset(self):
-        return OperatorDocuments.objects.filter(operator_id=self.request.user.operator.operator_user_id)
+        return OperatorDocument.objects.filter(operator_id=self.request.user.operator.operator_user_id)
 
 
 def operatorDocumetDelete(request, pk):
     if hasattr(request.user, 'operator'):
-        document = OperatorDocuments.objects.get(doc_id=pk)
+        document = OperatorDocument.objects.get(doc_id=pk)
         if document:
             document.documents.delete()
             document.delete()
@@ -745,7 +745,7 @@ def operatorDocumetDelete(request, pk):
             return render(request, 'operator_documents_list.html')
 
     if hasattr(request.user, 'employee'):
-        document = EmployeeDocuments.objects.get(doc_id=pk)
+        document = EmployeeDocument.objects.get(doc_id=pk)
         if document:
             document.documents.delete()
             document.delete()
@@ -768,86 +768,86 @@ class ClientOperatorList(ListView):
 
 class ClientOperatorDocumentsList(ListView):
     template_name = 'client_operator_documents_list.html'
-    model = OperatorDocuments
+    model = OperatorDocument
     context_object_name = 'documents'
     paginate_by = 10
 
     def get_queryset(self):
         path = self.request.path_info.split('/')
-        return OperatorDocuments.objects.filter(operator_id=path[-1])
+        return OperatorDocument.objects.filter(operator_id=path[-1])
 
 
 class OperatorViewClientMessages(ListView):
     template_name = 'operator_view_messages_client.html'
-    model = MessageQuries
+    model = MessageQuery
     context_object_name = 'message_list'
     paginate_by = 20
 
     def get_queryset(self):
-        MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id, client_id=self.request.user.operator.client_id.client_user_id,
+        MessageQuery.objects.filter(operator_id=self.request.user.operator.operator_user_id, client_id=self.request.user.operator.client_id.client_user_id,
                                      read_by_operator=False).update(read_by_operator=True)
-        return MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id, client_id=self.request.user.operator.client_id.client_user_id).order_by('-created_at')
+        return MessageQuery.objects.filter(operator_id=self.request.user.operator.operator_user_id, client_id=self.request.user.operator.client_id.client_user_id).order_by('-created_at')
 
 
 class OperatorViewAdminMessages(ListView):
     template_name = 'operator_view_message_admin.html'
-    model = MessageQuries
+    model = MessageQuery
     context_object_name = 'message_list'
     paginate_by = 20
 
     def get_queryset(self):
         admin = User.objects.get(is_staff=True, is_superuser=True)
-        MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id, admin_id=admin.id,
+        MessageQuery.objects.filter(operator_id=self.request.user.operator.operator_user_id, admin_id=admin.id,
                                      read_by_operator=False).update(read_by_operator=True)
-        return MessageQuries.objects.filter(operator_id=self.request.user.operator.operator_user_id, admin_id=admin.id).order_by('-created_at')
+        return MessageQuery.objects.filter(operator_id=self.request.user.operator.operator_user_id, admin_id=admin.id).order_by('-created_at')
 
 
 class ClientOperatorViewMessage(ListView):
     template_name = 'client_view_message_operator.html'
-    model = MessageQuries
+    model = MessageQuery
     context_object_name = 'message_list'
     paginate_by = 20
 
     def get_queryset(self):
         operator_id = self.request.path.split('/')[-1]
-        return MessageQuries.objects.filter(operator_id=operator_id, client_id=self.request.user.client.client_user_id).order_by('-created_at')
+        return MessageQuery.objects.filter(operator_id=operator_id, client_id=self.request.user.client.client_user_id).order_by('-created_at')
 
 
 class ClientAdminViewMessage(ListView):
     template_name = 'client_admin_view_message.html'
-    model = MessageQuries
+    model = MessageQuery
     context_object_name = 'message_list'
     paginate_by = 20
 
     def get_queryset(self):
         admin_id = self.request.path.split('/')[-1]
-        MessageQuries.objects.filter(client_id=self.request.user.client.client_user_id,
+        MessageQuery.objects.filter(client_id=self.request.user.client.client_user_id,
                                      admin_id=admin_id, read_by_client=False).update(read_by_client=True)
-        return MessageQuries.objects.filter(client_id=self.request.user.client.client_user_id, admin_id=admin_id).order_by('-created_at')
+        return MessageQuery.objects.filter(client_id=self.request.user.client.client_user_id, admin_id=admin_id).order_by('-created_at')
 
 
 class AdminClientViewMessage(ListView):
     template_name = 'client_admin_view_message.html'
-    model = MessageQuries
+    model = MessageQuery
     context_object_name = 'message_list'
     paginate_by = 20
 
     def get_queryset(self):
         client_user_id = self.request.path.split('/')[-1]
-        MessageQuries.objects.filter(
+        MessageQuery.objects.filter(
             client_id=client_user_id, admin_id=self.request.user.id, read_by_admin=False).update(read_by_admin=True)
-        return MessageQuries.objects.filter(client_id=client_user_id, admin_id=self.request.user.id).order_by('-created_at')
+        return MessageQuery.objects.filter(client_id=client_user_id, admin_id=self.request.user.id).order_by('-created_at')
 
 
 class AdminOperatorViewMessage(ListView):
     template_name = 'client_view_message_operator.html'
-    model = MessageQuries
+    model = MessageQuery
     context_object_name = 'message_list'
     paginate_by = 20
 
     def get_queryset(self):
         operator_id = self.request.path.split('/')[-1]
-        return MessageQuries.objects.filter(operator_id=operator_id, admin_id=self.request.user.id).order_by('-created_at')
+        return MessageQuery.objects.filter(operator_id=operator_id, admin_id=self.request.user.id).order_by('-created_at')
 
 
 class ClientInvoiceUpload(FormView):
@@ -895,17 +895,17 @@ class ClientInvoiceUpload(FormView):
 
 class AdminInvoiceList(ListView):
     template_name = 'admin_invoice_list.html'
-    model = Invoices
+    model = Invoice
     context_object_name = 'documents'
     paginate_by = 10
 
     def get_queryset(self):
-        return Invoices.objects.all().order_by('-created_at')
+        return Invoice.objects.all().order_by('-created_at')
 
 
 def invoiceDelete(request, pk):
     if request.user.is_staff:
-        document = Invoices.objects.get(invoice_id=pk)
+        document = Invoice.objects.get(invoice_id=pk)
         if document:
             document.invoices.delete()
             document.delete()
@@ -918,14 +918,14 @@ def invoiceDelete(request, pk):
 
 class ClientInvoiceList(ListView):
     template_name = 'client_invoice_view.html'
-    model = Invoices
+    model = Invoice
     context_object_name = 'documents'
     paginate_by = 10
 
     def get_queryset(self):
-        Invoices.objects.filter(client_id=self.request.user.client.client_user_id,
+        Invoice.objects.filter(client_id=self.request.user.client.client_user_id,
                                 read_by_client=False).update(read_by_client=True)
-        return Invoices.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')
+        return Invoice.objects.filter(client_id=self.request.user.client.client_user_id).order_by('-created_at')
 
 
 class EmployeeDocumentsUpload(FormView):
@@ -939,7 +939,7 @@ class EmployeeDocumentsUpload(FormView):
         files = request.FILES.getlist('documents')
         if form.is_valid():
             for doc in files:
-                document = EmployeeDocuments(
+                document = EmployeeDocument(
                     employee_id=request.user.employee,
                     doc_title=doc.name,
                     documents=doc
@@ -954,12 +954,12 @@ class EmployeeDocumentsUpload(FormView):
 
 class EmployeeDocumentsList(ListView):
     template_name = 'operator_documents_list.html'
-    model = EmployeeDocuments
+    model = EmployeeDocument
     context_object_name = 'documents'
     paginate_by = 10
 
     def get_queryset(self):
-        return EmployeeDocuments.objects.filter(employee_id=self.request.user.employee.employee_user_id)
+        return EmployeeDocument.objects.filter(employee_id=self.request.user.employee.employee_user_id)
 
 
 class EmployeeHolidayRequest(TemplateView):

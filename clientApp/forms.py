@@ -9,10 +9,10 @@ from clientApp.models import (
     Employee,
     Feedback,
     Leave,
-    OperatorDocuments,
-    MessageQuries,
-    Invoices,
-    EmployeeDocuments,
+    OperatorDocument,
+    MessageQuery,
+    Invoice,
+    EmployeeDocument,
     EmployeeHoliday,
     EmployeeFeedback
 )
@@ -230,7 +230,7 @@ class OperatorDocumentsForm(forms.ModelForm):
     }))
 
     class Meta:
-        model = OperatorDocuments
+        model = OperatorDocument
         fields = (
             'documents',
         )
@@ -244,7 +244,7 @@ class ClientSendMessageForm(forms.ModelForm):
             client_id=request.user.client.client_user_id)
 
     class Meta:
-        model = MessageQuries
+        model = MessageQuery
         fields = (
             'operator_id',
             'messageQuery'
@@ -262,7 +262,7 @@ class AdminSendMessageForm(forms.ModelForm):
             'client_name')
 
     class Meta:
-        model = MessageQuries
+        model = MessageQuery
         fields = (
             'client_id',
             'messageQuery'
@@ -276,7 +276,7 @@ class AdminSendMessageForm(forms.ModelForm):
 class AdminSendMessageToOperatorForm(forms.ModelForm):
 
     class Meta:
-        model = MessageQuries
+        model = MessageQuery
         fields = (
             'operator_id',
             'messageQuery'
@@ -290,7 +290,7 @@ class AdminSendMessageToOperatorForm(forms.ModelForm):
 class ClientSendMessageToAdminForm(forms.ModelForm):
 
     class Meta:
-        model = MessageQuries
+        model = MessageQuery
         fields = (
             'messageQuery',
         )
@@ -302,7 +302,7 @@ class ClientSendMessageToAdminForm(forms.ModelForm):
 class ClientInvoiceForm(forms.ModelForm):
 
     class Meta:
-        model = Invoices
+        model = Invoice
         fields = (
             'client_id',
             'title',
@@ -319,7 +319,7 @@ class EmployeeDocumentsForm(forms.ModelForm):
     }))
 
     class Meta:
-        model = EmployeeDocuments
+        model = EmployeeDocument
         fields = (
             'documents',
         )
