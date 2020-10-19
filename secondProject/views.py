@@ -76,7 +76,7 @@ class ClientRegistration(TemplateView):
                 
                 <b>Username:</b> {form_user.cleaned_data['username']} <br> 
                 <b>Password:</b> {form_user.cleaned_data['password1']} <br> <br> 
-                You can now login by visiting our website at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> </p> <br>
+                You can now login by visiting our website at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> </p> <br>
                 <b> Things you can do by login: <br>
                 <ul>
                     <li>You can view the list of operators associated with you</li>
@@ -155,7 +155,7 @@ class OperatorRegistration(TemplateView):
                 
                 <b>Username:</b> {form_user.cleaned_data['username']} <br> 
                 <b>Password:</b> {form_user.cleaned_data['password1']} <br> <br> 
-                You can now login by visiting our website at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> </p> <br>
+                You can now login by visiting our website at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> </p> <br>
                 <b> Things you can do by login: <br>
                 <ul>
                     <li>You can request your holidays and track its status</li>
@@ -234,7 +234,7 @@ class EmployeeRegistration(TemplateView):
                 
                 <b>Username:</b> {form_user.cleaned_data['username']} <br> 
                 <b>Password:</b> {form_user.cleaned_data['password1']} <br> <br> 
-                You can now login by visiting our website at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> </p> <br>
+                You can now login by visiting our website at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> </p> <br>
                 <b> Things you can do by login: <br>
                 <ul>
                     <li>You can request your holidays and track its status</li>

@@ -152,7 +152,7 @@ class HomeView(TemplateView):
                 <h2> PRIVATE & CONFIDENTIAL </h2>
                 <p> Dear {adminChatForm.cleaned_data['client_id']}, <br> 
                 The company has send you a message: <br><br> <strong> {adminChatForm.cleaned_data['messageQuery']} </strong> <br>
-                Kindly check and reply from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                Kindly check and reply from your account by login at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> 
                 </p>
                 </div>"""
                 msg = EmailMultiAlternatives(
@@ -189,7 +189,7 @@ class HomeView(TemplateView):
                 <h2> PRIVATE & CONFIDENTIAL </h2>
                 <p> Dear {adminChatOperatorForm.cleaned_data['operator_id']}, <br> 
                 The company has send you a message: <br><br> <strong> {adminChatOperatorForm.cleaned_data['messageQuery']} </strong> <br>
-                Kindly check and reply from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                Kindly check and reply from your account by login at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> 
                 </p>
                 </div>"""
                 msg = EmailMultiAlternatives(
@@ -229,7 +229,7 @@ class HomeView(TemplateView):
                 <h2> PRIVATE & CONFIDENTIAL </h2>
                 <p> Dear {clientChatForm.cleaned_data['operator_id']}, <br> 
                 The company has send you a message: <br><br> <strong> {clientChatForm.cleaned_data['messageQuery']} </strong> <br>
-                Kindly check and reply from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                Kindly check and reply from your account by login at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> 
                 </p>
                 </div>"""
                 msg = EmailMultiAlternatives(
@@ -267,7 +267,7 @@ class HomeView(TemplateView):
                 <h2> PRIVATE & CONFIDENTIAL </h2>
                 <p> Dear Admin, <br> 
                 The client: ({request.user.client}) has send you a message: <br><br> <strong> {clientChatAdmin.cleaned_data['messageQuery']} </strong> <br>
-                Kindly check and reply from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                Kindly check and reply from your account by login at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> 
                 </p>
                 </div>"""
                 msg = EmailMultiAlternatives(
@@ -339,7 +339,7 @@ class FeedbackView(TemplateView):
                     There is a feedback from your client ({request.user.client}). Details are as follow: <br><br>
                     <b>Rating:</b> {feedback_form.cleaned_data['rating']} <br>
                     <b>Feedback:</b> {feedback_form.cleaned_data['feedback_note']} <br><br>
-                    You can check the feedback by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                    You can check the feedback by login at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> 
                     </p>
                     </div>"""
 
@@ -463,7 +463,7 @@ class OperatorLeaveRequest(TemplateView):
                     <b>Total Days:</b> {total_days} <br>
                     <b>Reason:</b> {form.cleaned_data['reason']} <br> <br>
 
-                    Kindly check and approve or decline from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                    Kindly check and approve or decline from your account by login at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> 
                     </p>
                     </div>"""
 
@@ -544,7 +544,7 @@ def leave_approve(request, pk):
                 <b>Leave final status:</b> {leave.leave_status} <br> 
                 <b>Client Action:</b> {leave.client_leave_status} <br> 
                 <b>Company Action:</b> {leave.admin_leave_status} <br> <br>
-                You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>
+                You can login by visiting our website for more details: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a>  </p>
                 """
             msg = EmailMultiAlternatives(
                 subject, text_content, from_email, [to])
@@ -583,7 +583,7 @@ def leave_approve(request, pk):
                 <b>Leave final status:</b> {leave.leave_status} <br> 
                 <b>Client Action:</b> {leave.client_leave_status} <br> 
                 <b>Company Action:</b> {leave.admin_leave_status} <br> <br>
-                You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>
+                You can login by visiting our website for more details: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a>  </p>
                 """
             msg = EmailMultiAlternatives(
                 subject, text_content, from_email, [to])
@@ -639,7 +639,7 @@ def leave_reject(request, pk):
             <b>Client Action:</b> {leave.client_leave_status} <br> 
             <b>Company Action:</b> {leave.admin_leave_status} <br> 
             <b>Leave final status:</b> {leave.leave_status} <br> <br>
-            You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>"""
+            You can login by visiting our website for more details: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a>  </p>"""
         msg = EmailMultiAlternatives(
             subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
@@ -704,7 +704,7 @@ class OperatorDocumentsUpload(FormView):
             text_content = "Operator uploaded a document."
             html_content = f"""<p>Hi {request.user.operator.client_id}, <br> 
                 <b>Your operator ({request.user.operator}) uploaded a document(s).</b> <br> <br> 
-                You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>"""
+                You can login by visiting our website for more details: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a>  </p>"""
             msg = EmailMultiAlternatives(
                 subject, text_content, from_email, [to])
             msg.attach_alternative(html_content, "text/html")
@@ -872,7 +872,7 @@ class ClientInvoiceUpload(FormView):
                 <h2> PRIVATE & CONFIDENTIAL </h2>
                 <p> Dear {form.cleaned_data['client_id']}, <br> 
                 The company has uploaded an invoice in you account with title: {form.cleaned_data['title']} <br>
-                Kindly check your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                Kindly check your account by login at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> 
                 </p>
                 </div>"""
             msg = EmailMultiAlternatives(
@@ -1015,7 +1015,7 @@ class EmployeeHolidayRequest(TemplateView):
                     <b>Total Days:</b> {total_days} <br>
                     <b>Reason:</b> {form.cleaned_data['reason']} <br> <br>
 
-                    Kindly check and approve or decline from your account by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                    Kindly check and approve or decline from your account by login at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> 
                     </p>
                     </div>"""
 
@@ -1099,7 +1099,7 @@ class AdminEmployeeFeedback(TemplateView):
                 There is a feedback from admin. Details are as follow: <br><br>
                 <b>Rating:</b> {feedback_form.cleaned_data['rating']} <br>
                 <b>Feedback:</b> {feedback_form.cleaned_data['feedback_note']} <br><br>
-                You can check the feedback by login at: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a> 
+                You can check the feedback by login at: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a> 
                 </p>
                 </div>"""
 
@@ -1197,7 +1197,7 @@ def employee_holiday_reject(request, pk):
             <b>Total Holidays:</b> {leave.no_of_days} <br>
             <b>Reason:</b> {leave.reason} <br>
             <b>Leave final status:</b> {leave.leave_status} <br> <br>
-            You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>"""
+            You can login by visiting our website for more details: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a>  </p>"""
         msg = EmailMultiAlternatives(
             subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
@@ -1241,7 +1241,7 @@ def employee_holiday_approve(request, pk):
             <b>Total Holidays:</b> {leave.no_of_days} <br>
             <b>Reason:</b> {leave.reason} <br>
             <b>Leave final status:</b> {leave.leave_status} <br> <br>
-            You can login by visiting our website for more details: <a href="https://urbancommunications.herokuapp.com/">UrbanCommunications</a>  </p>"""
+            You can login by visiting our website for more details: <a href="http://www.app.urban-communications.co.uk/">UrbanCommunications</a>  </p>"""
         msg = EmailMultiAlternatives(
             subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
