@@ -38,16 +38,16 @@
                 <td> 
                     {% if user.operator %}
                     <a href="{% url 'clientApp:operator_leave_detail' leave.leave_id %}" class="btn btn-warning btn-sm" role="button"
-                        aria-pressed="true"> Detail </a>
+                        aria-pressed="true"> Details </a>
 
                     {% elif user.employee %}
                     <a href="{% url 'clientApp:employee_leave_detail' leave.leave_id %}" class="btn btn-warning btn-sm" role="button"
-                        aria-pressed="true"> Detail </a>
+                        aria-pressed="true"> Details </a>
 
                     {% else %}
 
                     <a href="{% url 'clientApp:operator_leave_detail' leave.leave_id %}" class="btn btn-warning btn-sm" role="button"
-                        aria-pressed="true"> Detail </a>
+                        aria-pressed="true"> Details </a>
                     
                     {% endif %}
 
@@ -59,7 +59,7 @@
     <br>
     <div class="row">
         <div class="col-5">
-            <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
+            <a class="btn btn-dark" href="{% url 'clientApp:home' %}">Back</a>
         </div>
     </div>
 </div>

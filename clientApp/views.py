@@ -319,7 +319,7 @@ class FeedbackView(TemplateView):
                 try:
                     data.save()
                     messages.success(
-                        request, "Your feedback has been submitted. Thank you")
+                        request, "Your feedback has been submitted. Thank you.")
                 except:
                     messages.error(
                         request, "Unable to submit your feedback.")
@@ -995,7 +995,7 @@ class EmployeeHolidayRequest(TemplateView):
                     try:
                         data.save()
                         messages.success(
-                            request, "Your holiday request has been submitted! We will get back in touch with you soon. Thank you")
+                            request, "Your holiday request has been submitted! We will get back in touch with you soon. Thank you.")
                     except:
                         messages.success(
                             request, "Unable to create holiday request")
@@ -1080,7 +1080,7 @@ class AdminEmployeeFeedback(TemplateView):
             try:
                 data.save()
                 messages.success(
-                    request, "Your feedback has been submitted. Thank you")
+                    request, "Your feedback has been submitted. Thank you.")
             except:
                 messages.error(
                     request, "Unable to submit your feedback")

@@ -31,7 +31,7 @@
                 <td>{{operator.contact_number}}</td>
                 <td>
                     <a href="{% url 'clientApp:operator_profile' operator.operator_user_id %}"
-                        class="btn btn-warning">Detail</a>
+                        class="btn btn-warning">Details</a>
                 </td>
                 <td>
                     <a href="{% url 'clientApp:client_operator_documents' operator.operator_user_id %}"
@@ -46,7 +46,7 @@
 <br>
 <div class="row">
     <div class="col-5">
-        <a class="btn btn-primary btn-lg" href="{% url 'clientApp:home' %}">Back</a>
+        <a class="btn btn-dark" href="{% url 'clientApp:home' %}">Back</a>
     </div>
 </div>
 

@@ -23,12 +23,12 @@
     <h1>{{user.client}}</h1>
     <hr>
     <br>
-    <h2>Yours Operators</h2>
+    <h2>Your operators</h2>
     <img src="{% static 'clientApp/client-operator-banner.jpg' %}" style="width: 100%; height:200px;">
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:client_operator_list' %}">View your operators</a>
         </div>
     </div>
@@ -40,10 +40,10 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:client_feedback' %}">Giving a feedback</a>
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;" href="{% url 'clientApp:client_feedback' %}">Give feedback</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:client_feedback_list' %}">Viewing a feedback</a>
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
+                href="{% url 'clientApp:client_feedback_list' %}">View feedback</a>
         </div>
     </div>
     <hr>
@@ -53,14 +53,14 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:leave_list' action='Pending' %}">Pending Holidays <span
                     class="badge badge-light">{{pendingLeaveCount}}</span></a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:leave_list' action='Approve' %}">Approved Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:leave_list' action='Decline' %}">Declined Holidays</a>
         </div>
     </div>
@@ -71,7 +71,7 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:client_invoice_list' %}">View Invoices <span
                     class="badge badge-light">{{invoiceCount}}</span></a>
         </div>
@@ -86,7 +86,7 @@
             </li>
             <br>
             <h2>Send a message to Urban Communications &nbsp;
-            <button type="submit" class="btn btn-dark text-center ">
+            <button type="submit" class="btn text-center" style="color: white;background-color: maroon;">
                 Send
             </button>
         </h2>
@@ -95,7 +95,7 @@
     <hr>
 
     <div>
-        <a class="btn btn-primary" style="margin-bottom: 10px;"
+        <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
             href="{% url 'clientApp:client_admin_message_list' adminAccount.id %}">Urban Communications Messages <span
                 class="badge badge-light">{{messageCount}}</span></a>
     </div>
@@ -109,7 +109,7 @@
                 {{clientChatForm|crispy}}
             </li>
             <br>
-            <button type="submit" class="btn btn-dark ">
+            <button type="submit" class="btn" style="color: white;background-color: maroon;">
                 Send
             </button>
         </form>
@@ -117,7 +117,7 @@
     <hr>
     <div>
         {% for operator in totalOperator %}
-        <a class="btn btn-primary" style="margin-bottom: 10px;"
+        <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
             href="{% url 'clientApp:client_message_operator_list' operator.operator_user_id %}">
             {{operator.operator_name}}
         </a>
@@ -141,10 +141,10 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:operator_document_upload' %}">Upload Documents</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:operator_document_list' %}">View Documents</a>
         </div>
     </div>
@@ -155,7 +155,7 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" href="{% url 'clientApp:operator_feedback_list' %}">Feedback <span
+            <a class="btn" style="color: white;background-color: maroon;" href="{% url 'clientApp:operator_feedback_list' %}">Feedback <span
                     class="badge badge-light">{{feedbackCount}}</span></a>
         </div>
     </div>
@@ -166,18 +166,18 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:operator_leave_request' %}">Request Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:operator_leave_list' action='Pending' %}">Pending
                 Holidays <span class="badge badge-light">{{pendingLeaveCount}}</span></a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:operator_leave_list' action='Approve' %}">Approved
                 Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:operator_leave_list' action='Decline' %}">Declined
                 Holidays</a>
         </div>
@@ -189,11 +189,11 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:operator_message_client_list' %}">Client Messages <span
                     class="badge badge-light">{{messageCount}}</span></a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:operator_message_admin_list' %}">Urban Communications Messages <span
                     class="badge badge-light">{{operatorAdminMessageCount}}</span></a>
         </div>
@@ -212,7 +212,7 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" href="/admin/">Admin Panel</a>
+            <a class="btn" style="color: white;background-color: maroon;" href="/admin/">Admin Panel</a>
         </div>
     </div>
     {% endif %}
@@ -223,15 +223,15 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:admin_feedback_list' %}">Client feedback <span
                     class="badge badge-light">{{feedbackCount}}</span></a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:admin_employee_feedback' %}">Giving feedback to your employee</a>
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
+                href="{% url 'clientApp:admin_employee_feedback' %}">Give feedback to employee</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
-                href="{% url 'clientApp:admin_employee_feedback_list' %}">Viewing the feedback of your employee</a>
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
+                href="{% url 'clientApp:admin_employee_feedback_list' %}">Feedback history</a>
 
         </div>
     </div>
@@ -242,10 +242,10 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:admin_invoice_upload' %}">Upload Invoices</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;" href="{% url 'clientApp:admin_invoice_list' %}">View
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;" href="{% url 'clientApp:admin_invoice_list' %}">View
                 Invoices</a>
         </div>
     </div>
@@ -256,13 +256,13 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:operator_signup' %}">Operator Registration</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:admin_client_signup' %}">Client Registration</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:employee_signup' %}">Employee Registration</a>
         </div>
     </div>
@@ -274,15 +274,15 @@
     <h6><strong>Operator</strong></h6>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:admin_leave_list' action='Pending' %}">Pending
                 Holidays <span class="badge badge-light">{{pendingLeaveCount}}</span></a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:admin_leave_list' action='Approve' %}">Approved
                 Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:admin_leave_list' action='Decline' %}">Declined
                 Holidays</a>
         </div>
@@ -290,15 +290,15 @@
     <h6><strong>Employee</strong></h6>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:admin_employee_holiday_list' action='Pending' %}">Pending
                 Holidays <span class="badge badge-light">{{pendingHolidayEmployeeCount}}</span></a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:admin_employee_holiday_list' action='Approve' %}">Approved
                 Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:admin_employee_holiday_list' action='Decline' %}">Declined
                 Holidays</a>
         </div>
@@ -313,7 +313,7 @@
                 {{adminChatForm|crispy}}
             </li>
             <br>
-            <button type="submit" class="btn btn-dark ">
+            <button type="submit" class="btn" style="color: white;background-color: maroon;">
                 Send
             </button>
         </form>
@@ -327,7 +327,7 @@
         {% for clientCountObj in adminClientMessageCountList %}
 
         {% if clientObj.client_user_id == clientCountObj.client_id %}
-        <a class="btn btn-primary" style="margin-bottom: 10px;"
+        <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
             href="{% url 'clientApp:admin_client_message_list' clientObj.client_user_id %}">
             {{clientObj.client_name}}
             <span class="badge badge-light">{{clientCountObj.count}}</span>
@@ -347,7 +347,7 @@
                 {{adminChatOperator|crispy}}
             </li>
             <br>
-            <button type="submit" class="btn btn-dark ">
+            <button type="submit" class="btn" style="color: white;background-color: maroon;">
                 Send
             </button>
         </form>
@@ -357,7 +357,7 @@
     <div>
         <h2>Messages of Operator</h2>
         {% for operatorObj in adminTotalOperator %}
-        <a class="btn btn-primary" style="margin-bottom: 10px;"
+        <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
             href="{% url 'clientApp:admin_operator_message_list' operatorObj.operator_user_id %}">
             {{operatorObj.operator_name}}
         </a>
@@ -379,7 +379,7 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" href="{% url 'clientApp:employee_feedback_list' %}">Feedback <span
+            <a class="btn" style="color: white;background-color: maroon;" href="{% url 'clientApp:employee_feedback_list' %}">Feedback <span
                     class="badge badge-light">{{feedbackCount}}</span></a>
         </div>
     </div>
@@ -390,10 +390,10 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:employee_document_upload' %}">Upload Documents</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:employee_document_list' %}">View Documents</a>
         </div>
     </div>
@@ -404,18 +404,18 @@
     <div class="row">
         <div class="col">
             <br>
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:employee_holiday_request' %}">Request Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:employee_holiday_list' action='Pending' %}">Pending
                 Holidays <span class="badge badge-light">{{pendingLeaveCount}}</span></a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:employee_holiday_list' action='Approve' %}">Approved
                 Holidays</a>
             &nbsp;
-            <a class="btn btn-primary" style="margin-bottom: 10px;"
+            <a class="btn" style="margin-bottom: 10px;color: white;background-color: maroon;"
                 href="{% url 'clientApp:employee_holiday_list' action='Decline' %}">Declined
                 Holidays</a>
         </div>

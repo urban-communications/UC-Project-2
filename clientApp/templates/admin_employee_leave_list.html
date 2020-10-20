@@ -15,7 +15,7 @@
     <hr>
     <form method="GET" action="">
         <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search by employee name" />
-        <button type="submit" class="btn btn-primary btn-sm" value="Search">Search</button>
+        <button type="submit" class="btn btn-sm" style="color: white;background-color: maroon;" value="Search">Search</button>
     </form>
     <br>
 </div>
@@ -44,7 +44,7 @@
                 <td>{{leave.leave_status}}</td>
                 <td> 
                     <a href="{% url 'clientApp:employee_leave_detail' leave.leave_id %}" class="btn btn-warning btn-sm" role="button"
-                        aria-pressed="true"> Detail </a>
+                        aria-pressed="true"> Details </a>
                 </td>
                 <td> 
                     <a href="{% url 'clientApp:employee_leave_approve' leave.leave_id %}" class="btn btn-success btn-sm" role="button"
@@ -61,7 +61,7 @@
     <br>
     <div class="row">
         <div class="col-5">
-            <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
+            <a class="btn btn-dark" href="{% url 'clientApp:home' %}">Back</a>
         </div>
     </div>
 </div>

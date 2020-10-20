@@ -18,7 +18,7 @@
 <div class="float-right">
     <form method="GET" action="">
         <input type="text" name="q" value="{{request.GET.q }}" placeholder="Search by rating" />
-        <button type="submit" class="btn btn-primary btn-sm" value="Search">Search</button>
+        <button type="submit" class="btn btn-sm" style="color: white;background-color: maroon;" value="Search">Search</button>
     </form>
     <hr />
 </div>
@@ -46,7 +46,7 @@
     <br>
     <div class="row">
         <div class="col-5">
-            <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
+            <a class="btn btn-dark" href="{% url 'clientApp:home' %}">Back</a>
         </div>
     </div>
 </div>
