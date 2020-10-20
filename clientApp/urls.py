@@ -93,6 +93,8 @@ urlpatterns = [
          views.employee_holiday_approve, name='employee_leave_approve'),
     path('leave-request/employee/reject/<slug:pk>',
          views.employee_holiday_reject, name='employee_leave_reject'),
+     path('employee/profile/<slug:pk>/',
+         views.EmployeeProfileView.as_view(), name='employee_profile'),
 
 ]
 

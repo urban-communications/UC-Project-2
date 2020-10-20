@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+
+<title>Employee Profile</title>
+
+{% endblock %}
+
+{% block body %}
+
+<br>
+<h1>Employee Profile</h1>
+<hr />
+
+<div class="card">
+    <h1 class="card-header">{{employee.employee_name}}</h1>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+
+            {% if employee.profile_picture %}
+            <li class="list-group-item">
+                <img class="img-thumbnail" src="{{employee.profile_picture.url}}" alt="Responsive image"></li>
+            {% endif %}
+
+            <li class="list-group-item">Username : {{employee.user_name}}</li>
+            <li class="list-group-item">Job description : {{employee.job_designation}}</li>
+            <li class="list-group-item">Email : {{employee.user_name.email}}</li>
+            <li class="list-group-item">Contact # : {{employee.contact_number}}</li>
+            <li class="list-group-item">Address : {{employee.address}}</li>
+            <li class="list-group-item">DOB : {{employee.date_of_birth}}</li>
+        </ul>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-5">
+        <a class="btn btn-primary" href="{% url 'clientApp:home' %}">Back</a>
+    </div>
+</div>
+
+{% endblock %}

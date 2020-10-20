@@ -1254,3 +1254,9 @@ def employee_holiday_approve(request, pk):
                 request, "Unable to sent email to employee.")
 
         return redirect('clientApp:home')
+
+
+class EmployeeProfileView(DetailView):
+    model = Employee
+    template_name = 'employee_profile.html'
+    context_object_name = 'employee'

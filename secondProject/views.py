@@ -77,7 +77,7 @@ class ClientRegistration(TemplateView):
                 <b>Password:</b> {form_user.cleaned_data['password1']}</p><br>
 
                 <p>You can now login by visiting our website at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> </p> <br>
-                <b>Things you can do by login:<br>
+                <b>Things you can do by login in:<br>
                 <ul>
                     <li>You can view the list of operators associated with you</li>
                     <li>You can approve or decline any holiday request from your operator</li>
@@ -162,7 +162,7 @@ class OperatorRegistration(TemplateView):
 
 
                 <p>You can now login by visiting our website at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> </p> <br>
-                <b>Things you can do by login:<br>
+                <b>Things you can do by login in:<br>
                 <ul>
                     <li>You can request your holidays and track its status</li>
                     <li>You can check your feedbacks</li>
@@ -247,7 +247,7 @@ class EmployeeRegistration(TemplateView):
 
 
                 <p>You can now login by visiting our website at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> </p> <br>
-                <b>Things you can do by login:<br>
+                <b>Things you can do by login in:<br>
                 <ul>
                     <li>You can request your holidays and track its status</li>
                     <li>You can check your feedbacks</li>
