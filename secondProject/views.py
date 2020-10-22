@@ -66,25 +66,25 @@ class ClientRegistration(TemplateView):
                 'email']
             text_content = "Your account has been registered successfully"
             html_content = f"""<div>
-                <em>This is an automated e-mail - please do not reply to this address</em><br>
-                <h2>PRIVATE & CONFIDENTIAL</h2>
+                <p>This is an automated e-mail - please do not reply to this address.</p>
+                <p><b>Private & Confidential</b></p>
+                <br>
                 <p>Dear {form_client.cleaned_data['client_name']}, </p>
-                <p>Welcome and congrats on becoming a member of the Urban Communications Family.</p>
-                <p>We are glad to inform you that your account has been registered successfully.</p><br>
-
-                <p><b> Your account credentials are as follow:</b></p>
+                <p>This is an email confirmation that your account has been registered successfully.</p>
+                
+                <p>Your account credentials are as follows:</p>
                 <p><b>Username:</b> {form_user.cleaned_data['username']} <br> 
-                <b>Password:</b> {form_user.cleaned_data['password1']}</p><br>
+                <b>Password:</b> {form_user.cleaned_data['password1']}</p>
 
-                <p>You can now login by visiting our website at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> </p> <br>
-                <b>Things you can do by login in:<br>
+                <p>You may now login to your account via <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a></p>
+                <p>Through your portal you may now:<br>
                 <ul>
-                    <li>You can view the list of operators associated with you</li>
-                    <li>You can approve or decline any holiday request from your operator</li>
-                    <li>You can give feedback to your operator and view it</li>
-                    <li>You can send a message to your operator and Urban Communications</li>
-                    <li>You can view your invoices from Urban Communications</li>
-                    <li>You can also view your profile information</li>
+                    <li>View all operators assigned to you</li>
+                    <li>View and accept/decline holiday requests send by operators</li>
+                    <li>Give feedback to your operators</li>
+                    <li>Send messages to your operators and UC admins</li>
+                    <li>View invoices</li>
+                    <li>View your company profile</li>
                 </ul> <br>
                 <p>Kind Regards,</p>
                 <p>Urban Communications</p>
@@ -149,25 +149,25 @@ class OperatorRegistration(TemplateView):
                     'email']
                 text_content = "Your account has been registered successfully"
                 html_content = f"""<div>
-                <em>This is an automated e-mail - please do not reply to this address</em><br>
-                <h2>PRIVATE & CONFIDENTIAL</h2>
+                <p>This is an automated e-mail - please do not reply to this address</p>
+                <p><b>Private & Confidential</b></p>
+                <br>
                 <p>Dear {name}, </p>
-                <p>Welcome and congrats on becoming a member of the Urban Communications Family.</p>
-                <p>We are glad to inform you that your account has been registered successfully.</p><br>
+                <p>This is an email confirmation that your account has been registered successfully.</p>
 
 
-                <p><b> Your account credentials are as follow:</b></p>
+                <p>Your account credentials are as follows:</p>
                 <p><b>Username:</b> {form_user.cleaned_data['username']} <br> 
-                <b>Password:</b> {form_user.cleaned_data['password1']}</p><br>
+                <b>Password:</b> {form_user.cleaned_data['password1']}</p>
 
 
-                <p>You can now login by visiting our website at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> </p> <br>
-                <b>Things you can do by login in:<br>
+                <p>You may now login to your account via <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a></p>
+                <p>Through your portal you may now:</p>
                 <ul>
-                    <li>You can request your holidays and track its status</li>
-                    <li>You can check your feedbacks</li>
-                    <li>You can view and upload your documents</li>
-                    <li>You can view a message from Urban Communications and you associated client</li>
+                    <li>Request holidays and track request status</li>
+                    <li>View feedback given by clients</li>
+                    <li>View and upload your documents</li>
+                    <li>View messages sent by admin staff and clients</li>
                </ul> <br>
                 <p>Kind Regards,</p>
                 <p>Urban Communications</p>
@@ -234,26 +234,25 @@ class EmployeeRegistration(TemplateView):
                     'email']
                 text_content = "Your account has been registered successfully"
                 html_content = f"""<div>
-                <em>This is an automated e-mail - please do not reply to this address</em><br>
-                <h2>PRIVATE & CONFIDENTIAL</h2>
+                <p>This is an automated e-mail - please do not reply to this address</p>
+                <p><b>Private & Confidential</b></p>
+                <br>
                 <p>Dear {name}, </p>
-                <p>Welcome and congrats on becoming a member of the Urban Communications Family.</p>
-                <p>We are glad to inform you that your account has been registered successfully.</p><br>
+                <p>This is an email confirmation that your account has been registered successfully.</p>
 
 
-                <p><b> Your account credentials are as follow:</b></p>
+                <p>Your account credentials are as follows:</p>
                 <p><b>Username:</b> {form_user.cleaned_data['username']} <br> 
-                <b>Password:</b> {form_user.cleaned_data['password1']}</p><br>
+                <b>Password:</b> {form_user.cleaned_data['password1']}</p>
 
 
-                <p>You can now login by visiting our website at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> </p> <br>
-                <b>Things you can do by login in:<br>
+                <p>You may now login to your account via <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a></p>
+                <p>Through your portal you may now:</p>
                 <ul>
-                    <li>You can request your holidays and track its status</li>
-                    <li>You can check your feedbacks</li>
-                    <li>You can view and upload your documents</li>
-                    <li>You can view a message from Urban Communications</li>
-                </ul> <br>
+                    <li>Request holidays and track request status</li>
+                    <li>View feedback given by admin staff</li>
+                    <li>View and upload your documents</li>
+               </ul> <br>
                 <p>Kind Regards,</p>
                 <p>Urban Communications</p>
                 <a href="http://www.app.urban-communications.co.uk/">admin@urban-communications.co.uk</a>
@@ -264,7 +263,7 @@ class EmployeeRegistration(TemplateView):
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
                 messages.success(
-                    request, "Email with login credientials has been sent successfully.")
+                    request, "Email with login credentials has been sent successfully.")
                 return HttpResponseRedirect(request.path_info)
             else:
                 context['user_form'] = form_user

@@ -148,12 +148,13 @@ class HomeView(TemplateView):
                 subject, from_email, to = f"Message received from Urban Communications", settings.EMAIL_HOST_USER, clientObj.user_name.email
                 text_content = ""
                 html_content = f"""<div>
-                <em> This is an automated e-mail - please do not reply to this address </em> <br>
-                <h2> PRIVATE & CONFIDENTIAL </h2>
-                <p> Dear {adminChatForm.cleaned_data['client_id']}, <br> 
-                The Urban Communications has send you a message: <br><br> <strong> {adminChatForm.cleaned_data['messageQuery']} </strong> <br>
-                Kindly check and reply from your account by login at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> 
-                </p>
+                <p>This is an automated e-mail - please do not reply to this address </p>
+                <p><b>Private & Confidential</b></p>
+                <br>
+                <p>Dear {adminChatForm.cleaned_data['client_id']},</p> 
+                <p>Your supervisor has sent you a message on the UC Portal.</p>
+                <p>{adminChatForm.cleaned_data['messageQuery']}</p>
+                <p>Kindly login to your portal to access the message: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a></p>
                 </div>"""
                 msg = EmailMultiAlternatives(
                     subject, text_content, from_email, [to])
@@ -191,6 +192,9 @@ class HomeView(TemplateView):
                 The Urban Communications has send you a message: <br><br> <strong> {adminChatOperatorForm.cleaned_data['messageQuery']} </strong> <br>
                 Kindly check and reply from your account by login at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> 
                 </p>
+                <p>Kind Regards,</p>
+                <p>Urban Communications</p>
+                <a href="http://www.app.urban-communications.co.uk/">admin@urban-communications.co.uk</a>
                 </div>"""
                 msg = EmailMultiAlternatives(
                     subject, text_content, from_email, [to])
@@ -333,13 +337,16 @@ class FeedbackView(TemplateView):
                     subject, from_email = f"Feedback from {request.user.client}", settings.EMAIL_HOST_USER
                     text_content = ""
                     html_content = f"""<div>
-                    <em> This is an automated e-mail - please do not reply to this address </em> <br>
-                    <h2> PRIVATE & CONFIDENTIAL </h2>
-                    <p> Dear {operator}, <br> 
-                    There is a feedback from your client ({request.user.client}). Details are as follow: <br><br>
-                    <b>Rating:</b> {feedback_form.cleaned_data['rating']} <br>
-                    <b>Feedback:</b> {feedback_form.cleaned_data['feedback_note']} <br><br>
-                    You can check the feedback by login at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> 
+                    <p>This is an automated e-mail - please do not reply to this address </p>
+                    <p><b>Private & Confidential</b></p>
+                    <br>
+                    <p>Dear {operator},</p>
+                    <br>
+                    <p>The company you have been assigned to has left feedback for you. Feedback details:</p>
+                    <br>
+                    <p><b>Performance rating:</b>    {feedback_form.cleaned_data['rating']} <br>
+                    <b>Feedback:</b>                 {feedback_form.cleaned_data['feedback_note']} </p><br>
+                    <p>You may check your feedback by logging in to your account via: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> 
                     </p>
                     </div>"""
 
@@ -868,12 +875,19 @@ class ClientInvoiceUpload(FormView):
             subject, from_email, to = f"Invoice received from Urban Communications", settings.EMAIL_HOST_USER, clientObj.user_name.email
             text_content = ""
             html_content = f"""<div>
-                <em> This is an automated e-mail - please do not reply to this address </em> <br>
-                <h2> PRIVATE & CONFIDENTIAL </h2>
-                <p> Dear {form.cleaned_data['client_id']}, <br> 
-                The Urban Communications has uploaded an invoice in you account with title: {form.cleaned_data['title']} <br>
-                Kindly check your account by login at: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> 
+                <p>This is an automated e-mail - please do not reply to this address.</p>
+                <p><b>Private & Confidential</b></p>
+                <br>
+                <p>Dear {form.cleaned_data['client_id']},</p> 
+                <p>Urban Communications has uploaded an invoice into your portal: {form.cleaned_data['title']}</p>
+                <p>Kindly login to your account to view the invoice: <a href="http://www.app.urban-communications.co.uk/">http://www.app.urban-communications.co.uk</a> 
                 </p>
+                <p>Thank you.</p>
+                <br>
+                <p>Kind Regards,</p>
+                <p>Urban Communications</p>
+                <a href="http://www.app.urban-communications.co.uk/">admin@urban-communications.co.uk</a>
+
                 </div>"""
             msg = EmailMultiAlternatives(
                 subject, text_content, from_email, [to])
